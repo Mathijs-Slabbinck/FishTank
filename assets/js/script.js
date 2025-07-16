@@ -78,12 +78,10 @@ var aquarium = new AquariumService("My Aquarium");
 var player = new PlayerService("Player1", 10, 100);
 
 $(document).ready(function () {
-    let randomIndex = GetRandomNumber(0, NormalFishTypes.length - 1);
-    SpawnRandomFish(NormalFishTypes[randomIndex]);
-    SpawnRandomFish(NormalFishTypes[randomIndex]);
-    SpawnRandomFish(NormalFishTypes[randomIndex]);
-    SpawnRandomFish(NormalFishTypes[randomIndex]);
-    SpawnRandomFish(NormalFishTypes[randomIndex]);
+    for (let i = 0; i < 5; i++) {
+        let randomIndex = GetRandomNumber(0, NormalFishTypes.length - 1);
+        SpawnRandomFish(NormalFishTypes[randomIndex]);
+    }
     UpdateStats();
 });
 
@@ -92,7 +90,7 @@ function SpawnRandomFish(fishType) {
     const topAndBottomFinColor = GetRandomColor();
 
     const newFish = new Fish(
-        "fish" + aquarium.AmountOfFish + 1,
+        "fish" + parseInt(aquarium.AmountOfFish + 1),
         fishType,
         1,
         10,
@@ -147,7 +145,7 @@ function MoveFishRandomly(fish) {
     const dy = newY - currentPos.top;
 
     const distance = Math.sqrt(dx * dx + dy * dy);
-    const speed = 100; // px/sec
+    const speed = fish.speed * 15; // px/sec
     const duration = (distance / speed) * 1000;
 
     // Flip direction based on movement
