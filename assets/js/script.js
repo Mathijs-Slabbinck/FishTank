@@ -1,11 +1,17 @@
 const AllFishTypes = {
     normalBroadback: 'normalBroadback',
-    normalOvalfin: 'normalOvalfin'
+    normalOvalfin: 'normalOvalfin',
+    normalPaddlefin: 'normalPaddlefin',
+    normalRoundback: 'normalRoundback',
+    normalSlimtail: 'normalSlimtail'
 };
 
 const NormalFishTypes = [
     AllFishTypes.normalBroadback,
-    AllFishTypes.normalOvalfin
+    AllFishTypes.normalOvalfin,
+    AllFishTypes.normalPaddlefin,
+    AllFishTypes.normalRoundback,
+    AllFishTypes.normalSlimtail
 ];
 
 const colors = {
@@ -74,16 +80,42 @@ const colors = {
     darkGrayDarkBlue: '#00008B',
 }
 
+let notRotatedAtStart = false;
+
 var aquarium = new AquariumService("My Aquarium");
 var player = new PlayerService("Player1", 10, 100);
 
 $(document).ready(function () {
-    for (let i = 0; i < 5; i++) {
-        let randomIndex = GetRandomNumber(0, NormalFishTypes.length - 1);
-        SpawnRandomFish(NormalFishTypes[randomIndex]);
+    if (window.innerWidth < 600) {
+        $('#rotatePhone').show();
+        $('#fishTank').hide();
+        notRotatedAtStart = true;
+    } else {
+        for (let i = 0; i < 5; i++) {
+            let randomIndex = GetRandomNumber(0, NormalFishTypes.length - 1);
+            SpawnRandomFish(NormalFishTypes[randomIndex]);
+        }
     }
     UpdateStats();
 });
+
+function checkOrientation() {
+    if (window.innerWidth < 600) {
+        $('#rotatePhone').show();
+        $('#fishTank').hide();
+    } else {
+        $('#rotatePhone').hide();
+        $('#fishTank').show();
+        if (notRotatedAtStart) {
+            notRotatedAtStart = false;
+            for (let i = 0; i < 5; i++) {
+                let randomIndex = GetRandomNumber(0, NormalFishTypes.length - 1);
+                SpawnRandomFish(NormalFishTypes[randomIndex]);
+            }
+        }
+        RestartMovingAllFish();
+    }
+}
 
 
 function SpawnRandomFish(fishType) {
@@ -93,7 +125,7 @@ function SpawnRandomFish(fishType) {
         "fish" + parseInt(aquarium.AmountOfFish + 1),
         fishType,
         1,
-        10,
+        1,
         true,
         GetRandomColor(),
         GetRandomColor(),
@@ -121,6 +153,7 @@ function SpawnRandomFish(fishType) {
 
         svg.attr('width', 80);
         svg.attr('height', 30);
+        svg.data('fish', newFish);
 
         $('#fishTank').append(svg);
 
@@ -180,10 +213,10 @@ function DirectFishToFood(fish, foodX, foodY) {
     const deltaY = foodY - fishY;
     const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
 
-    if (distance < 5) {
+    if (distance < 6) {
         // Fish has reached the food
         console.log(`${fish.Name} has reached the food!`);
-        fish.foodEaten += 1; // Increment food eaten count
+        fish.FoodEaten += 1; // Increment food eaten count
         setTimeout(function () {
             $(`img.food`).filter(function () {
                 const food = $(this)[0];
@@ -335,3 +368,13 @@ function SpawnFood(x, y) {
         });
     }
 }
+
+
+$('#fishTank').on('click', '.spawned-fish', function () {
+    const fish = $(this).data('fish');
+    console.log(fish);
+});
+
+$(window).on('resize', function () {
+    checkOrientation();
+});

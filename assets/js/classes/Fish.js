@@ -36,6 +36,7 @@ class Fish {
         this.hungerAmount = hungerAmount;
         this.costPrice = costPrice; // Cost price of the fish
         this.svgElement = svgElement; // SVG representation of the fish
+        this.foodEaten = foodEaten; // Amount of food eaten by the fish
     }
 
     // Getters and setters
@@ -101,6 +102,41 @@ class Fish {
     set FoodEaten(value) {
         if (value < 0) {
             throw new Error("Food eaten cannot be negative!");
+        }
+        else if (value > 100) {
+            this.Size = 7;
+            this.SvgElement.attr('width', 170);
+            this.SvgElement.attr('height', 100);
+        }
+        else if (value > 75) {
+            this.Size = 6;
+            this.SvgElement.attr('width', 160);
+            this.SvgElement.attr('height', 90);
+        }
+        else if (value > 50) {
+            this.Size = 5;
+            this.SvgElement.attr('width', 150);
+            this.SvgElement.attr('height', 80);
+        }
+        else if (value > 30) {
+            this.Size = 4;
+            this.SvgElement.attr('width', 140);
+            this.SvgElement.attr('height', 70);
+        }
+        else if (value > 20) {
+            this.Size = 3;
+            this.SvgElement.attr('width', 130);
+            this.SvgElement.attr('height', 60);
+        }
+        else if (value > 10) {
+            this.Size = 2;
+            this.SvgElement.attr('width', 120);
+            this.SvgElement.attr('height', 50);
+        }
+        else if (value > 5) {
+            this.Size = 1;
+            this.SvgElement.attr('width', 100);
+            this.SvgElement.attr('height', 40);
         }
         this.foodEaten = value;
     }

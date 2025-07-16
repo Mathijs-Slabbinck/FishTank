@@ -1,0 +1,19 @@
+<!-- Normal Paddlefin -->
+<svg width="200" height="100" viewBox="0 0 150 100" xmlns="http://www.w3.org/2000/svg" class="fish normalPaddlefin">
+    <!-- Tail -->
+    <polygon points="10,50 0,35 0,65" fill="var(--tail-color, #9f9)" />
+    <!-- Top fin -->
+    <path d="M40,25 Q55,0 70,25" fill="var(--fin-color, #6e6)" />
+    <!-- Bottom fin -->
+    <path d="M40,75 Q55,100 70,75" fill="var(--fin-color, #6e6)" />
+    <!-- Body -->
+    <path d="M10,50 Q60,0 130,30 Q170,50 130,70 Q60,100 10,50 Z" fill="var(--body-color, #5d5)" />
+    <!-- Side fin -->
+    <polygon points="85,50 95,45 95,55" fill="var(--side-fin-color, #3c3)" fill-opacity="0.6" />
+    <!-- Eye white -->
+    <circle cx="135" cy="40" r="6" fill="white" />
+    <!-- Pupil -->
+    <circle cx="135" cy="40" r="3" fill="black" />
+    <!-- Eye highlight -->
+    <circle cx="137" cy="38" r="1" fill="white" />
+</svg>
