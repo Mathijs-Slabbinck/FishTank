@@ -1,0 +1,26 @@
+<!-- Normal Ovalfin -->
+<svg width="200" height="100" viewBox="0 0 150 100" xmlns="http://www.w3.org/2000/svg" class="fish">
+    <!-- Tail -->
+    <polygon id="tail" points="10,50 0,35 0,65" fill="var(--tail-color, #6cc)" />
+
+    <!-- Top fin -->
+    <path id="top-fin" d="M50,30 Q60,5 70,30" fill="var(--fin-color, #7ad)" />
+
+    <!-- Bottom fin -->
+    <path id="bottom-fin" d="M50,70 Q60,95 70,70" fill="var(--fin-color, #7ad)" />
+
+    <!-- Body -->
+    <path id="body" d="M10,50 Q50,10 130,30 Q180,50 130,70 Q50,90 10,50 Z" fill="var(--body-color, #4af)" />
+
+    <!-- Side fin -->
+    <polygon id="side-fin" points="75,50 85,45 85,55" fill="var(--side-fin-color, #6cc)" fill-opacity="0.6" />
+
+    <!-- Eye white -->
+    <circle cx="140" cy="40" r="6" fill="white" />
+
+    <!-- Pupil -->
+    <circle cx="140" cy="40" r="3" fill="black" />
+
+    <!-- Eye highlight -->
+    <circle cx="142" cy="38" r="1" fill="white" />
+</svg>

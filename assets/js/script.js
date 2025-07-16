@@ -1,0 +1,339 @@
+const AllFishTypes = {
+    normalBroadback: 'normalBroadback',
+    normalOvalfin: 'normalOvalfin'
+};
+
+const NormalFishTypes = [
+    AllFishTypes.normalBroadback,
+    AllFishTypes.normalOvalfin
+];
+
+const colors = {
+    red: '#FF0000',
+    blue: '#0000FF',
+    green: '#00FF00',
+    yellow: '#FFFF00',
+    purple: '#800080',
+    black: '#000000',
+    white: '#FFFFFF',
+    orange: '#FFA500',
+    pink: '#FFC0CB',
+    cyan: '#00FFFF',
+    magenta: '#FF00FF',
+    brown: '#A52A2A',
+    gray: '#808080',
+    darkGreen: '#006400',
+    lightGreen: '#90EE90',
+    lightGray: '#D3D3D3',
+    darkGray: '#A9A9A9',
+    gold: '#FFD700',
+    silver: '#C0C0C0',
+    bronze: '#CD7F32',
+    teal: '#008080',
+    navy: '#000080',
+    maroon: '#800000',
+    olive: '#808000',
+    coral: '#FF7F50',
+    salmon: '#FA8072',
+    lavender: '#E6E6FA',
+    mint: '#98FF98',
+    peach: '#FFDAB9',
+    indigo: '#4B0082',
+    violet: '#EE82EE',
+    lightPink: '#FFB6C1',
+    darkRed: '#8B0000',
+    darkBlue: '#00008B',
+    darkCyan: '#008B8B',
+    darkMagenta: '#8B008B',
+    darkOrange: '#FF8C00',
+    darkOlive: '#556B2F',
+    darkSalmon: '#E9967A',
+    darkViolet: '#9400D3',
+    darkTeal: '#008080',
+    darkGrayBlue: '#4682B4',
+    darkGrayGreen: '#6B8E23',
+    darkGrayRed: '#B22222',
+    darkGrayPurple: '#800080',
+    darkGrayPink: '#DDA0DD',
+    darkGrayGold: '#B8860B',
+    darkGraySilver: '#C0C0C0',
+    darkGrayBronze: '#CD853F',
+    darkGrayTeal: '#008080',
+    darkGrayNavy: '#000080',
+    darkGrayMaroon: '#800000',
+    darkGrayOlive: '#808000',
+    darkGrayCoral: '#FF6347',
+    darkGraySalmon: '#FA8072',
+    darkGrayLavender: '#E6E6FA',
+    darkGrayMint: '#98FF98',
+    darkGrayPeach: '#FFDAB9',
+    darkGrayIndigo: '#4B0082',
+    darkGrayViolet: '#EE82EE',
+    darkGrayLightPink: '#FFB6C1',
+    darkGrayDarkRed: '#8B0000',
+    darkGrayDarkBlue: '#00008B',
+}
+
+var aquarium = new AquariumService("My Aquarium");
+var player = new PlayerService("Player1", 10, 100);
+
+$(document).ready(function () {
+    let randomIndex = GetRandomNumber(0, NormalFishTypes.length - 1);
+    SpawnRandomFish(NormalFishTypes[randomIndex]);
+    SpawnRandomFish(NormalFishTypes[randomIndex]);
+    SpawnRandomFish(NormalFishTypes[randomIndex]);
+    SpawnRandomFish(NormalFishTypes[randomIndex]);
+    SpawnRandomFish(NormalFishTypes[randomIndex]);
+    UpdateStats();
+});
+
+
+function SpawnRandomFish(fishType) {
+    const topAndBottomFinColor = GetRandomColor();
+
+    const newFish = new Fish(
+        "fish" + aquarium.AmountOfFish + 1,
+        fishType,
+        1,
+        10,
+        true,
+        GetRandomColor(),
+        GetRandomColor(),
+        topAndBottomFinColor,
+        topAndBottomFinColor,
+        GetRandomColor(),
+        GetRandomNumber(1, 7)
+    );
+    aquarium.FishList.push(newFish);
+
+    $.get(`assets/media/fish/${fishType}.svg`, function (data) {
+        const svg = $(data).find('svg');
+
+        svg.addClass('spawned-fish');
+        svg.css({
+            '--body-color': newFish.BodyColor,
+            '--tail-color': newFish.TailFinColor,
+            '--bottom-fin-color': newFish.BottomFinColor,
+            '--top-fin-color': newFish.TopFinColor,
+            '--side-fin-color': newFish.SideFinColor,
+            position: 'absolute',
+            top: 0,
+            left: 0
+        });
+
+        svg.attr('width', 80);
+        svg.attr('height', 30);
+
+        $('#fishTank').append(svg);
+
+        newFish.svgElement = svg;
+        MoveFishRandomly(newFish);
+    }, 'xml');
+}
+
+function MoveFishRandomly(fish) {
+    const tankWidth = $('#fishTank').width();
+    const tankHeight = $('#fishTank').height();
+
+    const maxX = tankWidth - fish.svgElement.width();
+    const maxY = tankHeight - fish.svgElement.height();
+
+    const newX = Math.random() * maxX;
+    const newY = Math.random() * maxY;
+
+    // Get current position
+    const currentPos = fish.svgElement.position();
+    const dx = newX - currentPos.left;
+    const dy = newY - currentPos.top;
+
+    const distance = Math.sqrt(dx * dx + dy * dy);
+    const speed = 100; // px/sec
+    const duration = (distance / speed) * 1000;
+
+    // Flip direction based on movement
+    if (dx < 0) {
+        fish.svgElement.css('transform', 'scaleX(-1)');
+    } else {
+        fish.svgElement.css('transform', 'scaleX(1)');
+    }
+
+    // Animate movement
+    fish.svgElement.animate({
+        left: newX,
+        top: newY
+    }, duration, 'linear', function () {
+        MoveFishRandomly(fish);
+    });
+}
+
+function RestartMovingAllFish() {
+    aquarium.FishList.forEach(fish => {
+        if (fish.svgElement) {
+            fish.svgElement.stop(true);
+            MoveFishRandomly(fish);
+        }
+    });
+}
+
+function DirectFishToFood(fish, foodX, foodY) {
+    const fishX = fish.svgElement.position().left;
+    const fishY = fish.svgElement.position().top;
+    const deltaX = foodX - fishX;
+    const deltaY = foodY - fishY;
+    const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+    if (distance < 5) {
+        // Fish has reached the food
+        console.log(`${fish.Name} has reached the food!`);
+        fish.foodEaten += 1; // Increment food eaten count
+        setTimeout(function () {
+            $(`img.food`).filter(function () {
+                const food = $(this)[0];
+                const rect = food.getBoundingClientRect();
+                const parentRect = $("#fishTank")[0].getBoundingClientRect();
+
+                // Convert rect to container-relative coordinates
+                const currentLeft = rect.left - parentRect.left;
+                const currentTop = rect.top - parentRect.top;
+                return Math.abs(currentLeft - foodX) < 10 && Math.abs(currentTop - foodY) < 10;
+            }).remove();
+        }, 750);
+
+        aquarium.HasFood = false; // Reset food availability
+        UpdateStats(); // Update food amount display
+        RestartMovingAllFish();
+        return;
+    }
+
+    // Move closer to the food position each step
+    const speed = 5; // Adjust pixels per step for smoothness
+    const directionX = deltaX / distance;
+    const directionY = deltaY / distance;
+    const newX = fishX + directionX * speed;
+    const newY = fishY + directionY * speed;
+
+    // Flip direction based on movement
+    if (deltaX < 0) {
+        fish.svgElement.css('transform', 'scaleX(-1)');
+    } else {
+        fish.svgElement.css('transform', 'scaleX(1)');
+    }
+
+    fish.svgElement.animate(
+        { left: newX, top: newY },
+        100, // milliseconds per step
+        function () {
+            DirectFishToFood(fish, foodX, foodY); // Continue until close
+        }
+    );
+}
+
+
+
+function GetRandomColor() {
+    const colorKeys = Object.keys(colors);
+    const randomIndex = Math.floor(Math.random() * colorKeys.length);
+    return colors[colorKeys[randomIndex]];
+}
+
+function GetRandomNumber(min, max) {
+    // Returns a random integer between min and max, inclusive
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function UpdateStats() {
+    $('#fishFoodAmount').text(player.FoodAmount);
+}
+
+
+
+$("#openBottomMenuImg").click(function () {
+    OpenBottomMenu();
+});
+
+$("#closeBottomMenuImg").click(function () {
+    CloseBottomMenu();
+});
+
+function OpenBottomMenu() {
+    $("#fishTank").css("height", "85vh");
+    $("#bottomMenu").css("display", "flex");
+    $("#openBottomMenuImg").css("display", "none");
+    $("#closeBottomMenuImg").css("display", "inline-block");
+    RestartMovingAllFish();
+}
+
+function CloseBottomMenu() {
+    $("#fishTank").css("height", "100vh");
+    $("#bottomMenu").css("display", "none");
+    $("#openBottomMenuImg").css("display", "inline-block");
+    $("#closeBottomMenuImg").css("display", "none");
+    RestartMovingAllFish();
+}
+
+$("#fishFoodImg").click(function () {
+    $("#fishTank, #bottomMenu").toggleClass("foodCursor");
+});
+
+// Reset cursor on mouseleave → remove the foodCursor class
+$("#bottomMenu").on("mouseleave", function () {
+    // When leaving the area, we reset cursor (whether foodMode is on or not)
+    $("#bottomMenu").removeClass("foodCursor");
+});
+
+
+$("#fishTank").click(function (event) {
+    // Check if the click target is the #fishTank itself, not its children
+    if (event.target !== this) return;
+
+    const x = event.offsetX;
+    const y = event.offsetY;
+
+    if ($(this).hasClass("foodCursor")) {
+        SpawnFood(x, y);
+        player.FoodAmount -= 1; // Decrease food amount
+    }
+    else {
+        SpawnBubble(x, y);
+    }
+});
+
+function SpawnBubble(x, y) {
+    // Create a new bubble element
+    const bubble = $('<img class="bubble" src="images/airBubble.png" alt="air bubble">');
+
+    // Position the bubble at the click location
+    bubble.css({
+        left: `${x}px`,
+        top: `${y}px`
+    });
+
+    // Append to fish tank
+    $("#fishTank").append(bubble);
+
+    // remove the bubble after animation ends
+    setTimeout(() => {
+        bubble.remove();
+    }, 2000); // match animation duration
+}
+
+function SpawnFood(x, y) {
+    if (!aquarium.HasFood) {
+        const food = $('<img class="food" src="images/fishFood.png" alt="fish food">');
+        food.css({
+            left: `${x}px`,
+            top: `${y + 60}px`
+        });
+        $("#fishTank").append(food);
+
+        aquarium.HasFood = true; // Set food availability to true
+
+        // Make all fish swim toward the food
+        aquarium.FishList.forEach(fish => {
+            if (fish.svgElement) {
+                fish.svgElement.stop(true); // Stop any current animation
+                DirectFishToFood(fish, x, y);
+            }
+        });
+    }
+}

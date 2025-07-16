@@ -1,0 +1,113 @@
+body {
+    -webkit-user-select: none;
+    /* Chrome all / Safari all */
+    -moz-user-select: none;
+    /* Firefox all */
+    -ms-user-select: none;
+    /* IE 10+ */
+    user-select: none;
+    /* Likely future */
+}
+
+.fish {
+    --body-color: steelblue;
+    --fin-color: #5bc0de;
+    --side-fin-color: green;
+    --tail-color: #7ad;
+}
+
+#fishTank {
+    width: 100%;
+    height: 100vh;
+    background-color: lightblue;
+    position: relative;
+}
+
+.spawned-fish {
+    transform-origin: center;
+    position: absolute;
+    transition: transform 0.3s ease;
+}
+
+#bottomMenuButtonContainer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+}
+
+#openBottomMenuImg,
+#closeBottomMenuImg {
+    width: 4%;
+    height: auto;
+    position: absolute;
+    bottom: 0;
+}
+
+#closeBottomMenuImg {
+    display: none;
+}
+
+#bottomMenu {
+    display: none;
+    height: 15vh;
+    justify-content: space-around;
+    align-items: center;
+    text-align: center;
+}
+
+#fishFoodImg {
+    height: 9vh;
+    width: auto;
+    border: 2px solid black;
+}
+
+.clickAble {
+    cursor: pointer;
+}
+
+.foodCursor {
+    cursor: url('../../images/fishFoodCursor.png') 10 10, auto;
+}
+
+.bubble {
+    position: absolute;
+    width: 20px;
+    /* Adjust size */
+    height: 20px;
+    pointer-events: none;
+    /* So clicks don't hit the bubble */
+    animation: bubbleRise 2s ease-out forwards;
+}
+
+.food {
+    position: absolute;
+    width: 30px;
+    /* Adjust size */
+    height: 30px;
+    pointer-events: none;
+    /* So clicks don't hit the bubble */
+    animation: foodRise 1s ease-out forwards;
+}
+
+@keyframes bubbleRise {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(-60px);
+    }
+}
+
+@keyframes foodRise {
+    0% {
+        transform: translateY(0);
+    }
+
+    100% {
+        transform: translateY(-60px);
+    }
+}

@@ -1,0 +1,115 @@
+class Fish {
+    constructor(
+        name,
+        fishTypeName,
+        age,
+        size,
+        isAlive,
+        bodyColor,
+        tailFinColor,
+        bottomFinColor,
+        topFinColor,
+        sideFinColor,
+        speed,
+        eyeWhiteColor = "white",
+        pupilColor = "black",
+        hungerAmount = 0,
+        costPrice = 0,
+        svgElement = null,
+        foodEaten = 0
+    ) {
+        // Basic properties
+        this.name = name;
+        this.fishTypeName = fishTypeName;
+        this.age = age;
+        this.size = size;
+        this.isAlive = isAlive;
+        this.bodyColor = bodyColor;
+        this.tailFinColor = tailFinColor;
+        this.bottomFinColor = bottomFinColor;
+        this.topFinColor = topFinColor;
+        this.sideFinColor = sideFinColor;
+        this.speed = speed;
+        // Optional with defaults
+        this.eyeWhiteColor = eyeWhiteColor;
+        this.pupilColor = pupilColor;
+        this.hungerAmount = hungerAmount;
+        this.costPrice = costPrice; // Cost price of the fish
+        this.svgElement = svgElement; // SVG representation of the fish
+    }
+
+    // Getters and setters
+    get Name() { return this.name; }
+    set Name(value) { this.name = value; }
+
+    get FishTypeName() { return this.fishTypeName; }
+    set FishTypeName(value) { this.fishTypeName = value; }
+
+    get Age() { return this.age; }
+    set Age(value) { this.age = value; }
+
+    get Size() { return this.size; }
+    set Size(value) { this.size = value; }
+
+    get IsAlive() { return this.isAlive; }
+    set IsAlive(value) { this.isAlive = value; }
+
+    get BodyColor() { return this.bodyColor; }
+    set BodyColor(value) { this.bodyColor = value; }
+
+    get TailFinColor() { return this.tailFinColor; }
+    set TailFinColor(value) { this.tailFinColor = value; }
+
+    get BottomFinColor() { return this.bottomFinColor; }
+    set BottomFinColor(value) { this.bottomFinColor = value; }
+
+    get TopFinColor() { return this.topFinColor; }
+    set TopFinColor(value) { this.topFinColor = value; }
+
+    get SideFinColor() { return this.sideFinColor; }
+    set SideFinColor(value) { this.sideFinColor = value; }
+
+    get EyeWhiteColor() { return this.eyeWhiteColor; }
+    set EyeWhiteColor(value) { this.eyeWhiteColor = value; }
+
+    get PupilColor() { return this.pupilColor; }
+    set PupilColor(value) { this.pupilColor = value; }
+
+    get HungerAmount() { return this.hungerAmount; }
+    set HungerAmount(value) { this.hungerAmount = value; }
+
+    get CostPrice() { return this.costPrice; }
+    set CostPrice(value) { this.costPrice = value; }
+
+    get SvgElement() { return this.svgElement; }
+    set SvgElement(value) { this.svgElement = value; }
+
+    get Speed() { return this.speed; }
+    set Speed(value) {
+        if (value < 0) {
+            throw new Error("Speed cannot be negative!");
+        }
+        if (value > 7) {
+            throw new Error("Speed cannot exceed 7!");
+        }
+        this.speed = value;
+    }
+
+    get FoodEaten() {
+        return this.foodEaten;
+    }
+    set FoodEaten(value) {
+        if (value < 0) {
+            throw new Error("Food eaten cannot be negative!");
+        }
+        this.foodEaten = value;
+    }
+
+    GetSpeedInPixelsPerSecond() {
+        return this.speed * 10;
+    }
+
+    toString() {
+        return this.name;
+    }
+}
