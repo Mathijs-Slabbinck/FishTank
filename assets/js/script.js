@@ -204,7 +204,7 @@ function DirectFishToFood(fish, foodX, foodY) {
     }
 
     // Move closer to the food position each step
-    const speed = 5; // Adjust pixels per step for smoothness
+    const speed = fish.speed * 3; // Adjust pixels per step for smoothness
     const directionX = deltaX / distance;
     const directionY = deltaY / distance;
     const newX = fishX + directionX * speed;
