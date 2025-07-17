@@ -1,5 +1,5 @@
 <!-- Normal Broadback -->
-<svg width="200" height="100" viewBox="0 0 170 100" xmlns="http://www.w3.org/2000/svg" class="fish fish-3">
+<svg width="200" height="100" viewBox="0 0 170 100" xmlns="http://www.w3.org/2000/svg" class="fish normalBroadback">
     <!-- Tail -->
     <polygon points="20,50 10,40 10,60" fill="var(--tail-color, #fa5)" />
     <!-- Top fin -->

@@ -11,12 +11,15 @@ class Fish {
         topFinColor,
         sideFinColor,
         speed,
+        hasPattern = false,
+        patternColor = null,
         eyeWhiteColor = "white",
         pupilColor = "black",
         hungerAmount = 0,
         costPrice = 0,
         svgElement = null,
-        foodEaten = 0
+        foodEaten = 0,
+
     ) {
         // Basic properties
         this.name = name;
@@ -31,6 +34,8 @@ class Fish {
         this.sideFinColor = sideFinColor;
         this.speed = speed;
         // Optional with defaults
+        this.hasPattern = hasPattern; // Indicates if the fish has a pattern
+        this.patternColor = patternColor;
         this.eyeWhiteColor = eyeWhiteColor;
         this.pupilColor = pupilColor;
         this.hungerAmount = hungerAmount;
@@ -84,6 +89,8 @@ class Fish {
 
     get SvgElement() { return this.svgElement; }
     set SvgElement(value) { this.svgElement = value; }
+
+    get HasPattern() { return this.hasPattern; }
 
     get Speed() { return this.speed; }
     set Speed(value) {
