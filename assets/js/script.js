@@ -244,6 +244,7 @@ function DirectFishToFood(fish, foodX, foodY) {
         // Fish has reached the food
         console.log(`${fish.Name} has reached the food!`);
         fish.FoodEaten += 1; // Increment food eaten count
+        $('#CBMI').attr('id', 'closeBottomMenuImg');
         setTimeout(function () {
             $(`img.food`).filter(function () {
                 const food = $(this)[0];
@@ -301,6 +302,7 @@ function GetRandomNumber(min, max) {
 
 function UpdateStats() {
     $('#fishFoodAmount').text(player.FoodAmount);
+    $("#moneyAmount").text(player.MoneyAmount);
 }
 
 
@@ -309,7 +311,7 @@ $("#openBottomMenuImg").click(function () {
     OpenBottomMenu();
 });
 
-$("#closeBottomMenuImg").click(function () {
+$(document).on('click', '#closeBottomMenuImg', function () {
     CloseBottomMenu();
 });
 
@@ -384,8 +386,9 @@ function SpawnFood(x, y) {
         });
         $("#fishTank").append(food);
 
-        aquarium.HasFood = true; // Set food availability to true
-
+        aquarium.HasFood = true;
+        $("#closeBottomMenuImg").off("click");
+        $('#closeBottomMenuImg').attr('id', 'CBMI');
         // Make all fish swim toward the food
         aquarium.FishList.forEach(fish => {
             if (fish.svgElement) {
