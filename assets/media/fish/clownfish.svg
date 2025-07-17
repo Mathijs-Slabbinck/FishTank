@@ -15,7 +15,7 @@
     <path d="M 100 15 Q 115 5 130 15 L 125 35 Q 110 25 100 15 Z" fill="var(--fin-color, #ff6600)" stroke="#000" stroke-width="3" />
 
     <!-- Side fin    -->
-    <polygon points="120,65 135,55 135,75" fill="var(--fin-color, #ff6600)" fill-opacity="0.6" stroke="#000" stroke-width="2" />
+    <polygon points="120,65 135,55 135,75" fill="var(--side-fin-color, #ff6600)" fill-opacity="0.6" stroke="#000" stroke-width="2" />
 
     <!-- Eye -->
     <circle cx="175" cy="55" r="12" fill="#fff" stroke="#000" stroke-width="2" />

@@ -9,9 +9,10 @@ class Fish {
         tailFinColor,
         bottomFinColor,
         topFinColor,
-        sideFinColor,
         speed,
+        hasSideFin = true,
         hasPattern = false,
+        sideFinColor = null,
         patternColor = null,
         eyeWhiteColor = "white",
         pupilColor = "black",
@@ -31,10 +32,11 @@ class Fish {
         this.tailFinColor = tailFinColor;
         this.bottomFinColor = bottomFinColor;
         this.topFinColor = topFinColor;
-        this.sideFinColor = sideFinColor;
         this.speed = speed;
         // Optional with defaults
+        this.hasSideFin = hasSideFin; // Indicates if the fish has a side fin
         this.hasPattern = hasPattern; // Indicates if the fish has a pattern
+        this.sideFinColor = sideFinColor;
         this.patternColor = patternColor;
         this.eyeWhiteColor = eyeWhiteColor;
         this.pupilColor = pupilColor;
