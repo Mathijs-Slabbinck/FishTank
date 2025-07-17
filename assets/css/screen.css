@@ -37,7 +37,8 @@ body {
 }
 
 #openBottomMenuImg,
-#closeBottomMenuImg {
+#closeBottomMenuImg,
+#CBMI {
     width: 4%;
     height: auto;
     position: absolute;
@@ -103,6 +104,21 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
     width: 100vw;
+    height: auto;
+}
+
+#coinDisplayBlock {
+    position: absolute;
+    z-index: 999;
+    width: 4vw;
+    height: auto;
+    text-align: center;
+    top: 0;
+    right: 0;
+}
+
+#coinDisplayBlock img {
+    width: 4vw;
     height: auto;
 }
 

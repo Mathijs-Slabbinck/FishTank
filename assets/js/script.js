@@ -3,7 +3,14 @@ const AllFishTypes = {
     normalOvalfin: 'normalOvalfin',
     normalPaddlefin: 'normalPaddlefin',
     normalRoundback: 'normalRoundback',
-    normalSlimtail: 'normalSlimtail'
+    normalSlimtail: 'normalSlimtail',
+    bubblemark: 'bubblemark',
+    tigerstripes: 'tigerstripes',
+    longpaddlefin: 'longpaddlefin',
+    clownfish: 'clownfish',
+    bubbleback: 'bubbleback',
+    wavyfin: 'wavyfin',
+    piranha: 'piranha'
 };
 
 const NormalFishTypes = [
@@ -91,13 +98,26 @@ $(document).ready(function () {
         $('#fishTank').hide();
         notRotatedAtStart = true;
     } else {
-        for (let i = 0; i < 5; i++) {
-            let randomIndex = GetRandomNumber(0, NormalFishTypes.length - 1);
-            SpawnRandomFish(NormalFishTypes[randomIndex]);
-        }
+        SpawnFishes();
+
     }
     UpdateStats();
 });
+
+function SpawnFishes() {
+    SpawnRandomFish(AllFishTypes.normalBroadback);
+    SpawnRandomFish(AllFishTypes.normalOvalfin);
+    SpawnRandomFish(AllFishTypes.normalPaddlefin);
+    SpawnRandomFish(AllFishTypes.normalRoundback);
+    SpawnRandomFish(AllFishTypes.normalSlimtail);
+    SpawnRandomFish(AllFishTypes.tigerstripes, true); // Spawn a tigerstripes fish with pattern
+    SpawnRandomFish(AllFishTypes.bubblemark, true); // Spawn a bubblemark fish with pattern
+    SpawnRandomFish(AllFishTypes.longpaddlefin, true); // Spawn a longpaddlefin fish with pattern
+    SpawnRandomFish(AllFishTypes.clownfish, true); // Spawn a clownfish with pattern
+    SpawnRandomFish(AllFishTypes.bubbleback, true); // Spawn a bubbleback fish with pattern
+    SpawnRandomFish(AllFishTypes.wavyfin, true); // Spawn a wavyfin fish with pattern
+    SpawnRandomFish(AllFishTypes.piranha, true); // Spawn a piranha fish with pattern
+}
 
 function checkOrientation() {
     if (window.innerWidth < 600) {
@@ -108,17 +128,14 @@ function checkOrientation() {
         $('#fishTank').show();
         if (notRotatedAtStart) {
             notRotatedAtStart = false;
-            for (let i = 0; i < 5; i++) {
-                let randomIndex = GetRandomNumber(0, NormalFishTypes.length - 1);
-                SpawnRandomFish(NormalFishTypes[randomIndex]);
-            }
+            SpawnFishes();
         }
         RestartMovingAllFish();
     }
 }
 
 
-function SpawnRandomFish(fishType) {
+function SpawnRandomFish(fishType, hasPattern = false) {
     const topAndBottomFinColor = GetRandomColor();
 
     const newFish = new Fish(
@@ -132,8 +149,14 @@ function SpawnRandomFish(fishType) {
         topAndBottomFinColor,
         topAndBottomFinColor,
         GetRandomColor(),
-        GetRandomNumber(1, 7)
+        GetRandomNumber(1, 7),
+        hasPattern
     );
+
+    if (hasPattern) {
+        newFish.patternColor = GetRandomColor(); // Assign a random color for the pattern
+    }
+
     aquarium.FishList.push(newFish);
 
     $.get(`assets/media/fish/${fishType}.svg`, function (data) {
@@ -150,6 +173,10 @@ function SpawnRandomFish(fishType) {
             top: 0,
             left: 0
         });
+
+        if (hasPattern) {
+            svg.css('--pattern-color', newFish.patternColor);
+        }
 
         svg.attr('width', 80);
         svg.attr('height', 30);
@@ -217,6 +244,7 @@ function DirectFishToFood(fish, foodX, foodY) {
         // Fish has reached the food
         console.log(`${fish.Name} has reached the food!`);
         fish.FoodEaten += 1; // Increment food eaten count
+        $('#CBMI').attr('id', 'closeBottomMenuImg');
         setTimeout(function () {
             $(`img.food`).filter(function () {
                 const food = $(this)[0];
@@ -274,6 +302,7 @@ function GetRandomNumber(min, max) {
 
 function UpdateStats() {
     $('#fishFoodAmount').text(player.FoodAmount);
+    $("#moneyAmount").text(player.MoneyAmount);
 }
 
 
@@ -282,7 +311,7 @@ $("#openBottomMenuImg").click(function () {
     OpenBottomMenu();
 });
 
-$("#closeBottomMenuImg").click(function () {
+$(document).on('click', '#closeBottomMenuImg', function () {
     CloseBottomMenu();
 });
 
@@ -357,8 +386,9 @@ function SpawnFood(x, y) {
         });
         $("#fishTank").append(food);
 
-        aquarium.HasFood = true; // Set food availability to true
-
+        aquarium.HasFood = true;
+        $("#closeBottomMenuImg").off("click");
+        $('#closeBottomMenuImg').attr('id', 'CBMI');
         // Make all fish swim toward the food
         aquarium.FishList.forEach(fish => {
             if (fish.svgElement) {
