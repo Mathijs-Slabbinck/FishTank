@@ -96,6 +96,7 @@ $(document).ready(function () {
     if (window.innerWidth < 600) {
         $('#rotatePhone').show();
         $('#fishTank').hide();
+        $('#coinDisplayBlock').hide();
         notRotatedAtStart = true;
     } else {
         SpawnFishes();
@@ -119,7 +120,7 @@ function SpawnFishes() {
     SpawnRandomFish(AllFishTypes.piranha, true, false); // Spawn a piranha fish with pattern
 }
 
-function checkOrientation() {
+function CheckOrientation() {
     if (window.innerWidth < 600) {
         $('#rotatePhone').show();
         $('#fishTank').hide();
@@ -457,7 +458,7 @@ $('#fishTank').on('click', '.spawned-fish', function () {
 });
 
 $(window).on('resize', function () {
-    checkOrientation();
+    CheckOrientation();
 });
 
 $('#closeModal').click(function () {
