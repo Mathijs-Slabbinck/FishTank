@@ -339,6 +339,7 @@ function CloseBottomMenu() {
     $("#bottomMenu").css("display", "none");
     $("#openBottomMenuImg").css("display", "inline-block");
     $("#closeBottomMenuImg").css("display", "none");
+    $("#fishTank").removeClass("foodCursor");
     RestartMovingAllFish();
 }
 
