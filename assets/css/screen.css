@@ -63,6 +63,68 @@ body {
     border: 2px solid black;
 }
 
+.modal {
+    background-color: white;
+    border: 2px solid black;
+    border-radius: 25px;
+    width: 85vw;
+    height: 85vh;
+    position: absolute;
+    z-index: 999;
+}
+
+.modalContainer {
+    width: 100vw;
+    height: 95vh;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    display: none;
+}
+
+#closeModal {
+    width: 4vw;
+    height: auto;
+    margin: 0 0 0 95%;
+}
+
+#modalGrid {
+    width: 85%;
+    display: grid;
+    grid-template-columns: 30% 40% 30%;
+    gap: 20px;
+    margin: 5vh 0 0 5vw;
+}
+
+/*
+ - tail color
+ - body color
+ - fin color
+ - side-fin-color
+ - pattern
+*/
+
+#modalGrid>div {
+    text-align: center;
+    position: relative;
+    border: 2px solid black;
+    padding: 5%;
+}
+
+#modalFishImgContainer {
+    grid-row: 2 / span 3;
+    grid-column: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#modalFishName {
+    grid-column: 1 / span 3;
+    padding: 2% !important;
+}
+
 .clickAble {
     cursor: pointer;
 }
@@ -109,7 +171,7 @@ body {
 
 #coinDisplayBlock {
     position: absolute;
-    z-index: 999;
+    z-index: 998;
     width: 4vw;
     height: auto;
     text-align: center;
