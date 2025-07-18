@@ -418,32 +418,39 @@ $('#fishTank').on('click', '.spawned-fish', function () {
     $('#fishModal').show();
     $('#modalFishImgContainer').empty();
     $('#modalFishImgContainer').append(fish.svgElement.clone());
+    $('#modalFishImgContainer svg').toggleClass('spawned-fish');
     $('#modalFishImgContainer svg').css("position", "relative");
     $('#modalFishImgContainer svg').css("top", "0");
     $('#modalFishImgContainer svg').css("left", "0");
     $('#modalFishImgContainer svg').css("scale", "3");
     $('#modalFishName').text(fish.Name);
-    $('#modalTailColor').text(`Tail Fin Color: ${fish.TailFinColor}`);
+    $('#modalTailColor p').text(`Tail Fin Color: ${fish.TailFinColor}`);
     $('#modalTailColor').css("background-color", fish.TailFinColor);
-    $('#modalBodyColor').text(`Body Color: ${fish.BodyColor}`);
+    $('#modalBodyColor p').text(`Body Color: ${fish.BodyColor}`);
     $('#modalBodyColor').css("background-color", fish.BodyColor);
-    $('#modalFinColor').text(`Fin Color: ${fish.BottomFinColor}`);
+    $('#modalFinColor p').text(`Fin Color: ${fish.BottomFinColor}`);
     $('#modalFinColor').css("background-color", fish.BottomFinColor);
+    $('#modalSpeed p').text(`Speed: ${fish.Speed}`);
+    $('#modalStatAge p').text(`Age: ${fish.Age}`);
+    $('#modalStatSize p').text(`Size: ${fish.Size}`);
+    $('#modalStatFoodEaten p').text(`Food Eaten: ${fish.FoodEaten}`);
+    $("#modalStatCostPrice p").text(`Cost Price: ${fish.CostPrice}`);
+    $("#modalStatHunger p").text(`Hunger: ${fish.HungerAmount}`);
     if (fish.hasSideFin) {
-        $('#modalSideFinColor').text(`Side Fin Color: ${fish.SideFinColor}`);
+        $('#modalSideFinColor p').text(`Side Fin Color: ${fish.SideFinColor}`);
         $('#modalSideFinColor').css("background-color", fish.SideFinColor);
     }
     else {
-        $('#modalSideFinColor').text(`No Side Fin`);
+        $('#modalSideFinColor p').text(`No Side Fin`);
         $('#modalSideFinColor').css("background-color", "transparent");
     }
 
     if (fish.hasPattern) {
-        $('#modalPatternColor').text(`Pattern Color: ${fish.patternColor}`);
+        $('#modalPatternColor p').text(`Pattern Color: ${fish.patternColor}`);
         $('#modalPatternColor').css("background-color", fish.patternColor);
     }
     else {
-        $('#modalPatternColor').text(`No Pattern`);
+        $('#modalPatternColor p').text(`No Pattern`);
         $('#modalPatternColor').css("background-color", "transparent");
     }
 });
