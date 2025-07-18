@@ -86,7 +86,7 @@ body {
 @media only screen and (min-width: 1200px) {
     .modalGrid {
         scale: 0.85;
-        margin-top: -10vh !important;
+        margin-top: -7vh !important;
     }
 }
 
