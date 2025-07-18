@@ -414,6 +414,7 @@ function SpawnFood(x, y) {
 $('#fishTank').on('click', '.spawned-fish', function () {
     const fish = $(this).data('fish');
     console.log(fish);
+    $(".modalContainer").css("display", "flex");
     $('#fishModal').show();
     $('#modalFishImgContainer').empty();
     $('#modalFishImgContainer').append(fish.svgElement.clone());
@@ -453,4 +454,5 @@ $(window).on('resize', function () {
 
 $('#closeModal').click(function () {
     $('#fishModal').hide();
+    $(".modalContainer").hide();
 });
