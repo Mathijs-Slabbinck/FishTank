@@ -246,6 +246,7 @@ function RestartMovingAllFish() {
 }
 
 function DirectFishToFood(fish, foodX, foodY) {
+    isFoodInAquarium = true;
     const fishX = fish.svgElement.position().left;
     const fishY = fish.svgElement.position().top;
     const deltaX = foodX - fishX;
@@ -254,6 +255,7 @@ function DirectFishToFood(fish, foodX, foodY) {
 
     if (distance < 6) {
         // Fish has reached the food
+        aquarium.HasFood = false;
         console.log(`${fish.Name} has reached the food!`);
         fish.FoodEaten += 1; // Increment food eaten count
         $('#CBMI').attr('id', 'closeBottomMenuImg');
@@ -320,7 +322,9 @@ function UpdateStats() {
 
 
 $("#openBottomMenuImg").click(function () {
-    OpenBottomMenu();
+    if (!aquarium.HasFood) {
+        OpenBottomMenu();
+    }
 });
 
 $(document).on('click', '#closeBottomMenuImg', function () {
@@ -332,7 +336,9 @@ function OpenBottomMenu() {
     $("#bottomMenu").css("display", "flex");
     $("#openBottomMenuImg").css("display", "none");
     $("#closeBottomMenuImg").css("display", "inline-block");
-    RestartMovingAllFish();
+    if (aquarium.HasFood === false) {
+        RestartMovingAllFish();
+    }
 }
 
 function CloseBottomMenu() {
@@ -340,20 +346,13 @@ function CloseBottomMenu() {
     $("#bottomMenu").css("display", "none");
     $("#openBottomMenuImg").css("display", "inline-block");
     $("#closeBottomMenuImg").css("display", "none");
-    $("#fishTank").removeClass("foodCursor");
     RestartMovingAllFish();
 }
 
 $("#fishFoodImg").click(function () {
-    $("#fishTank, #bottomMenu").toggleClass("foodCursor");
+    CloseBottomMenu();
+    $("#fishTank").toggleClass("foodCursor");
 });
-
-// Reset cursor on mouseleave → remove the foodCursor class
-$("#bottomMenu").on("mouseleave", function () {
-    // When leaving the area, we reset cursor (whether foodMode is on or not)
-    $("#bottomMenu").removeClass("foodCursor");
-});
-
 
 $("#fishTank").click(function (event) {
     // Check if the click target is the #fishTank itself, not its children
