@@ -8,6 +8,8 @@
     <link rel="shortcut icon" href="assets/media/favicon.ico" type="image/x-icon">
     <link href="assets/css/reset.css" rel='stylesheet' type='text/css'>
     <link href="assets/css/screen.css" rel='stylesheet' type='text/css'>
+    <link href="assets/css/modal.css" rel='stylesheet' type='text/css'>
+
 </head>
 
 <body>
@@ -28,49 +30,78 @@
                 <div class="modal" id="fishModal">
                     <img src="images/closeButton.png" alt="close button" id="closeModal" class="clickAble">
 
-                    <div class="modalGrid">
+                    <div id="modalContent" class="modalGrid">
                         <div id="modalFishName">
-                            <p></p>
+                            <strong></strong>
                         </div>
 
-                        <div id="modalTailColor">
-                            <p></p>
-                        </div>
-                        <div id="modalFishImgContainer"></div>
-                        <div id="modalBodyColor">
-                            <p></p>
+                        <div id="colorInfoBlock">
+                            <div class="colorInfo">
+                                <div id="modalTailColor">
+                                    <b></b>
+                                </div>
+
+                                <div id="modalFinColor">
+                                    <b></b>
+                                </div>
+
+                                <div id="modalPatternColor">
+                                    <b></b>
+                                </div>
+                            </div>
+
+                            <div id="modalFishImgContainer"></div>
+
+                            <div class="colorInfo">
+                                <div id="modalBodyColor">
+                                    <b></b>
+                                </div>
+
+                                <div id="modalSideFinColor">
+                                    <b></b>
+                                </div>
+                            </div>
                         </div>
 
-                        <div id="modalFinColor">
-                            <p></p>
-                        </div>
-                        <div id="modalSideFinColor">
-                            <p></p>
-                        </div>
-                        <div id="modalPatternColor">
-                            <p></p>
-                        </div>
-                        <div id="modalSpeed">
-                            <p></p>
-                        </div>
                         <div id="modalStatsBlock">
                             <div>
-                                <p>stats:</p>
+                                <strong>stats:</strong>
                             </div>
                             <div id="modalStatAge">
-                                <p></p>
+                                <span>
+                                    <b>Age:</b>
+                                    <p></p>
+                                </span>
                             </div>
-                            <div id="modalStatFoodEaten">
-                                <p></p>
-                            </div>
-                            <div id="modalStatSize">
-                                <p></p>
+                            <div id="modalSpeed">
+                                <span>
+                                    <b>Speed:</b>
+                                    <p></p>
+                                </span>
                             </div>
                             <div id="modalStatCostPrice">
-                                <p></p>
+                                <span>
+                                    <b>Cost Price:</b>
+                                    <p></p>
+                                </span>
                             </div>
                             <div id="modalStatHunger">
-                                <p></p>
+                                <span>
+                                    <b>Hunger:</b>
+                                    <p></p>
+                                </span>
+                            </div>
+                            <div id="modalStatFoodEaten">
+                                <span>
+                                    <b>Food Eaten:</b>
+                                    <p></p>
+                                </span>
+                            </div>
+                            <div id="modalStatSize">
+                                <span>
+                                    <b>Size:</b>
+                                    <p></p>
+                                </span>
                             </div>
                         </div>
 
