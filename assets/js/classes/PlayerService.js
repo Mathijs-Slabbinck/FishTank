@@ -18,7 +18,12 @@ class PlayerService {
         return this._foodAmount;
     }
     set FoodAmount(value) {
-        this._foodAmount = value;
+        if (value < 0) {
+            throw new Error("You can't use more food then you have!");
+        }
+        else {
+            this._foodAmount = value;
+        }
     }
 
     // Getter and setter for moneyAmount

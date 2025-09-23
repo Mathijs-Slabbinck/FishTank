@@ -361,8 +361,16 @@ $("#fishTank").click(function (event) {
     const y = event.offsetY;
 
     if ($(this).hasClass("foodCursor")) {
-        SpawnFood(x, y);
-        player.FoodAmount -= 1; // Decrease food amount
+        if (!aquarium.HasFood) {
+            CloseBottomMenu();
+            try {
+                player.FoodAmount -= 1; // Decrease food amount
+                SpawnFood(x, y);
+            }
+            catch (errorMsg) {
+                alert(errorMsg.message);
+            }
+        }
     }
     else {
         SpawnBubble(x, y);
@@ -389,25 +397,27 @@ function SpawnBubble(x, y) {
 }
 
 function SpawnFood(x, y) {
-    if (!aquarium.HasFood) {
-        const food = $('<img class="food" src="images/fishFood.png" alt="fish food">');
-        food.css({
-            left: `${x}px`,
-            top: `${y + 60}px`
-        });
-        $("#fishTank").append(food);
+    setTimeout(function () {
+        if (!aquarium.HasFood) {
+            const food = $('<img class="food" src="images/fishFood.png" alt="fish food">');
+            food.css({
+                left: `${x}px`,
+                top: `${y + 60}px`
+            });
+            $("#fishTank").append(food);
 
-        aquarium.HasFood = true;
-        $("#closeBottomMenuImg").off("click");
-        $('#closeBottomMenuImg').attr('id', 'CBMI');
-        // Make all fish swim toward the food
-        aquarium.FishList.forEach(fish => {
-            if (fish.svgElement) {
-                fish.svgElement.stop(true); // Stop any current animation
-                DirectFishToFood(fish, x, y);
-            }
-        });
-    }
+            aquarium.HasFood = true;
+            $("#closeBottomMenuImg").off("click");
+            $('#closeBottomMenuImg').attr('id', 'CBMI');
+            // Make all fish swim toward the food
+            aquarium.FishList.forEach(fish => {
+                if (fish.svgElement) {
+                    fish.svgElement.stop(true); // Stop any current animation
+                    DirectFishToFood(fish, x, y);
+                }
+            });
+        }
+    }, 100);
 }
 
 
