@@ -1,0 +1,157 @@
+.modalContainer {
+    width: 100vw;
+    height: 95vh;
+    position: absolute;
+    justify-content: center;
+    align-items: center;
+    display: none;
+}
+
+.modal {
+    background-color: white;
+    border: 2px solid black;
+    border-radius: 25px;
+    width: 85vw;
+    height: 85vh;
+    position: absolute;
+    z-index: 999;
+    overflow-y: auto;
+}
+
+#closeModal {
+    width: 4vw;
+    height: auto;
+    margin: 0 0 0 95%;
+}
+
+#modalFishName {
+    text-align: center;
+    border: 3px solid black;
+    padding: 1.5vh 0;
+    margin-bottom: 2vh;
+}
+
+#modalStatsBlock div:not(:last-of-type) {
+    text-align: center;
+    border-bottom: 2px solid black;
+    padding: 1.5vh 0;
+}
+
+#modalStatsBlock div:last-of-type {
+    text-align: center;
+    padding: 1.5vh 0;
+}
+
+#modalStatsBlock {
+    border: 3px solid black;
+    margin-top: 2vh;
+}
+
+#modalStatsBlock:not(:first-of-type) {
+    text-align: center;
+}
+
+#modalContent {
+    max-width: 80vw;
+    margin: 0 auto 0 auto;
+}
+
+#colorInfoBlock {
+    display: flex;
+    justify-content: space-around;
+}
+
+.colorInfo {
+    width: 33%;
+}
+
+#modalFishImgContainer {
+    width: 13%;
+    justify-content: center;
+}
+
+.colorInfo div {
+    border: 3px solid black;
+    padding: 1.5vh 0;
+    text-align: center;
+}
+
+.colorInfo div:not(:last-of-type) {
+    margin-bottom: 1vh;
+}
+
+#modalFishImgContainer {
+    align-items: center;
+    display: flex;
+    border: 3px solid black;
+    padding: 1.5vh 7vw;
+}
+
+#modalSaveBlock {
+    margin: 3vh 0;
+    display: flex;
+    justify-content: center;
+}
+
+#modalSaveBlock p {
+    background-color: darkgreen;
+    padding: 1vh 3vw;
+    color: white;
+    border: 2px solid black;
+    border-radius: 25px;
+}
+
+strong,
+b {
+    font-weight: bold;
+}
+
+#modalFishName strong {
+    font-size: 2rem;
+}
+
+#modalStatsBlock>div>strong {
+    font-size: 1.6rem;
+}
+
+#modalFishName {
+    background-color: lightgray;
+}
+
+#modalStatsBlock div:first-of-type {
+    background-color: lightgray;
+}
+
+#modalStatsBlock b,
+#modalStatsBlock p {
+    display: inline;
+}
+
+#modalStatsBlock span {
+    justify-content: space-between;
+    display: flex;
+    max-width: 27vh;
+    text-align: center;
+    margin: 0 auto 0 auto;
+}
+
+b,
+p {
+    font-size: 1.2rem;
+}
+
+@media only screen and (max-width: 768px) {
+
+    b,
+    p {
+        font-size: 0.8rem;
+    }
+
+    #modalFishName strong {
+        font-size: 1.5rem;
+    }
+
+    #modalStatsBlock>div>strong {
+        font-size: 1.2rem;
+    }
+}

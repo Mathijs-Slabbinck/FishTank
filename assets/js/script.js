@@ -425,34 +425,36 @@ $('#fishTank').on('click', '.spawned-fish', function () {
     $('#modalFishImgContainer svg').css("top", "0");
     $('#modalFishImgContainer svg').css("left", "0");
     $('#modalFishImgContainer svg').css("scale", "3");
-    $('#modalFishName').text(fish.Name);
-    $('#modalTailColor p').text(`Tail Fin Color: ${fish.TailFinColor}`);
+    $('#modalFishImgContainer svg').css("width", "80");
+    $('#modalFishImgContainer svg').css("height", "30");
+    $('#modalFishName strong').text(fish.Name);
+    $('#modalTailColor b').text(`Tail Fin Color: ${fish.TailFinColor}`);
     $('#modalTailColor').css("background-color", fish.TailFinColor);
-    $('#modalBodyColor p').text(`Body Color: ${fish.BodyColor}`);
+    $('#modalBodyColor b').text(`Body Color: ${fish.BodyColor}`);
     $('#modalBodyColor').css("background-color", fish.BodyColor);
-    $('#modalFinColor p').text(`Fin Color: ${fish.BottomFinColor}`);
+    $('#modalFinColor b').text(`Fin Color: ${fish.BottomFinColor}`);
     $('#modalFinColor').css("background-color", fish.BottomFinColor);
-    $('#modalSpeed p').text(`Speed: ${fish.Speed}`);
-    $('#modalStatAge p').text(`Age: ${fish.Age}`);
-    $('#modalStatSize p').text(`Size: ${fish.Size}`);
-    $('#modalStatFoodEaten p').text(`Food Eaten: ${fish.FoodEaten}`);
-    $("#modalStatCostPrice p").text(`Cost Price: ${fish.CostPrice}`);
-    $("#modalStatHunger p").text(`Hunger: ${fish.HungerAmount}`);
+    $('#modalSpeed p').text(`${fish.Speed}`);
+    $('#modalStatAge p').text(`${fish.Age}`);
+    $('#modalStatSize p').text(`${fish.Size}`);
+    $('#modalStatFoodEaten p').text(`${fish.FoodEaten}`);
+    $("#modalStatCostPrice p").text(`${fish.CostPrice}`);
+    $("#modalStatHunger p").text(`${fish.HungerAmount}`);
     if (fish.hasSideFin) {
-        $('#modalSideFinColor p').text(`Side Fin Color: ${fish.SideFinColor}`);
+        $('#modalSideFinColor b').text(`Side Fin Color: ${fish.SideFinColor}`);
         $('#modalSideFinColor').css("background-color", fish.SideFinColor);
     }
     else {
-        $('#modalSideFinColor p').text(`No Side Fin`);
+        $('#modalSideFinColor b').text(`No Side Fin`);
         $('#modalSideFinColor').css("background-color", "transparent");
     }
 
     if (fish.hasPattern) {
-        $('#modalPatternColor p').text(`Pattern Color: ${fish.patternColor}`);
+        $('#modalPatternColor b').text(`Pattern Color: ${fish.patternColor}`);
         $('#modalPatternColor').css("background-color", fish.patternColor);
     }
     else {
-        $('#modalPatternColor p').text(`No Pattern`);
+        $('#modalPatternColor b').text(`No Pattern`);
         $('#modalPatternColor').css("background-color", "transparent");
     }
 });
