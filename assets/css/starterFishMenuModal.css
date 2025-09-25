@@ -1,0 +1,25 @@
+#modalStarterFishContainer,
+#starterFishButtonsContainer {
+    display: flex;
+}
+
+#starterFishBlocksContainer {
+    border: 3px solid black;
+    display: flex;
+    justify-content: space-around;
+}
+
+#starterFishBlocksContainer>div,
+#starterFishButtonsContainer>div {
+    width: 33%;
+    display: flex;
+    justify-content: center;
+}
+
+#starterFish1Block {
+    border-right: 3px solid black;
+}
+
+#starterFish3Block {
+    border-left: 3px solid black;
+}

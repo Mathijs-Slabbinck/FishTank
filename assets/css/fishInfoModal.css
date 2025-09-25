@@ -1,34 +1,7 @@
-.modalContainer {
-    width: 100vw;
-    height: 95vh;
-    position: absolute;
-    justify-content: center;
-    align-items: center;
-    display: none;
-}
-
-.modal {
-    background-color: white;
-    border: 2px solid black;
-    border-radius: 25px;
-    width: 85vw;
-    height: 85vh;
-    position: absolute;
-    z-index: 999;
-    overflow-y: auto;
-}
-
-#closeModal {
+.closeModal {
     width: 4vw;
     height: auto;
     margin: 0 0 0 95%;
-}
-
-#modalFishName {
-    text-align: center;
-    border: 3px solid black;
-    padding: 1.5vh 0;
-    margin-bottom: 2vh;
 }
 
 #modalStatsBlock div:not(:last-of-type) {
@@ -51,7 +24,7 @@
     text-align: center;
 }
 
-#modalContent {
+.modalContent {
     max-width: 80vw;
     margin: 0 auto 0 auto;
 }
@@ -87,35 +60,8 @@
     padding: 1.5vh 7vw;
 }
 
-#modalSaveBlock {
-    margin: 3vh 0;
-    display: flex;
-    justify-content: center;
-}
-
-#modalSaveBlock p {
-    background-color: darkgreen;
-    padding: 1vh 3vw;
-    color: white;
-    border: 2px solid black;
-    border-radius: 25px;
-}
-
-strong,
-b {
-    font-weight: bold;
-}
-
-#modalFishName strong {
-    font-size: 2rem;
-}
-
 #modalStatsBlock>div>strong {
     font-size: 1.6rem;
-}
-
-#modalFishName {
-    background-color: lightgray;
 }
 
 #modalStatsBlock div:first-of-type {

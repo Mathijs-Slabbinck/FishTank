@@ -9,6 +9,62 @@ body {
     /* Likely future */
 }
 
+.modalContainer {
+    width: 100vw;
+    height: 95vh;
+    position: absolute;
+    justify-content: center;
+    align-items: center;
+    display: none;
+}
+
+.modal {
+    background-color: white;
+    border: 2px solid black;
+    border-radius: 25px;
+    width: 85vw;
+    height: 85vh;
+    position: absolute;
+    z-index: 999;
+    overflow-y: auto;
+}
+
+.modalTitle {
+    text-align: center;
+    border: 3px solid black;
+    padding: 1.5vh 0;
+    margin-bottom: 2vh;
+    background-color: lightgray;
+}
+
+.modalContent {
+    max-width: 80vw;
+    margin: 0 auto 0 auto;
+}
+
+strong,
+b {
+    font-weight: bold;
+}
+
+.modalTitle strong {
+    font-size: 2rem;
+}
+
+.modalGreenButtonBlock {
+    margin: 3vh 0;
+    display: flex;
+    justify-content: center;
+}
+
+.modalGreenButtonBlock p {
+    background-color: darkgreen;
+    padding: 1vh 3vw;
+    color: white;
+    border: 2px solid black;
+    border-radius: 25px;
+}
+
 .fish {
     --body-color: steelblue;
     --fin-color: #5bc0de;
