@@ -438,10 +438,28 @@ $('#fishTank').on('click', '.spawned-fish', function () {
     $('#modalFishImgContainer svg').css("height", "30");
     $('#modalFishName strong').text(fish.Name);
     $('#modalTailColor b').text(`Tail Fin Color: ${fish.TailFinColor}`);
+    if (IsDarkColor(fish.TailFinColor)) {
+        $('#modalTailColor b').css('color', 'white');
+    }
+    else {
+        $('#modalTailColor b').css('color', 'black');
+    }
     $('#modalTailColor').css("background-color", fish.TailFinColor);
     $('#modalBodyColor b').text(`Body Color: ${fish.BodyColor}`);
+    if (IsDarkColor(fish.BodyColor)) {
+        $('#modalBodyColor b').css('color', 'white');
+    }
+    else {
+        $('#modalBodyColor b').css('color', 'black');
+    }
     $('#modalBodyColor').css("background-color", fish.BodyColor);
     $('#modalFinColor b').text(`Fin Color: ${fish.BottomFinColor}`);
+    if (IsDarkColor(fish.BottomFinColor)) {
+        $('#modalFinColor b').css('color', 'white');
+    }
+    else {
+        $('#modalFinColor b').css('color', 'black');
+    }
     $('#modalFinColor').css("background-color", fish.BottomFinColor);
     $('#modalSpeed p').text(`${fish.Speed}`);
     $('#modalStatAge p').text(`${fish.Age}`);
@@ -449,21 +467,36 @@ $('#fishTank').on('click', '.spawned-fish', function () {
     $('#modalStatFoodEaten p').text(`${fish.FoodEaten}`);
     $("#modalStatCostPrice p").text(`${fish.CostPrice}`);
     $("#modalStatHunger p").text(`${fish.HungerAmount}`);
-    if (fish.hasSideFin) {
+
+    if (fish.HasSideFin) {
         $('#modalSideFinColor b').text(`Side Fin Color: ${fish.SideFinColor}`);
+        if (IsDarkColor(fish.SideFinColor)) {
+            $('#modalSideFinColor b').css('color', 'white');
+        }
+        else {
+            $('#modalSideFinColor b').css('color', 'black');
+        }
         $('#modalSideFinColor').css("background-color", fish.SideFinColor);
     }
     else {
         $('#modalSideFinColor b').text(`No Side Fin`);
+        $('#modalSideFinColor b').css("color", "black");
         $('#modalSideFinColor').css("background-color", "transparent");
     }
 
-    if (fish.hasPattern) {
-        $('#modalPatternColor b').text(`Pattern Color: ${fish.patternColor}`);
-        $('#modalPatternColor').css("background-color", fish.patternColor);
+    if (fish.HasPattern) {
+        $('#modalPatternColor b').text(`Pattern Color: ${fish.PatternColor}`);
+        if (IsDarkColor(fish.PatternColor)) {
+            $('#modalPatternColor b').css('color', 'white');
+        }
+        else {
+            $('#modalPatternColor b').css('color', 'black');
+        }
+        $('#modalPatternColor').css("background-color", fish.PatternColor);
     }
     else {
         $('#modalPatternColor b').text(`No Pattern`);
+        $('#modalPatternColor b').css("color", "black");
         $('#modalPatternColor').css("background-color", "transparent");
     }
 });
@@ -476,3 +509,115 @@ $('#closeModal').click(function () {
     $('#fishModal').hide();
     $(".modalContainer").hide();
 });
+
+
+
+/* vvv !!! CHATGPT WITH EXTRA COMMENTS; UNDERSTAND THIS !!! vvv */
+
+
+function IsDarkColor(color) {
+    if (!color || color.toLowerCase() === "transparent") {
+        return false; // treat transparent as light
+    }
+
+    // We'll normalize the color into an RGB array: [red, green, blue]
+    let rgb = color;
+
+    // Case 1: The color is in HEX format like "#ff8800"
+    if (rgb.startsWith("#")) {
+        // Remove the "#" and parse the hex string into a number
+        let bigint = parseInt(rgb.slice(1), 16);
+
+        // Extract red, green, and blue using bitwise operations
+        // Example: for #ff8800 (hex ff8800 = decimal 16744192)
+        // r = ff (255), g = 88 (136), b = 00 (0)
+        let r = (bigint >> 16) & 255; // shift 16 bits to the right → red
+        let g = (bigint >> 8) & 255;  // shift 8 bits → green
+        let b = bigint & 255;         // lowest 8 bits → blue
+
+        // Replace rgb variable with array of values
+        rgb = [r, g, b];
+
+        // Case 2: The color is already in "rgb(...)" or "rgba(...)" format
+    } else if (rgb.startsWith("rgb")) {
+        // Grab all the numbers inside the string (ignores "rgb", commas, parentheses)
+        // Example: "rgb(255, 136, 0)" → [255, 136, 0]
+        rgb = rgb.match(/\d+/g).map(Number).slice(0, 3);
+        // slice(0, 3) ensures we drop alpha if it's "rgba(...)"
+    }
+
+    // Destructure red, green, blue into their own variables
+    const [r, g, b] = rgb;
+
+    // Now we compute "perceived brightness" of the color.
+    // This isn't a simple average, because human eyes are more sensitive
+    // to green, less to blue. The formula weights the channels accordingly.
+    //
+    // Formula explanation (YIQ color space approximation):
+    // brightness = 0.299*R + 0.587*G + 0.114*B
+    //
+    // Multiplying by 1000 and using integers avoids floating-point mess.
+    const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+
+    // Pick a threshold to decide what's "dark."
+    // Brightness scale goes 0 (black) to 255 (white).
+    // 128 is a middle-ish cutoff. Below = "dark", above = "light."
+    return brightness < 100;
+}
+
+
+
+
+
+
+/* TEMP FUNCTION TO TEST vvv */
+
+function GetBrightNessLevel(color) {
+    if (!color || color.toLowerCase() === "transparent") {
+        return false; // treat transparent as light
+    }
+
+    // We'll normalize the color into an RGB array: [red, green, blue]
+    let rgb = color;
+
+    // Case 1: The color is in HEX format like "#ff8800"
+    if (rgb.startsWith("#")) {
+        // Remove the "#" and parse the hex string into a number
+        let bigint = parseInt(rgb.slice(1), 16);
+
+        // Extract red, green, and blue using bitwise operations
+        // Example: for #ff8800 (hex ff8800 = decimal 16744192)
+        // r = ff (255), g = 88 (136), b = 00 (0)
+        let r = (bigint >> 16) & 255; // shift 16 bits to the right → red
+        let g = (bigint >> 8) & 255;  // shift 8 bits → green
+        let b = bigint & 255;         // lowest 8 bits → blue
+
+        // Replace rgb variable with array of values
+        rgb = [r, g, b];
+
+        // Case 2: The color is already in "rgb(...)" or "rgba(...)" format
+    } else if (rgb.startsWith("rgb")) {
+        // Grab all the numbers inside the string (ignores "rgb", commas, parentheses)
+        // Example: "rgb(255, 136, 0)" → [255, 136, 0]
+        rgb = rgb.match(/\d+/g).map(Number).slice(0, 3);
+        // slice(0, 3) ensures we drop alpha if it's "rgba(...)"
+    }
+
+    // Destructure red, green, blue into their own variables
+    const [r, g, b] = rgb;
+
+    // Now we compute "perceived brightness" of the color.
+    // This isn't a simple average, because human eyes are more sensitive
+    // to green, less to blue. The formula weights the channels accordingly.
+    //
+    // Formula explanation (YIQ color space approximation):
+    // brightness = 0.299*R + 0.587*G + 0.114*B
+    //
+    // Multiplying by 1000 and using integers avoids floating-point mess.
+    const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+
+    // Pick a threshold to decide what's "dark."
+    // Brightness scale goes 0 (black) to 255 (white).
+    // 128 is a middle-ish cutoff. Below = "dark", above = "light."
+    return brightness;
+}

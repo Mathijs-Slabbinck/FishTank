@@ -77,6 +77,9 @@ class Fish {
     get SideFinColor() { return this.sideFinColor; }
     set SideFinColor(value) { this.sideFinColor = value; }
 
+    get PatternColor() { return this.patternColor; }
+    set PatternColor(value) { this.patternColor = value };
+
     get EyeWhiteColor() { return this.eyeWhiteColor; }
     set EyeWhiteColor(value) { this.eyeWhiteColor = value; }
 
@@ -93,6 +96,8 @@ class Fish {
     set SvgElement(value) { this.svgElement = value; }
 
     get HasPattern() { return this.hasPattern; }
+
+    get HasSideFin() { return this.hasSideFin; }
 
     get Speed() { return this.speed; }
     set Speed(value) {
