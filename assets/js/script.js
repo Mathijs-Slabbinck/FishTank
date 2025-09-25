@@ -1,3 +1,7 @@
+/* jshint esversion: 6 */
+
+"use strict";
+
 const AllFishTypes = {
     normalBroadback: 'normalBroadback',
     normalOvalfin: 'normalOvalfin',
@@ -85,7 +89,7 @@ const colors = {
     darkGrayLightPink: '#FFB6C1',
     darkGrayDarkRed: '#8B0000',
     darkGrayDarkBlue: '#00008B',
-}
+};
 
 let notRotatedAtStart = false;
 
@@ -194,7 +198,7 @@ function SpawnRandomFish(fishType, hasPattern = false, hasSideFin = true) {
         svg.attr('height', 30);
         svg.data('fish', newFish);
 
-        $('#fishTank').append(svg);
+        $('#swimZone').append(svg);
 
         newFish.svgElement = svg;
         MoveFishRandomly(newFish);
@@ -202,8 +206,9 @@ function SpawnRandomFish(fishType, hasPattern = false, hasSideFin = true) {
 }
 
 function MoveFishRandomly(fish) {
-    const tankWidth = $('#fishTank').width();
-    const tankHeight = $('#fishTank').height();
+    HavePooChance(fish);
+    const tankWidth = $('#swimZone').width();
+    const tankHeight = $('#swimZone').height();
 
     const maxX = tankWidth - fish.svgElement.width();
     const maxY = tankHeight - fish.svgElement.height();
@@ -228,12 +233,22 @@ function MoveFishRandomly(fish) {
     }
 
     // Animate movement
-    fish.svgElement.animate({
-        left: newX,
-        top: newY
-    }, duration, 'linear', function () {
-        MoveFishRandomly(fish);
-    });
+    fish.svgElement.animate(
+        {
+            left: newX,
+            top: newY
+        },
+        {
+            duration: duration,
+            easing: 'linear',
+            step: function () {
+                HavePooChance(fish);
+            },
+            complete: function () {
+                MoveFishRandomly(fish);
+            }
+        }
+    );
 }
 
 function RestartMovingAllFish() {
@@ -246,7 +261,6 @@ function RestartMovingAllFish() {
 }
 
 function DirectFishToFood(fish, foodX, foodY) {
-    isFoodInAquarium = true;
     const fishX = fish.svgElement.position().left;
     const fishY = fish.svgElement.position().top;
     const deltaX = foodX - fishX;
@@ -263,7 +277,7 @@ function DirectFishToFood(fish, foodX, foodY) {
             $(`img.food`).filter(function () {
                 const food = $(this)[0];
                 const rect = food.getBoundingClientRect();
-                const parentRect = $("#fishTank")[0].getBoundingClientRect();
+                const parentRect = $("#swimZone")[0].getBoundingClientRect();
 
                 // Convert rect to container-relative coordinates
                 const currentLeft = rect.left - parentRect.left;
@@ -294,14 +308,27 @@ function DirectFishToFood(fish, foodX, foodY) {
 
     fish.svgElement.animate(
         { left: newX, top: newY },
-        100, // milliseconds per step
-        function () {
-            DirectFishToFood(fish, foodX, foodY); // Continue until close
+        {
+            duration: 100, // miliseconds per step
+            step: function () {
+                HavePooChance(fish);
+            },
+            complete: function () {
+                DirectFishToFood(fish, foodX, foodY);
+            }
         }
     );
+
 }
 
-
+function HavePooChance(fish) {
+    let random = GetRandomNumber(1, 50000 - fish.CostPrice * 20 - fish.Size * 25);
+    if (random === 1) {
+        const fishX = fish.svgElement.position().left;
+        const fishY = fish.svgElement.position().top;
+        SpawnPoo(fishX, fishY);
+    }
+}
 
 function GetRandomColor() {
     const colorKeys = Object.keys(colors);
@@ -324,6 +351,15 @@ function UpdateStats() {
 $("#openBottomMenuImg").click(function () {
     if (!aquarium.HasFood) {
         OpenBottomMenu();
+    }
+});
+
+$("#openBottomMenuImg").hover(function () {
+    if (aquarium.HasFood) {
+        $("#openBottomMenuImg").addClass("noClickCursor");
+    }
+    else {
+        $("#openBottomMenuImg").removeClass("noClickCursor");
     }
 });
 
@@ -351,17 +387,18 @@ function CloseBottomMenu() {
 
 $("#fishFoodImg").click(function () {
     CloseBottomMenu();
-    $("#fishTank").toggleClass("foodCursor");
+    $("#swimZone").toggleClass("foodCursor");
 });
 
 $("#fishTank").click(function (event) {
-    // Check if the click target is the #fishTank itself, not its children
-    if (event.target !== this) return;
+    // Check if the click target is the #swimZone
+    const swimZone = $("#swimZone");
+    if (event.target !== swimZone[0]) return;
 
     const x = event.offsetX;
     const y = event.offsetY;
 
-    if ($(this).hasClass("foodCursor")) {
+    if (swimZone.hasClass("foodCursor")) {
         if (!aquarium.HasFood) {
             CloseBottomMenu();
             try {
@@ -397,6 +434,20 @@ function SpawnBubble(x, y) {
     }, 2000); // match animation duration
 }
 
+function SpawnPoo(x, y) {
+    // Create a new bubble element
+    const poo = $('<img class="poo" src="images/poo.png" alt="poo">');
+
+    // Position the bubble at the click location
+    poo.css({
+        left: `${x}px`,
+        top: `${y}px`
+    });
+
+    // Append to poo tank
+    $("#fishTank").append(poo);
+}
+
 function SpawnFood(x, y) {
     setTimeout(function () {
         if (!aquarium.HasFood) {
@@ -413,7 +464,7 @@ function SpawnFood(x, y) {
             // Make all fish swim toward the food
             aquarium.FishList.forEach(fish => {
                 if (fish.svgElement) {
-                    fish.svgElement.stop(true); // Stop any current animation
+                    fish.svgElement.stop(); // Stop any current animation
                     DirectFishToFood(fish, x, y);
                 }
             });
@@ -436,6 +487,7 @@ $('#fishTank').on('click', '.spawned-fish', function () {
     $('#modalFishImgContainer svg').css("scale", "3");
     $('#modalFishImgContainer svg').css("width", "80");
     $('#modalFishImgContainer svg').css("height", "30");
+    $('#modalFishImgContainer svg').css("transform", "scaleX(1)");
     $('#modalFishName strong').text(fish.Name);
     $('#modalTailColor b').text(`Tail Fin Color: ${fish.TailFinColor}`);
     if (IsDarkColor(fish.TailFinColor)) {
@@ -564,10 +616,6 @@ function IsDarkColor(color) {
     // 128 is a middle-ish cutoff. Below = "dark", above = "light."
     return brightness < 100;
 }
-
-
-
-
 
 
 /* TEMP FUNCTION TO TEST vvv */

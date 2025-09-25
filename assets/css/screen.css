@@ -23,6 +23,12 @@ body {
     position: relative;
 }
 
+#swimZone {
+    width: 100%;
+    height: 80vh;
+    padding-top: 5vh;
+}
+
 .spawned-fish {
     transform-origin: center;
     position: absolute;
@@ -69,7 +75,11 @@ body {
 }
 
 .foodCursor {
-    cursor: url('../../images/fishFoodCursor.png') 10 10, auto;
+    cursor: url('../media/fishFoodCursor.png') 10 10, auto;
+}
+
+.noClickCursor {
+    cursor: url('../media//noClickCursor.png') 10 10, auto;
 }
 
 .bubble {
@@ -80,6 +90,16 @@ body {
     pointer-events: none;
     /* So clicks don't hit the bubble */
     animation: bubbleRise 2s ease-out forwards;
+}
+
+.poo {
+    position: absolute;
+    width: 30px;
+    /* Adjust size */
+    height: 30px;
+    pointer-events: none;
+    /* So clicks don't hit the bubble */
+    animation: pooRise 2s ease-out forwards;
 }
 
 .food {
@@ -143,3 +163,14 @@ body {
     100% {
         transform: translateY(-60px);
     }
+}
+
+@keyframes pooRise {
+    0% {
+        transform: translateY(0);
+    }
+
+    100% {
+        transform: translateY(-10px);
+    }
+}
