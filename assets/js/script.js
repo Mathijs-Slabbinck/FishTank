@@ -387,8 +387,19 @@ function CloseBottomMenu() {
 
 $("#fishFoodImg").click(function () {
     CloseBottomMenu();
+    if ($("#swimZone").hasClass("dustpanCursor")) {
+        $("#swimZone").removeClass("dustpanCursor");
+    }
     $("#swimZone").toggleClass("foodCursor");
 });
+
+$("#dustpanImg").click(function () {
+    CloseBottomMenu();
+    if ($("#swimZone").hasClass("foodCursor")) {
+        $("#swimZone").removeClass("foodCursor");
+    }
+    $("#swimZone").toggleClass("dustpanCursor");
+})
 
 $("#fishTank").click(function (event) {
     // Check if the click target is the #swimZone
@@ -473,7 +484,7 @@ function SpawnFood(x, y) {
 }
 
 
-$('#fishTank').on('click', '.spawned-fish', function () {
+$('#fishTank').on("click", '.spawned-fish', function () {
     const fish = $(this).data('fish');
     console.log(fish);
     $(".modalContainer").css("display", "flex");
@@ -560,6 +571,24 @@ $(window).on('resize', function () {
 $('#closeModal').click(function () {
     $('#fishModal').hide();
     $(".modalContainer").hide();
+});
+
+$("#fishTank").on("mouseenter", ".poo", function () {
+    if ($("#swimZone").hasClass("dustpanCursor")) {
+        $(this).addClass("dustpanGreenCursor");
+    }
+});
+
+$("#fishTank").on("mouseleave", ".poo", function () {
+    $(this).removeClass("dustpanGreenCursor");
+});
+
+$("#fishTank").on("click", ".poo", function () {
+    if ($("#swimZone").hasClass("dustpanCursor")) {
+        $(this).remove();
+        player.MoneyAmount += 3;
+        UpdateStats();
+    }
 });
 
 

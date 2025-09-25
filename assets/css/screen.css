@@ -63,7 +63,8 @@ body {
     text-align: center;
 }
 
-#fishFoodImg {
+#fishFoodImg,
+#dustpanImg {
     height: 9vh;
     width: auto;
     border: 2px solid black;
@@ -76,6 +77,14 @@ body {
 
 .foodCursor {
     cursor: url('../media/fishFoodCursor.png') 10 10, auto;
+}
+
+.dustpanCursor {
+    cursor: url('../media/dustpanCursor.png') 10 10, auto;
+}
+
+.dustpanGreenCursor {
+    cursor: url('../media/dustpanGreenCursor.png') 10 10, auto;
 }
 
 .noClickCursor {
@@ -97,7 +106,6 @@ body {
     width: 30px;
     /* Adjust size */
     height: 30px;
-    pointer-events: none;
     /* So clicks don't hit the bubble */
     animation: pooRise 2s ease-out forwards;
 }
