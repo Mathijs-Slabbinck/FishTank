@@ -322,7 +322,7 @@ function DirectFishToFood(fish, foodX, foodY) {
 }
 
 function HavePooChance(fish) {
-    let random = GetRandomNumber(1, 50000 - fish.CostPrice * 20 - fish.Size * 25);
+    let random = GetRandomNumber(1, 15000 - fish.CostPrice * 20 - fish.Size * 25);
     if (random === 1) {
         const fishX = fish.svgElement.position().left;
         const fishY = fish.svgElement.position().top;
