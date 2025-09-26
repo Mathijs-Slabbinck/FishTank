@@ -175,8 +175,6 @@ function CheckOrientation() {
 
 $("#starterFish1ButtonHolder").click(function () {
     var fish = starterFishes[0];
-    fish.svgElement.css("width", "80");
-    fish.svgElement.css("height", "30");
     fish.svgElement.css({ position: 'absolute', top: 0, left: 0, scale: '', transform: 'scaleX(1)' });
     CloseStarterFishModal();
     SpawnFish(fish);
@@ -184,8 +182,6 @@ $("#starterFish1ButtonHolder").click(function () {
 
 $("#starterFish2ButtonHolder").click(function () {
     var fish = starterFishes[1];
-    fish.svgElement.css("width", "80");
-    fish.svgElement.css("height", "30");
     fish.svgElement.css({ position: 'absolute', top: 0, left: 0, scale: '', transform: 'scaleX(1)' });
     CloseStarterFishModal();
     SpawnFish(fish);
@@ -193,8 +189,6 @@ $("#starterFish2ButtonHolder").click(function () {
 
 $("#starterFish3ButtonHolder").click(function () {
     var fish = starterFishes[2];
-    fish.svgElement.css("width", "80");
-    fish.svgElement.css("height", "30");
     fish.svgElement.css({ position: 'absolute', top: 0, left: 0, scale: '', transform: 'scaleX(1)' });
     CloseStarterFishModal();
     SpawnFish(fish);
