@@ -53,42 +53,27 @@ function checkOrientation() {
     }
 }
 
-function pushStarterFishes() {
-    createStarterFish(getRandomNormalFishType()).then(fish => {
-        starterFishes.push(fish);
-        fish.SvgElement.css({ top: '', left: '' });
-        fish.SvgElement.css({ position: 'relative', scale: '3', transform: 'scaleX(1)' });
-        fish.SvgElement.css("margin", "5vh auto 5vh auto");
-        $("#starterFish1Block").append(fish.SvgElement);
-        console.log("--------------------------------------------------");
-        console.log("Starter Fish 1:");
-        console.log(fish);
-        console.log("--------------------------------------------------");
-    });
+async function pushStarterFishes() {
+    const fish1 = await createStarterFish(getRandomNormalFishType());
+    addFishToBlock(fish1, "#starterFish1Block");
+    starterFishes.push(fish1);
 
-    createStarterFish(getRandomNormalFishType()).then(fish => {
-        starterFishes.push(fish);
-        fish.SvgElement.css({ top: '', left: '' });
-        fish.SvgElement.css({ position: 'relative', scale: '3', transform: 'scaleX(1)' });
-        fish.SvgElement.css("margin", "5vh auto 5vh auto");
-        $("#starterFish2Block").append(fish.SvgElement);
-        console.log("--------------------------------------------------");
-        console.log("Starter Fish 2:");
-        console.log(fish);
-        console.log("--------------------------------------------------");
-    });
+    const fish2 = await createStarterFish(getRandomNormalFishType());
+    addFishToBlock(fish2, "#starterFish2Block");
+    starterFishes.push(fish2);
 
-    createStarterFish(getRandomNormalFishType()).then(fish => {
-        starterFishes.push(fish);
-        fish.SvgElement.css({ top: '', left: '' });
-        fish.SvgElement.css({ position: 'relative', scale: '3', transform: 'scaleX(1)' });
-        fish.SvgElement.css("margin", "5vh auto 5vh auto");
-        $("#starterFish3Block").append(fish.SvgElement);
-        console.log("--------------------------------------------------");
-        console.log("Starter Fish 3:");
-        console.log(fish);
-        console.log("--------------------------------------------------");
-    });
+    const fish3 = await createStarterFish(getRandomNormalFishType());
+    addFishToBlock(fish3, "#starterFish3Block");
+    starterFishes.push(fish3);
+
+    console.log(starterFishes);
+}
+
+function addFishToBlock(fish, blockSelector) {
+    fish.SvgElement.css({ top: '', left: '' });
+    fish.SvgElement.css({ position: 'relative', scale: '3', transform: 'scaleX(1)' });
+    fish.SvgElement.css("margin", "5vh auto 5vh auto");
+    $(blockSelector).append(fish.SvgElement);
 }
 
 function createStarterFish(fishType) {
@@ -285,6 +270,13 @@ function getRandomColor() {
 function getRandomNumber(min, max) {
     // Returns a random integer between min and max, inclusive
     return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function camelCaseToCapitalizedText(str) {
+    if (!str) return "";
+    return str
+        .replace(/([a-z])([A-Z])/g, "$1 $2") // insert space before capital letters
+        .replace(/^./, match => match.toUpperCase()); // capitalize first letter
 }
 
 function updateStats() {
@@ -506,6 +498,7 @@ $('#fishTank').on("click", '.spawned-fish', function () {
     $('#modalFishImgContainer svg').css("height", "30");
     $('#modalFishImgContainer svg').css("transform", "scaleX(1)");
     $('#modalFishName strong').text(fish.Name);
+    $('#modalStatFishType p').text(camelCaseToCapitalizedText(fish.FishTypeName));
     $('#modalTailColor b').text(`Tail Fin Color: ${fish.TailFinColor}`);
     if (isDarkColor(fish.TailFinColor)) {
         $('#modalTailColor b').css('color', 'white');

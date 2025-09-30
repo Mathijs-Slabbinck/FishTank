@@ -81,6 +81,15 @@
     margin: 0 auto 0 auto;
 }
 
+#modalStatFishType span:first-of-type {
+    display: flex;
+    flex-direction: column;
+}
+
+#modalStatFishType span p:first-of-type {
+    margin-top: 1vh;
+}
+
 b,
 p {
     font-size: 1.2rem;
