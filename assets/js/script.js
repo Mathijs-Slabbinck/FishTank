@@ -104,32 +104,7 @@ $(document).ready(function () {
         $('#coinDisplayBlock').hide();
         notRotatedAtStart = true;
     } else {
-        CreateStarterFish(GetRandomNormalFishType()).then(fish => {
-            starterFishes.push(fish);
-            fish.svgElement.css({ top: '', left: '' });
-            fish.svgElement.css({ position: 'relative', scale: '3', transform: 'scaleX(1)' });
-            fish.svgElement.css("margin", "5vh auto 5vh auto");
-            $("#starterFish1Block").append(fish.svgElement);
-            console.log(fish);
-        });
-
-        CreateStarterFish(GetRandomNormalFishType()).then(fish => {
-            starterFishes.push(fish);
-            fish.svgElement.css({ top: '', left: '' });
-            fish.svgElement.css({ position: 'relative', scale: '3', transform: 'scaleX(1)' });
-            fish.svgElement.css("margin", "5vh auto 5vh auto");
-            $("#starterFish2Block").append(fish.svgElement);
-            console.log(fish);
-        });
-
-        CreateStarterFish(GetRandomNormalFishType()).then(fish => {
-            starterFishes.push(fish);
-            fish.svgElement.css({ top: '', left: '' });
-            fish.svgElement.css({ position: 'relative', scale: '3', transform: 'scaleX(1)' });
-            fish.svgElement.css("margin", "5vh auto 5vh auto");
-            $("#starterFish3Block").append(fish.svgElement);
-            console.log(fish);
-        });
+        PushStarterFishes();
     }
     UpdateStats();
 });
@@ -166,11 +141,44 @@ function CheckOrientation() {
         $('#rotatePhone').hide();
         $('#fishTank').show();
         $('#coinDisplayBlock').show();
+
+        if (notRotatedAtStart) {
+            PushStarterFishes();
+        }
+
         if (notRotatedAtStart) {
             notRotatedAtStart = false;
         }
-        RestartMovingAllFish();
     }
+}
+
+function PushStarterFishes() {
+    CreateStarterFish(GetRandomNormalFishType()).then(fish => {
+        starterFishes.push(fish);
+        fish.svgElement.css({ top: '', left: '' });
+        fish.svgElement.css({ position: 'relative', scale: '3', transform: 'scaleX(1)' });
+        fish.svgElement.css("margin", "5vh auto 5vh auto");
+        $("#starterFish1Block").append(fish.svgElement);
+        console.log(fish);
+    });
+
+    CreateStarterFish(GetRandomNormalFishType()).then(fish => {
+        starterFishes.push(fish);
+        fish.svgElement.css({ top: '', left: '' });
+        fish.svgElement.css({ position: 'relative', scale: '3', transform: 'scaleX(1)' });
+        fish.svgElement.css("margin", "5vh auto 5vh auto");
+        $("#starterFish2Block").append(fish.svgElement);
+        console.log(fish);
+    });
+
+    CreateStarterFish(GetRandomNormalFishType()).then(fish => {
+        starterFishes.push(fish);
+        fish.svgElement.css({ top: '', left: '' });
+        fish.svgElement.css({ position: 'relative', scale: '3', transform: 'scaleX(1)' });
+        fish.svgElement.css("margin", "5vh auto 5vh auto");
+        $("#starterFish3Block").append(fish.svgElement);
+        console.log(fish);
+    });
 }
 
 $("#starterFish1ButtonHolder").click(function () {
