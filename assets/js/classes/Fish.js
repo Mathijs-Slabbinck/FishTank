@@ -2,65 +2,67 @@ class Fish {
     constructor(
         name,
         fishTypeName,
-        age,
-        size,
-        isAlive,
         bodyColor,
         tailFinColor,
-        bottomFinColor,
-        topFinColor,
         speed,
-        hasSideFin = true,
-        hasPattern = false,
+        size = 1,
         sideFinColor = null,
         patternColor = null,
+        topFinColor = null,
+        bottomFinColor = null,
         eyeWhiteColor = "white",
         pupilColor = "black",
         hungerAmount = 0,
         costPrice = 0,
         svgElement = null,
         foodEaten = 0,
-
+        isAlive = true,
+        age = 0,
+        currentValue = 0
     ) {
         // Basic properties
         this.name = name;
-        this.fishTypeName = fishTypeName;
-        this.age = age;
-        this.size = size;
-        this.isAlive = isAlive;
+        this.FishTypeName = fishTypeName;
         this.bodyColor = bodyColor;
         this.tailFinColor = tailFinColor;
-        this.bottomFinColor = bottomFinColor;
-        this.topFinColor = topFinColor;
-        this.speed = speed;
+        this.Speed = speed;
+        this.Size = size;
         // Optional with defaults
-        this.hasSideFin = hasSideFin; // Indicates if the fish has a side fin
-        this.hasPattern = hasPattern; // Indicates if the fish has a pattern
         this.sideFinColor = sideFinColor;
         this.patternColor = patternColor;
+        this.topFinColor = topFinColor;
+        this.bottomFinColor = bottomFinColor;
         this.eyeWhiteColor = eyeWhiteColor;
         this.pupilColor = pupilColor;
         this.hungerAmount = hungerAmount;
         this.costPrice = costPrice; // Cost price of the fish
-        this.svgElement = svgElement; // SVG representation of the fish
+        this.SvgElement = svgElement; // SVG representation of the fish
         this.foodEaten = foodEaten; // Amount of food eaten by the fish
+        this.isAlive = isAlive;
+        this.age = age;
+        this.currentValue = currentValue; // Current value of the fish based on age and size
     }
 
     // Getters and setters
+
     get Name() { return this.name; }
-    set Name(value) { this.name = value; }
+    set Name(value) {
+        if (value === undefined || value === null || value.trim() === "") {
+            throw new Error("The name of the fish can't be empty!");
+        }
+        else {
+            this.name = value;
+        }
+    }
 
     get FishTypeName() { return this.fishTypeName; }
-    set FishTypeName(value) { this.fishTypeName = value; }
-
-    get Age() { return this.age; }
-    set Age(value) { this.age = value; }
-
-    get Size() { return this.size; }
-    set Size(value) { this.size = value; }
-
-    get IsAlive() { return this.isAlive; }
-    set IsAlive(value) { this.isAlive = value; }
+    set FishTypeName(value) {
+        if (isInEnum(value, AllFishTypes)) {
+            this.fishTypeName = value;
+        } else {
+            throw new Error("This fishtype is not recognized!");
+        }
+    }
 
     get BodyColor() { return this.bodyColor; }
     set BodyColor(value) { this.bodyColor = value; }
@@ -68,17 +70,110 @@ class Fish {
     get TailFinColor() { return this.tailFinColor; }
     set TailFinColor(value) { this.tailFinColor = value; }
 
-    get BottomFinColor() { return this.bottomFinColor; }
-    set BottomFinColor(value) { this.bottomFinColor = value; }
+    get Size() { return this.size; }
+    set Size(value) {
+        if (value < 1) {
+            throw new Error("Size cannot be less than 1!");
+        }
+        if (value > 7) {
+            throw new Error("Size cannot exceed 7!");
+        }
+        this.size = value;
+    }
 
-    get TopFinColor() { return this.topFinColor; }
-    set TopFinColor(value) { this.topFinColor = value; }
+    get Speed() { return this.speed; }
+    set Speed(value) {
+        if (value < 0) {
+            throw new Error("Speed cannot be negative!");
+        }
+        if (value > 5) {
+            throw new Error("Speed cannot exceed 5!");
+        }
+        this.speed = value;
+    }
+
+    get HasBottomFin() {
+        if (
+            this.FishTypeName === AllFishTypes.bubbleback ||
+            this.FishTypeName === AllFishTypes.bubblemark ||
+            this.FishTypeName === AllFishTypes.longpaddlefin ||
+            this.FishTypeName === AllFishTypes.normalBroadback ||
+            this.FishTypeName === AllFishTypes.normalOvalfin ||
+            this.FishTypeName === AllFishTypes.normalPaddlefin ||
+            this.FishTypeName === AllFishTypes.normalRoundback ||
+            this.FishTypeName === AllFishTypes.piranha ||
+            this.FishTypeName === AllFishTypes.tigerstripes ||
+            this.FishTypeName === AllFishTypes.wavyfin
+        ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    get HasTopFin() {
+        if (
+            this.FishTypeName === AllFishTypes.bubbleback ||
+            this.FishTypeName === AllFishTypes.bubblemark ||
+            this.FishTypeName === AllFishTypes.clownfish ||
+            this.FishTypeName === AllFishTypes.longpaddlefin ||
+            this.FishTypeName === AllFishTypes.normalBroadback ||
+            this.FishTypeName === AllFishTypes.normalOvalfin ||
+            this.FishTypeName === AllFishTypes.normalPaddlefin ||
+            this.FishTypeName === AllFishTypes.normalRoundback ||
+            this.FishTypeName === AllFishTypes.piranha ||
+            this.FishTypeName === AllFishTypes.tigerstripes ||
+            this.FishTypeName === AllFishTypes.wavyfin
+        ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    get HasPattern() {
+        if (
+            this.FishTypeName === AllFishTypes.normalBroadback ||
+            this.FishTypeName === AllFishTypes.normalOvalfin ||
+            this.FishTypeName === AllFishTypes.normalPaddlefin ||
+            this.FishTypeName === AllFishTypes.normalRoundback ||
+            this.FishTypeName === AllFishTypes.normalSlimtail
+        ) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    get HasSideFin() {
+        if (
+            this.FishTypeName === AllFishTypes.bubblemark ||
+            this.FishTypeName === AllFishTypes.clownfish ||
+            this.FishTypeName === AllFishTypes.longpaddlefin ||
+            this.FishTypeName === AllFishTypes.normalBroadback ||
+            this.FishTypeName === AllFishTypes.normalOvalfin ||
+            this.FishTypeName === AllFishTypes.normalPaddlefin ||
+            this.FishTypeName === AllFishTypes.normalRoundback ||
+            this.FishTypeName === AllFishTypes.normalSlimtail ||
+            this.FishTypeName === AllFishTypes.tigerstripes
+        ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     get SideFinColor() { return this.sideFinColor; }
     set SideFinColor(value) { this.sideFinColor = value; }
 
     get PatternColor() { return this.patternColor; }
-    set PatternColor(value) { this.patternColor = value };
+    set PatternColor(value) { this.patternColor = value; }
+
+    get BottomFinColor() { return this.bottomFinColor; }
+    set BottomFinColor(value) { this.bottomFinColor = value; }
+
+    get TopFinColor() { return this.topFinColor; }
+    set TopFinColor(value) { this.topFinColor = value; }
 
     get EyeWhiteColor() { return this.eyeWhiteColor; }
     set EyeWhiteColor(value) { this.eyeWhiteColor = value; }
@@ -93,22 +188,20 @@ class Fish {
     set CostPrice(value) { this.costPrice = value; }
 
     get SvgElement() { return this.svgElement; }
-    set SvgElement(value) { this.svgElement = value; }
-
-    get HasPattern() { return this.hasPattern; }
-
-    get HasSideFin() { return this.hasSideFin; }
-
-    get Speed() { return this.speed; }
-    set Speed(value) {
-        if (value < 0) {
-            throw new Error("Speed cannot be negative!");
+    set SvgElement(value) {
+        if (!value) {
+            this.svgElement = null;
         }
-        if (value > 7) {
-            throw new Error("Speed cannot exceed 7!");
+        else if (value.jquery) {
+            // Already a jQuery object
+            this.svgElement = value;
         }
-        this.speed = value;
+        else {
+            // Wrap raw DOM node
+            this.svgElement = $(value);
+        }
     }
+
 
     get FoodEaten() {
         return this.foodEaten;
@@ -118,48 +211,61 @@ class Fish {
             throw new Error("Food eaten cannot be negative!");
         }
         else if (value > 100) {
-            this.size = 7;
+            this.Size = 7;
             this.SvgElement.attr('width', 170);
             this.SvgElement.attr('height', 100);
         }
         else if (value > 75) {
-            this.size = 6;
+            this.Size = 6;
             this.SvgElement.attr('width', 160);
             this.SvgElement.attr('height', 90);
         }
         else if (value > 50) {
-            this.size = 5;
+            this.Size = 5;
             this.SvgElement.attr('width', 150);
             this.SvgElement.attr('height', 80);
         }
         else if (value > 30) {
-            this.size = 4;
+            this.Size = 4;
             this.SvgElement.attr('width', 140);
             this.SvgElement.attr('height', 70);
         }
         else if (value > 20) {
-            this.size = 3;
+            this.Size = 3;
             this.SvgElement.attr('width', 130);
             this.SvgElement.attr('height', 60);
         }
         else if (value > 10) {
-            this.size = 2;
+            this.Size = 2;
             this.SvgElement.attr('width', 120);
             this.SvgElement.attr('height', 50);
         }
         else if (value > 5) {
-            this.size = 1;
+            this.Size = 1;
             this.SvgElement.attr('width', 100);
             this.SvgElement.attr('height', 40);
         }
         this.foodEaten = value;
     }
 
-    GetSpeedInPixelsPerSecond() {
-        return this.speed * 10;
+    get IsAlive() { return this.isAlive; }
+    set IsAlive(value) { this.isAlive = value; }
+
+    get Age() { return this.age; }
+    set Age(value) { this.age = value; }
+
+    get CurrentValue() { return this.currentValue; }
+    set CurrentValue(value) { this.currentValue = value; }
+
+    getSpeedInPixelsPerSecond() {
+        return this.Speed * 10;
     }
 
     toString() {
-        return this.name;
+        return this.Name;
     }
+}
+
+function isInEnum(value, enumObj) {
+    return Object.values(enumObj).includes(value);
 }

@@ -25,5 +25,22 @@
 }
 
 #starterFishMenu .modalTitle {
-    margin-top: 3vh;
+    margin: 7vh 0 4vh 0;
+}
+
+#starterFishBlocksContainer div svg {
+    stroke: black;
+    stroke-width: 1;
+    stroke-linejoin: round;
+    /* smooth edges */
+}
+
+@media only screen and (max-width: 1000px) {
+    #starterFishMenu .modalTitle {
+        margin: 7vh 0 7vh 0;
+    }
+
+    #starterFishBlocksContainer div svg {
+        padding: 5vh 7vh !important;
+    }
 }

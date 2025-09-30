@@ -4,10 +4,10 @@
     <polygon points="10,50 0,35 0,65" fill="var(--tail-color, #7dd)" />
 
     <!-- Top fin -->
-    <path d="M60,30 Q70,10 80,30" fill="var(--fin-color, #6ac)" />
+    <path d="M60,30 Q70,10 80,30" fill="var(--top-fin-color, #6ac)" />
 
     <!-- Bottom fin -->
-    <path d="M60,70 Q70,90 80,70" fill="var(--fin-color, #6ac)" />
+    <path d="M60,70 Q70,90 80,70" fill="var(--bottom-fin-color, #6ac)" />
 
     <!-- Body -->
     <path d="M10,50 Q40,15 110,35 Q160,50 110,65 Q40,85 10,50 Z" fill="var(--body-color, #59f)" />
