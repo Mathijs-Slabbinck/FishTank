@@ -48,24 +48,6 @@ function getRandomNormalFishType() {
     return NormalFishTypes[randomIndex];
 }
 
-
-/*
-function SpawnFishes() {
-    spawnRandomFish(AllFishTypes.normalBroadback);
-    spawnRandomFish(AllFishTypes.normalOvalfin);
-    spawnRandomFish(AllFishTypes.normalPaddlefin);
-    spawnRandomFish(AllFishTypes.normalRoundback);
-    spawnRandomFish(AllFishTypes.normalSlimtail);
-    spawnRandomFish(AllFishTypes.tigerstripes, true); // Spawn a tigerstripes fish with pattern
-    spawnRandomFish(AllFishTypes.bubblemark, true); // Spawn a bubblemark fish with pattern
-    spawnRandomFish(AllFishTypes.longpaddlefin, true); // Spawn a longpaddlefin fish with pattern
-    spawnRandomFish(AllFishTypes.clownfish, true); // Spawn a clownfish with pattern
-    spawnRandomFish(AllFishTypes.bubbleback, true, false); // Spawn a bubbleback fish with pattern
-    spawnRandomFish(AllFishTypes.wavyfin, true, false); // Spawn a wavyfin fish with pattern
-    spawnRandomFish(AllFishTypes.piranha, true, false); // Spawn a piranha fish with pattern
-}
-    */
-
 function checkOrientation() {
     if (window.innerWidth < 600) {
         $('#rotatePhone').show();
@@ -115,27 +97,6 @@ function pushStarterFishes() {
     });
 }
 
-$("#starterFish1ButtonHolder").click(function () {
-    var fish = starterFishes[0];
-    fish.svgElement.css({ position: 'absolute', top: 0, left: 0, scale: '', transform: 'scaleX(1)' });
-    closeStarterFishModal();
-    spawnFish(fish);
-});
-
-$("#starterFish2ButtonHolder").click(function () {
-    var fish = starterFishes[1];
-    fish.svgElement.css({ position: 'absolute', top: 0, left: 0, scale: '', transform: 'scaleX(1)' });
-    closeStarterFishModal();
-    spawnFish(fish);
-});
-
-$("#starterFish3ButtonHolder").click(function () {
-    var fish = starterFishes[2];
-    fish.svgElement.css({ position: 'absolute', top: 0, left: 0, scale: '', transform: 'scaleX(1)' });
-    closeStarterFishModal();
-    spawnFish(fish);
-});
-
 function createStarterFish(fishType, hasPattern = false, hasSideFin = true) {
     return new Promise((resolve, reject) => {
         const topAndBottomFinColor = getRandomColor();
@@ -178,72 +139,6 @@ function createStarterFish(fishType, hasPattern = false, hasSideFin = true) {
             resolve(newFish);
         }, 'xml').fail(reject);
     });
-}
-
-
-/* THIS FUNCTION IS UNUSED NOW */
-
-function spawnRandomFish(fishType, hasPattern = false, hasSideFin = true) {
-    console.log(`Spawning fish of type: ${fishType}, hasPattern: ${hasPattern}, hasSideFin: ${hasSideFin}`);
-    const topAndBottomFinColor = getRandomColor();
-
-    // name, fishtype, age, size, isAlive, bodyColor, tailFinColor, bottomFinColor, topFinColor, speed, hasSideFin, sideFinColor, hasPattern
-    const newFish = new Fish(
-        "fish" + parseInt(aquarium.AmountOfFish + 1), // name
-        fishType, // fishTypeName
-        1, // age
-        1, // size
-        true, // isAlive
-        getRandomColor(), // bodyColor
-        getRandomColor(), // tailFinColor
-        topAndBottomFinColor, // bottomFinColor
-        topAndBottomFinColor, // topFinColor
-        getRandomNumber(1, 7), // speed
-        hasSideFin, // hasSideFin
-        hasPattern
-    );
-
-
-    if (hasSideFin) {
-        newFish.sideFinColor = getRandomColor(); // Assign a random color for the side fin
-    }
-
-    if (hasPattern) {
-        newFish.patternColor = getRandomColor(); // Assign a random color for the pattern
-    }
-
-    aquarium.FishList.push(newFish);
-
-    $.get(`assets/media/fish/${fishType}.svg`, function (data) {
-        const svg = $(data).find('svg');
-
-        svg.addClass('spawned-fish');
-        svg.css({
-            '--body-color': newFish.BodyColor,
-            '--tail-color': newFish.TailFinColor,
-            '--fin-color': newFish.BottomFinColor,
-            position: 'absolute',
-            top: 0,
-            left: 0
-        });
-
-        if (hasPattern) {
-            svg.css('--pattern-color', newFish.patternColor);
-        }
-
-        if (hasSideFin) {
-            svg.css('--side-fin-color', newFish.sideFinColor);
-        }
-
-        svg.attr('width', 80);
-        svg.attr('height', 30);
-        svg.data('fish', newFish);
-
-        $('#swimZone').append(svg);
-
-        newFish.svgElement = svg;
-        moveFishRandomly(newFish);
-    }, 'xml');
 }
 
 function spawnFish(fish) {
@@ -393,86 +288,6 @@ function updateStats() {
     $("#moneyAmount").text(player.MoneyAmount);
 }
 
-
-
-$("#openBottomMenuImg").click(function () {
-    if (!aquarium.HasFood) {
-        openBottomMenu();
-    }
-});
-
-$("#openBottomMenuImg").hover(function () {
-    if (aquarium.HasFood) {
-        $("#openBottomMenuImg").addClass("noClickCursor");
-    }
-    else {
-        $("#openBottomMenuImg").removeClass("noClickCursor");
-    }
-});
-
-$(document).on('click', '#closeBottomMenuImg', function () {
-    closeBottomMenu();
-});
-
-function openBottomMenu() {
-    $("#fishTank").css("height", "85vh");
-    $("#bottomMenu").css("display", "flex");
-    $("#openBottomMenuImg").css("display", "none");
-    $("#closeBottomMenuImg").css("display", "inline-block");
-    if (aquarium.HasFood === false) {
-        restartMovingAllFish();
-    }
-}
-
-function closeBottomMenu() {
-    $("#fishTank").css("height", "100vh");
-    $("#bottomMenu").css("display", "none");
-    $("#openBottomMenuImg").css("display", "inline-block");
-    $("#closeBottomMenuImg").css("display", "none");
-    restartMovingAllFish();
-}
-
-$("#fishFoodImg").click(function () {
-    closeBottomMenu();
-    if ($("#swimZone").hasClass("dustpanCursor")) {
-        $("#swimZone").removeClass("dustpanCursor");
-    }
-    $("#swimZone").toggleClass("foodCursor");
-});
-
-$("#dustpanImg").click(function () {
-    closeBottomMenu();
-    if ($("#swimZone").hasClass("foodCursor")) {
-        $("#swimZone").removeClass("foodCursor");
-    }
-    $("#swimZone").toggleClass("dustpanCursor");
-})
-
-$("#fishTank").click(function (event) {
-    // Check if the click target is the #swimZone
-    const swimZone = $("#swimZone");
-    if (event.target !== swimZone[0]) return;
-
-    const x = event.offsetX;
-    const y = event.offsetY;
-
-    if (swimZone.hasClass("foodCursor")) {
-        if (!aquarium.HasFood) {
-            closeBottomMenu();
-            try {
-                player.FoodAmount -= 1; // Decrease food amount
-                spawnFood(x, y);
-            }
-            catch (errorMsg) {
-                alert(errorMsg.message);
-            }
-        }
-    }
-    else {
-        spawnBubble(x, y);
-    }
-});
-
 function spawnBubble(x, y) {
     // Create a new bubble element
     const bubble = $('<img class="bubble" src="images/airBubble.png" alt="air bubble">');
@@ -530,6 +345,143 @@ function spawnFood(x, y) {
     }, 100);
 }
 
+function closeStarterFishModal() {
+    $('#starterFishModal').hide();
+    $("#modalStarterFishContainer").hide();
+}
+
+function openBottomMenu() {
+    $("#fishTank").css("height", "85vh");
+    $("#bottomMenu").css("display", "flex");
+    $("#openBottomMenuImg").css("display", "none");
+    $("#closeBottomMenuImg").css("display", "inline-block");
+    if (aquarium.HasFood === false) {
+        restartMovingAllFish();
+    }
+}
+
+function closeBottomMenu() {
+    $("#fishTank").css("height", "100vh");
+    $("#bottomMenu").css("display", "none");
+    $("#openBottomMenuImg").css("display", "inline-block");
+    $("#closeBottomMenuImg").css("display", "none");
+    restartMovingAllFish();
+}
+
+
+//#region EVENT HANDLERS
+
+$(window).on('resize', function () {
+    checkOrientation();
+});
+
+$("#fishTank").click(function (event) {
+    // Check if the click target is the #swimZone
+    const swimZone = $("#swimZone");
+    if (event.target !== swimZone[0]) return;
+
+    const x = event.offsetX;
+    const y = event.offsetY;
+
+    if (swimZone.hasClass("foodCursor")) {
+        if (!aquarium.HasFood) {
+            closeBottomMenu();
+            try {
+                player.FoodAmount -= 1; // Decrease food amount
+                spawnFood(x, y);
+            }
+            catch (errorMsg) {
+                alert(errorMsg.message);
+            }
+        }
+    }
+    else {
+        spawnBubble(x, y);
+    }
+});
+
+$("#fishFoodImg").click(function () {
+    closeBottomMenu();
+    if ($("#swimZone").hasClass("dustpanCursor")) {
+        $("#swimZone").removeClass("dustpanCursor");
+    }
+    $("#swimZone").toggleClass("foodCursor");
+});
+
+$("#dustpanImg").click(function () {
+    closeBottomMenu();
+    if ($("#swimZone").hasClass("foodCursor")) {
+        $("#swimZone").removeClass("foodCursor");
+    }
+    $("#swimZone").toggleClass("dustpanCursor");
+})
+
+$('#closeFishInfoModal').click(function () {
+    $('#fishInfoModal').hide();
+    $("#modalFishInfoContainer").hide();
+});
+
+$("#starterFish1ButtonHolder").click(function () {
+    var fish = starterFishes[0];
+    fish.svgElement.css({ position: 'absolute', top: 0, left: 0, scale: '', transform: 'scaleX(1)' });
+    closeStarterFishModal();
+    spawnFish(fish);
+});
+
+$("#starterFish2ButtonHolder").click(function () {
+    var fish = starterFishes[1];
+    fish.svgElement.css({ position: 'absolute', top: 0, left: 0, scale: '', transform: 'scaleX(1)' });
+    closeStarterFishModal();
+    spawnFish(fish);
+});
+
+$("#starterFish3ButtonHolder").click(function () {
+    var fish = starterFishes[2];
+    fish.svgElement.css({ position: 'absolute', top: 0, left: 0, scale: '', transform: 'scaleX(1)' });
+    closeStarterFishModal();
+    spawnFish(fish);
+});
+
+$('#closeStarterFishModal').click(function () {
+    closeStarterFishModal();
+});
+
+$(document).on('click', '#closeBottomMenuImg', function () {
+    closeBottomMenu();
+});
+
+$("#openBottomMenuImg").click(function () {
+    if (!aquarium.HasFood) {
+        openBottomMenu();
+    }
+});
+
+$("#openBottomMenuImg").hover(function () {
+    if (aquarium.HasFood) {
+        $("#openBottomMenuImg").addClass("noClickCursor");
+    }
+    else {
+        $("#openBottomMenuImg").removeClass("noClickCursor");
+    }
+});
+
+$("#fishTank").on("mouseenter", ".poo", function () {
+    if ($("#swimZone").hasClass("dustpanCursor")) {
+        $(this).addClass("dustpanGreenCursor");
+    }
+});
+
+$("#fishTank").on("mouseleave", ".poo", function () {
+    $(this).removeClass("dustpanGreenCursor");
+});
+
+$("#fishTank").on("click", ".poo", function () {
+    if ($("#swimZone").hasClass("dustpanCursor")) {
+        $(this).remove();
+        player.MoneyAmount += 3;
+        updateStats();
+    }
+});
 
 $('#fishTank').on("click", '.spawned-fish', function () {
     const fish = $(this).data('fish');
@@ -611,42 +563,7 @@ $('#fishTank').on("click", '.spawned-fish', function () {
     }
 });
 
-$(window).on('resize', function () {
-    checkOrientation();
-});
-
-$('#closeFishInfoModal').click(function () {
-    $('#fishInfoModal').hide();
-    $("#modalFishInfoContainer").hide();
-});
-
-$('#closeStarterFishModal').click(function () {
-    closeStarterFishModal();
-});
-
-function closeStarterFishModal() {
-    $('#starterFishModal').hide();
-    $("#modalStarterFishContainer").hide();
-}
-
-$("#fishTank").on("mouseenter", ".poo", function () {
-    if ($("#swimZone").hasClass("dustpanCursor")) {
-        $(this).addClass("dustpanGreenCursor");
-    }
-});
-
-$("#fishTank").on("mouseleave", ".poo", function () {
-    $(this).removeClass("dustpanGreenCursor");
-});
-
-$("#fishTank").on("click", ".poo", function () {
-    if ($("#swimZone").hasClass("dustpanCursor")) {
-        $(this).remove();
-        player.MoneyAmount += 3;
-        updateStats();
-    }
-});
-
+//#endregion
 
 
 /* vvv !!! CHATGPT WITH EXTRA COMMENTS; UNDERSTAND THIS !!! vvv */
@@ -703,54 +620,87 @@ function isDarkColor(color) {
 }
 
 
-/* TEMP FUNCTION TO TEST vvv */
 
-function getBrightNessLevel(color) {
-    if (!color || color.toLowerCase() === "transparent") {
-        return false; // treat transparent as light
+/* THIS FUNCTION IS CURRENTLY NOT IN USE */
+
+function spawnRandomFish(fishType, hasPattern = false, hasSideFin = true) {
+    console.log(`Spawning fish of type: ${fishType}, hasPattern: ${hasPattern}, hasSideFin: ${hasSideFin}`);
+    const topAndBottomFinColor = getRandomColor();
+
+    // name, fishtype, age, size, isAlive, bodyColor, tailFinColor, bottomFinColor, topFinColor, speed, hasSideFin, sideFinColor, hasPattern
+    const newFish = new Fish(
+        "fish" + parseInt(aquarium.AmountOfFish + 1), // name
+        fishType, // fishTypeName
+        1, // age
+        1, // size
+        true, // isAlive
+        getRandomColor(), // bodyColor
+        getRandomColor(), // tailFinColor
+        topAndBottomFinColor, // bottomFinColor
+        topAndBottomFinColor, // topFinColor
+        getRandomNumber(1, 7), // speed
+        hasSideFin, // hasSideFin
+        hasPattern
+    );
+
+
+    if (hasSideFin) {
+        newFish.sideFinColor = getRandomColor(); // Assign a random color for the side fin
     }
 
-    // We'll normalize the color into an RGB array: [red, green, blue]
-    let rgb = color;
-
-    // Case 1: The color is in HEX format like "#ff8800"
-    if (rgb.startsWith("#")) {
-        // Remove the "#" and parse the hex string into a number
-        let bigint = parseInt(rgb.slice(1), 16);
-
-        // Extract red, green, and blue using bitwise operations
-        // Example: for #ff8800 (hex ff8800 = decimal 16744192)
-        // r = ff (255), g = 88 (136), b = 00 (0)
-        let r = (bigint >> 16) & 255; // shift 16 bits to the right → red
-        let g = (bigint >> 8) & 255;  // shift 8 bits → green
-        let b = bigint & 255;         // lowest 8 bits → blue
-
-        // Replace rgb variable with array of values
-        rgb = [r, g, b];
-
-        // Case 2: The color is already in "rgb(...)" or "rgba(...)" format
-    } else if (rgb.startsWith("rgb")) {
-        // Grab all the numbers inside the string (ignores "rgb", commas, parentheses)
-        // Example: "rgb(255, 136, 0)" → [255, 136, 0]
-        rgb = rgb.match(/\d+/g).map(Number).slice(0, 3);
-        // slice(0, 3) ensures we drop alpha if it's "rgba(...)"
+    if (hasPattern) {
+        newFish.patternColor = getRandomColor(); // Assign a random color for the pattern
     }
 
-    // Destructure red, green, blue into their own variables
-    const [r, g, b] = rgb;
+    aquarium.FishList.push(newFish);
 
-    // Now we compute "perceived brightness" of the color.
-    // This isn't a simple average, because human eyes are more sensitive
-    // to green, less to blue. The formula weights the channels accordingly.
-    //
-    // Formula explanation (YIQ color space approximation):
-    // brightness = 0.299*R + 0.587*G + 0.114*B
-    //
-    // Multiplying by 1000 and using integers avoids floating-point mess.
-    const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+    $.get(`assets/media/fish/${fishType}.svg`, function (data) {
+        const svg = $(data).find('svg');
 
-    // Pick a threshold to decide what's "dark."
-    // Brightness scale goes 0 (black) to 255 (white).
-    // 128 is a middle-ish cutoff. Below = "dark", above = "light."
-    return brightness;
+        svg.addClass('spawned-fish');
+        svg.css({
+            '--body-color': newFish.BodyColor,
+            '--tail-color': newFish.TailFinColor,
+            '--fin-color': newFish.BottomFinColor,
+            position: 'absolute',
+            top: 0,
+            left: 0
+        });
+
+        if (hasPattern) {
+            svg.css('--pattern-color', newFish.patternColor);
+        }
+
+        if (hasSideFin) {
+            svg.css('--side-fin-color', newFish.sideFinColor);
+        }
+
+        svg.attr('width', 80);
+        svg.attr('height', 30);
+        svg.data('fish', newFish);
+
+        $('#swimZone').append(svg);
+
+        newFish.svgElement = svg;
+        moveFishRandomly(newFish);
+    }, 'xml');
 }
+
+
+
+/*
+function SpawnFishes() {
+    spawnRandomFish(AllFishTypes.normalBroadback);
+    spawnRandomFish(AllFishTypes.normalOvalfin);
+    spawnRandomFish(AllFishTypes.normalPaddlefin);
+    spawnRandomFish(AllFishTypes.normalRoundback);
+    spawnRandomFish(AllFishTypes.normalSlimtail);
+    spawnRandomFish(AllFishTypes.tigerstripes, true); // Spawn a tigerstripes fish with pattern
+    spawnRandomFish(AllFishTypes.bubblemark, true); // Spawn a bubblemark fish with pattern
+    spawnRandomFish(AllFishTypes.longpaddlefin, true); // Spawn a longpaddlefin fish with pattern
+    spawnRandomFish(AllFishTypes.clownfish, true); // Spawn a clownfish with pattern
+    spawnRandomFish(AllFishTypes.bubbleback, true, false); // Spawn a bubbleback fish with pattern
+    spawnRandomFish(AllFishTypes.wavyfin, true, false); // Spawn a wavyfin fish with pattern
+    spawnRandomFish(AllFishTypes.piranha, true, false); // Spawn a piranha fish with pattern
+}
+    */
