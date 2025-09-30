@@ -2,14 +2,14 @@ class Fish {
     constructor(
         name,
         fishTypeName,
-        size,
-        speed,
         bodyColor,
         tailFinColor,
+        speed,
+        size = 1,
         sideFinColor = null,
         patternColor = null,
-        bottomFinColor = null,
         topFinColor = null,
+        bottomFinColor = null,
         eyeWhiteColor = "white",
         pupilColor = "black",
         hungerAmount = 0,
@@ -18,73 +18,78 @@ class Fish {
         foodEaten = 0,
         isAlive = true,
         age = 0,
+        currentValue = 0
     ) {
         // Basic properties
-        this._name = name;
+        this.name = name;
         this.FishTypeName = fishTypeName;
-        this._size = size;
-        this._bodyColor = bodyColor;
-        this._tailFinColor = tailFinColor;
+        this.bodyColor = bodyColor;
+        this.tailFinColor = tailFinColor;
         this.Speed = speed;
+        this.Size = size;
         // Optional with defaults
-        this._sideFinColor = sideFinColor;
-        this._patternColor = patternColor;
-        this._topFinColor = topFinColor;
-        this._bottomFinColor = bottomFinColor;
-        this._eyeWhiteColor = eyeWhiteColor;
-        this._pupilColor = pupilColor;
-        this._hungerAmount = hungerAmount;
-        this._costPrice = costPrice; // Cost price of the fish
+        this.sideFinColor = sideFinColor;
+        this.patternColor = patternColor;
+        this.topFinColor = topFinColor;
+        this.bottomFinColor = bottomFinColor;
+        this.eyeWhiteColor = eyeWhiteColor;
+        this.pupilColor = pupilColor;
+        this.hungerAmount = hungerAmount;
+        this.costPrice = costPrice; // Cost price of the fish
         this.SvgElement = svgElement; // SVG representation of the fish
-        this._foodEaten = foodEaten; // Amount of food eaten by the fish
-        this._isAlive = isAlive;
-        this._age = age;
+        this.foodEaten = foodEaten; // Amount of food eaten by the fish
+        this.isAlive = isAlive;
+        this.age = age;
+        this.currentValue = currentValue; // Current value of the fish based on age and size
     }
 
     // Getters and setters
 
-    get Name() { return this._name; }
+    get Name() { return this.name; }
     set Name(value) {
         if (value === undefined || value === null || value.trim() === "") {
             throw new Error("The name of the fish can't be empty!");
         }
         else {
-            this._name = value;
+            this.name = value;
         }
     }
 
-    get FishTypeName() { return this._fishTypeName; }
+    get FishTypeName() { return this.fishTypeName; }
     set FishTypeName(value) {
         if (isInEnum(value, AllFishTypes)) {
-            this._fishTypeName = value;
+            this.fishTypeName = value;
         } else {
             throw new Error("This fishtype is not recognized!");
         }
     }
 
-    get Age() { return this._age; }
-    set Age(value) { this._age = value; }
+    get BodyColor() { return this.bodyColor; }
+    set BodyColor(value) { this.bodyColor = value; }
 
-    get Size() { return this._size; }
+    get TailFinColor() { return this.tailFinColor; }
+    set TailFinColor(value) { this.tailFinColor = value; }
 
-    get IsAlive() { return this._isAlive; }
-    set IsAlive(value) { this._isAlive = value; }
+    get Size() { return this.size; }
+    set Size(value) {
+        if (value < 1) {
+            throw new Error("Size cannot be less than 1!");
+        }
+        if (value > 7) {
+            throw new Error("Size cannot exceed 7!");
+        }
+        this.size = value;
+    }
 
-    get BodyColor() { return this._bodyColor; }
-    set BodyColor(value) { this._bodyColor = value; }
-
-    get TailFinColor() { return this._tailFinColor; }
-    set TailFinColor(value) { this._tailFinColor = value; }
-
-    get Speed() { return this._speed; }
+    get Speed() { return this.speed; }
     set Speed(value) {
         if (value < 0) {
             throw new Error("Speed cannot be negative!");
         }
-        if (value > 7) {
-            throw new Error("Speed cannot exceed 7!");
+        if (value > 5) {
+            throw new Error("Speed cannot exceed 5!");
         }
-        this._speed = value;
+        this.speed = value;
     }
 
     get HasBottomFin() {
@@ -158,90 +163,99 @@ class Fish {
         }
     }
 
-    get SideFinColor() { return this._sideFinColor; }
-    set SideFinColor(value) { this._sideFinColor = value; }
+    get SideFinColor() { return this.sideFinColor; }
+    set SideFinColor(value) { this.sideFinColor = value; }
 
-    get PatternColor() { return this._patternColor; }
-    set PatternColor(value) { this._patternColor = value; }
+    get PatternColor() { return this.patternColor; }
+    set PatternColor(value) { this.patternColor = value; }
 
-    get BottomFinColor() { return this._bottomFinColor; }
-    set BottomFinColor(value) { this._bottomFinColor = value; }
+    get BottomFinColor() { return this.bottomFinColor; }
+    set BottomFinColor(value) { this.bottomFinColor = value; }
 
-    get TopFinColor() { return this._topFinColor; }
-    set TopFinColor(value) { this._topFinColor = value; }
+    get TopFinColor() { return this.topFinColor; }
+    set TopFinColor(value) { this.topFinColor = value; }
 
-    get EyeWhiteColor() { return this._eyeWhiteColor; }
-    set EyeWhiteColor(value) { this._eyeWhiteColor = value; }
+    get EyeWhiteColor() { return this.eyeWhiteColor; }
+    set EyeWhiteColor(value) { this.eyeWhiteColor = value; }
 
-    get PupilColor() { return this._pupilColor; }
-    set PupilColor(value) { this._pupilColor = value; }
+    get PupilColor() { return this.pupilColor; }
+    set PupilColor(value) { this.pupilColor = value; }
 
-    get HungerAmount() { return this._hungerAmount; }
-    set HungerAmount(value) { this._hungerAmount = value; }
+    get HungerAmount() { return this.hungerAmount; }
+    set HungerAmount(value) { this.hungerAmount = value; }
 
-    get CostPrice() { return this._costPrice; }
-    set CostPrice(value) { this._costPrice = value; }
+    get CostPrice() { return this.costPrice; }
+    set CostPrice(value) { this.costPrice = value; }
 
-    get SvgElement() { return this._svgElement; }
+    get SvgElement() { return this.svgElement; }
     set SvgElement(value) {
         if (!value) {
-            this._svgElement = null;
+            this.svgElement = null;
         }
         else if (value.jquery) {
             // Already a jQuery object
-            this._svgElement = value;
+            this.svgElement = value;
         }
         else {
             // Wrap raw DOM node
-            this._svgElement = $(value);
+            this.svgElement = $(value);
         }
     }
 
 
     get FoodEaten() {
-        return this._foodEaten;
+        return this.foodEaten;
     }
     set FoodEaten(value) {
         if (value < 0) {
             throw new Error("Food eaten cannot be negative!");
         }
         else if (value > 100) {
-            this._size = 7;
-            this._svgElement.attr('width', 170);
-            this._svgElement.attr('height', 100);
+            this.Size = 7;
+            this.SvgElement.attr('width', 170);
+            this.SvgElement.attr('height', 100);
         }
         else if (value > 75) {
-            this._size = 6;
-            this._svgElement.attr('width', 160);
-            this._svgElement.attr('height', 90);
+            this.Size = 6;
+            this.SvgElement.attr('width', 160);
+            this.SvgElement.attr('height', 90);
         }
         else if (value > 50) {
-            this._size = 5;
-            this._svgElement.attr('width', 150);
-            this._svgElement.attr('height', 80);
+            this.Size = 5;
+            this.SvgElement.attr('width', 150);
+            this.SvgElement.attr('height', 80);
         }
         else if (value > 30) {
-            this._size = 4;
-            this._svgElement.attr('width', 140);
-            this._svgElement.attr('height', 70);
+            this.Size = 4;
+            this.SvgElement.attr('width', 140);
+            this.SvgElement.attr('height', 70);
         }
         else if (value > 20) {
-            this._size = 3;
-            this._svgElement.attr('width', 130);
-            this._svgElement.attr('height', 60);
+            this.Size = 3;
+            this.SvgElement.attr('width', 130);
+            this.SvgElement.attr('height', 60);
         }
         else if (value > 10) {
-            this._size = 2;
-            this._svgElement.attr('width', 120);
-            this._svgElement.attr('height', 50);
+            this.Size = 2;
+            this.SvgElement.attr('width', 120);
+            this.SvgElement.attr('height', 50);
         }
         else if (value > 5) {
-            this._size = 1;
-            this._svgElement.attr('width', 100);
-            this._svgElement.attr('height', 40);
+            this.Size = 1;
+            this.SvgElement.attr('width', 100);
+            this.SvgElement.attr('height', 40);
         }
-        this._foodEaten = value;
+        this.foodEaten = value;
     }
+
+    get IsAlive() { return this.isAlive; }
+    set IsAlive(value) { this.isAlive = value; }
+
+    get Age() { return this.age; }
+    set Age(value) { this.age = value; }
+
+    get CurrentValue() { return this.currentValue; }
+    set CurrentValue(value) { this.currentValue = value; }
 
     getSpeedInPixelsPerSecond() {
         return this.Speed * 10;

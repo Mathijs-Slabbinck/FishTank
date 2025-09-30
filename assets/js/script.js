@@ -60,7 +60,10 @@ function pushStarterFishes() {
         fish.SvgElement.css({ position: 'relative', scale: '3', transform: 'scaleX(1)' });
         fish.SvgElement.css("margin", "5vh auto 5vh auto");
         $("#starterFish1Block").append(fish.SvgElement);
+        console.log("--------------------------------------------------");
+        console.log("Starter Fish 1:");
         console.log(fish);
+        console.log("--------------------------------------------------");
     });
 
     createStarterFish(getRandomNormalFishType()).then(fish => {
@@ -69,7 +72,10 @@ function pushStarterFishes() {
         fish.SvgElement.css({ position: 'relative', scale: '3', transform: 'scaleX(1)' });
         fish.SvgElement.css("margin", "5vh auto 5vh auto");
         $("#starterFish2Block").append(fish.SvgElement);
+        console.log("--------------------------------------------------");
+        console.log("Starter Fish 2:");
         console.log(fish);
+        console.log("--------------------------------------------------");
     });
 
     createStarterFish(getRandomNormalFishType()).then(fish => {
@@ -78,27 +84,27 @@ function pushStarterFishes() {
         fish.SvgElement.css({ position: 'relative', scale: '3', transform: 'scaleX(1)' });
         fish.SvgElement.css("margin", "5vh auto 5vh auto");
         $("#starterFish3Block").append(fish.SvgElement);
+        console.log("--------------------------------------------------");
+        console.log("Starter Fish 3:");
         console.log(fish);
+        console.log("--------------------------------------------------");
     });
 }
 
 function createStarterFish(fishType) {
-    console.log("fishType: " + fishType);
     return new Promise((resolve, reject) => {
-        // name, fishType, size, speed, bodyColor, tailFinColor, sideFinColor (=null), patternColor (=null), bottomFinColor (=null), topFinColor (=null)
+        // name, fishType, size, speed, bodyColor, tailFinColor, sideFinColor (=null), patternColor (=null), topFinColor (=null), bottomFinColor (=null)
         const newFish = new Fish(
             // name
             "fish" + parseInt(aquarium.AmountOfFish + 1),
             // fishTypeName
             fishType,
-            // size
-            1,
-            // speed
-            getRandomNumber(1, 7),
             // bodyColor
             getRandomColor(),
             // tailFinColor
             getRandomColor(),
+            // speed
+            1 // fixed speed of 2 for starter fish
         );
 
         if (newFish.HasSideFin) newFish.SideFinColor = getRandomColor();
@@ -113,15 +119,18 @@ function createStarterFish(fishType) {
                 '--tail-color': newFish.TailFinColor,
                 position: 'absolute',
                 top: 0,
-                left: 0
+                left: 0,
             });
 
             if (newFish.HasPattern) svg.css('--pattern-color', newFish.PatternColor);
             if (newFish.HasSideFin) svg.css('--side-fin-color', newFish.SideFinColor);
-            if (newFish.HasBottomFin) svg.css('--bottom-fin-color', newFish.BottomFinColor);
             if (newFish.HasTopFin) svg.css('--top-fin-color', newFish.TopFinColor);
+            if (newFish.HasBottomFin) svg.css('--bottom-fin-color', newFish.BottomFinColor);
 
             svg.attr({ width: 80, height: 30 });
+            svg.css("stroke", "black");
+            svg.css("stroke-width", 1);
+            svg.css("stroke-linejoin", "round");
             svg.data('fish', newFish);
             newFish.SvgElement = svg;
 
@@ -153,7 +162,7 @@ function moveFishRandomly(fish) {
     const dy = newY - currentPos.top;
 
     const distance = Math.sqrt(dx * dx + dy * dy);
-    const speed = fish.speed * 15; // px/sec
+    const speed = ((fish.speed / 0.6) * 30); // px/sec
     const duration = (distance / speed) * 1000;
 
     // Flip direction based on movement
@@ -176,7 +185,13 @@ function moveFishRandomly(fish) {
                 havePooChance(fish);
             },
             complete: function () {
-                setTimeout(() => moveFishRandomly(fish), 500);
+                // have a 1 / 5 chance the fish will wait (between 0 and 1 sec) before moving again
+                if (getRandomNumber(0, 4) === 0) {
+                    setTimeout(() => moveFishRandomly(fish), getRandomNumber(0, 1000))
+                }
+                else {
+                    moveFishRandomly(fish)
+                }
             }
         }
     );
@@ -224,7 +239,7 @@ function directFishToFood(fish, foodX, foodY) {
     }
 
     // Move closer to the food position each step
-    const speed = fish.Speed * 3; // Adjust pixels per step for smoothness
+    const speed = ((fish.Speed / 0.75) * 7); // Adjust pixels per step for smoothness
     const directionX = deltaX / distance;
     const directionY = deltaY / distance;
     const newX = fishX + directionX * speed;
@@ -474,7 +489,10 @@ $("#fishTank").on("click", ".poo", function () {
 
 $('#fishTank').on("click", '.spawned-fish', function () {
     const fish = $(this).data('fish');
+    console.log("--------------------------------------------------");
+    console.log("Clicked on fish:");
     console.log(fish);
+    console.log("--------------------------------------------------");
     $("#modalFishInfoContainer").css("display", "flex");
     $('#fishInfoModal').show();
     $('#modalFishImgContainer').empty();
@@ -612,24 +630,20 @@ function isDarkColor(color) {
 
 /* THIS FUNCTION IS CURRENTLY NOT IN USE */
 
-function spawnNewFishFromType(fishType) {
-    const topAndBottomFinColor = getRandomColor();
-
-    // name, fishtype, age, size, isAlive, bodyColor, tailFinColor, bottomFinColor, topFinColor, speed, hasSideFin, sideFinColor, hasPattern
+function spawnNewRandomFish(fishType) {
     const newFish = new Fish(
         "fish" + parseInt(aquarium.AmountOfFish + 1), // name
         fishType, // fishTypeName
-        1, // size
-        getRandomNumber(1, 7), // speed
         getRandomColor(), // bodyColor
         getRandomColor(), // tailFinColor
+        getRandomNumber(1, 7), // speed
     );
 
 
-    if (newFish.HasSideFin) newFish.SideFinColor = getRandomColor(); // Assign a random color for the side fin
-    if (newFish.HasPattern) newFish.PatternColor = getRandomColor(); // Assign a random color for the pattern
-    if (newFish.HasTopFin) newFish.TopFinColor = getRandomColor();
-    if (newFish.HasBottomFin) newFish.BottomFinColor = getRandomColor();
+    if (newFish.HasSideFin) newFish.SideFinColor = getRandomColor(); // sideFinColor
+    if (newFish.HasPattern) newFish.PatternColor = getRandomColor(); // patternColor
+    if (newFish.HasTopFin) newFish.TopFinColor = getRandomColor(); // topFinColor
+    if (newFish.HasBottomFin) newFish.BottomFinColor = getRandomColor(); // bottomFinColor
 
     aquarium.FishList.push(newFish);
 
@@ -663,6 +677,9 @@ function spawnNewFishFromType(fishType) {
 
         svg.attr('width', 80);
         svg.attr('height', 30);
+        svg.css("stroke", "black");
+        svg.css("stroke-width", 1);
+        svg.css("stroke-linejoin", "round");
         svg.data('fish', newFish);
 
         $('#swimZone').append(svg);
