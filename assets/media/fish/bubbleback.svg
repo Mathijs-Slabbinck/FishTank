@@ -13,10 +13,10 @@
     <polygon points="23,60 7,40 7,80" fill="var(--tail-color, #ff5c5c)" stroke="#b32a2a" stroke-width="3" />
 
     <!-- Top fin -->
-    <path d="M 100 15 Q 120 0 140 15 L 130 40 Q 110 25 100 15 Z" fill="var(--fin-color, #ff5c5c)" stroke="#b32a2a" stroke-width="3" />
+    <path d="M 100 15 Q 120 0 140 15 L 130 40 Q 110 25 100 15 Z" fill="var(--top-fin-color, #ff5c5c)" stroke="#b32a2a" stroke-width="3" />
 
     <!-- Bottom fin -->
-    <path d="M 100 105 Q 120 120 140 105 L 130 80 Q 110 95 100 105 Z" fill="var(--fin-color, #ff5c5c)" stroke="#b32a2a" stroke-width="3" />
+    <path d="M 100 105 Q 120 120 140 105 L 130 80 Q 110 95 100 105 Z" fill="var(--bottom-fin-color, #ff5c5c)" stroke="#b32a2a" stroke-width="3" />
 
     <!-- Eye -->
     <circle cx="165" cy="55" r="10" fill="#fff" stroke="#000" stroke-width="1.5" />

@@ -3,11 +3,11 @@
     <!-- Tail -->
     <polygon points="10,50 0,35 0,65" fill="var(--tail-color, #f99)" />
 
-    <!-- Top fin (lowered) -->
-    <path d="M80,40 Q95,25 110,40" fill="var(--fin-color, #faa)" />
+    <!-- Top fin -->
+    <path d="M80,40 Q95,25 110,40" fill="var(--top-fin-color, #faa)" />
 
-    <!-- Bottom fin (raised) -->
-    <path d="M80,60 Q95,75 110,60" fill="var(--fin-color, #faa)" />
+    <!-- Bottom fin -->
+    <path d="M80,60 Q95,75 110,60" fill="var(--bottom-fin-color, #faa)" />
 
     <!-- Body -->
     <path d="M10,50 Q60,20 160,40 Q180,50 160,60 Q60,80 10,50 Z" fill="var(--body-color, #f77)" />
