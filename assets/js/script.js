@@ -25,72 +25,6 @@ const NormalFishTypes = [
     AllFishTypes.normalSlimtail
 ];
 
-const colors = {
-    red: '#FF0000',
-    blue: '#0000FF',
-    green: '#00FF00',
-    yellow: '#FFFF00',
-    purple: '#800080',
-    black: '#000000',
-    white: '#FFFFFF',
-    orange: '#FFA500',
-    pink: '#FFC0CB',
-    cyan: '#00FFFF',
-    magenta: '#FF00FF',
-    brown: '#A52A2A',
-    gray: '#808080',
-    darkGreen: '#006400',
-    lightGreen: '#90EE90',
-    lightGray: '#D3D3D3',
-    darkGray: '#A9A9A9',
-    gold: '#FFD700',
-    silver: '#C0C0C0',
-    bronze: '#CD7F32',
-    teal: '#008080',
-    navy: '#000080',
-    maroon: '#800000',
-    olive: '#808000',
-    coral: '#FF7F50',
-    salmon: '#FA8072',
-    lavender: '#E6E6FA',
-    mint: '#98FF98',
-    peach: '#FFDAB9',
-    indigo: '#4B0082',
-    violet: '#EE82EE',
-    lightPink: '#FFB6C1',
-    darkRed: '#8B0000',
-    darkBlue: '#00008B',
-    darkCyan: '#008B8B',
-    darkMagenta: '#8B008B',
-    darkOrange: '#FF8C00',
-    darkOlive: '#556B2F',
-    darkSalmon: '#E9967A',
-    darkViolet: '#9400D3',
-    darkTeal: '#008080',
-    darkGrayBlue: '#4682B4',
-    darkGrayGreen: '#6B8E23',
-    darkGrayRed: '#B22222',
-    darkGrayPurple: '#800080',
-    darkGrayPink: '#DDA0DD',
-    darkGrayGold: '#B8860B',
-    darkGraySilver: '#C0C0C0',
-    darkGrayBronze: '#CD853F',
-    darkGrayTeal: '#008080',
-    darkGrayNavy: '#000080',
-    darkGrayMaroon: '#800000',
-    darkGrayOlive: '#808000',
-    darkGrayCoral: '#FF6347',
-    darkGraySalmon: '#FA8072',
-    darkGrayLavender: '#E6E6FA',
-    darkGrayMint: '#98FF98',
-    darkGrayPeach: '#FFDAB9',
-    darkGrayIndigo: '#4B0082',
-    darkGrayViolet: '#EE82EE',
-    darkGrayLightPink: '#FFB6C1',
-    darkGrayDarkRed: '#8B0000',
-    darkGrayDarkBlue: '#00008B',
-};
-
 let notRotatedAtStart = false;
 let starterFishes = [];
 
@@ -104,12 +38,12 @@ $(document).ready(function () {
         $('#coinDisplayBlock').hide();
         notRotatedAtStart = true;
     } else {
-        PushStarterFishes();
+        pushStarterFishes();
     }
-    UpdateStats();
+    updateStats();
 });
 
-function GetRandomNormalFishType() {
+function getRandomNormalFishType() {
     const randomIndex = Math.floor(Math.random() * NormalFishTypes.length);
     return NormalFishTypes[randomIndex];
 }
@@ -117,22 +51,22 @@ function GetRandomNormalFishType() {
 
 /*
 function SpawnFishes() {
-    SpawnRandomFish(AllFishTypes.normalBroadback);
-    SpawnRandomFish(AllFishTypes.normalOvalfin);
-    SpawnRandomFish(AllFishTypes.normalPaddlefin);
-    SpawnRandomFish(AllFishTypes.normalRoundback);
-    SpawnRandomFish(AllFishTypes.normalSlimtail);
-    SpawnRandomFish(AllFishTypes.tigerstripes, true); // Spawn a tigerstripes fish with pattern
-    SpawnRandomFish(AllFishTypes.bubblemark, true); // Spawn a bubblemark fish with pattern
-    SpawnRandomFish(AllFishTypes.longpaddlefin, true); // Spawn a longpaddlefin fish with pattern
-    SpawnRandomFish(AllFishTypes.clownfish, true); // Spawn a clownfish with pattern
-    SpawnRandomFish(AllFishTypes.bubbleback, true, false); // Spawn a bubbleback fish with pattern
-    SpawnRandomFish(AllFishTypes.wavyfin, true, false); // Spawn a wavyfin fish with pattern
-    SpawnRandomFish(AllFishTypes.piranha, true, false); // Spawn a piranha fish with pattern
+    spawnRandomFish(AllFishTypes.normalBroadback);
+    spawnRandomFish(AllFishTypes.normalOvalfin);
+    spawnRandomFish(AllFishTypes.normalPaddlefin);
+    spawnRandomFish(AllFishTypes.normalRoundback);
+    spawnRandomFish(AllFishTypes.normalSlimtail);
+    spawnRandomFish(AllFishTypes.tigerstripes, true); // Spawn a tigerstripes fish with pattern
+    spawnRandomFish(AllFishTypes.bubblemark, true); // Spawn a bubblemark fish with pattern
+    spawnRandomFish(AllFishTypes.longpaddlefin, true); // Spawn a longpaddlefin fish with pattern
+    spawnRandomFish(AllFishTypes.clownfish, true); // Spawn a clownfish with pattern
+    spawnRandomFish(AllFishTypes.bubbleback, true, false); // Spawn a bubbleback fish with pattern
+    spawnRandomFish(AllFishTypes.wavyfin, true, false); // Spawn a wavyfin fish with pattern
+    spawnRandomFish(AllFishTypes.piranha, true, false); // Spawn a piranha fish with pattern
 }
     */
 
-function CheckOrientation() {
+function checkOrientation() {
     if (window.innerWidth < 600) {
         $('#rotatePhone').show();
         $('#fishTank').hide();
@@ -143,7 +77,7 @@ function CheckOrientation() {
         $('#coinDisplayBlock').show();
 
         if (notRotatedAtStart) {
-            PushStarterFishes();
+            pushStarterFishes();
         }
 
         if (notRotatedAtStart) {
@@ -152,8 +86,8 @@ function CheckOrientation() {
     }
 }
 
-function PushStarterFishes() {
-    CreateStarterFish(GetRandomNormalFishType()).then(fish => {
+function pushStarterFishes() {
+    createStarterFish(getRandomNormalFishType()).then(fish => {
         starterFishes.push(fish);
         fish.svgElement.css({ top: '', left: '' });
         fish.svgElement.css({ position: 'relative', scale: '3', transform: 'scaleX(1)' });
@@ -162,7 +96,7 @@ function PushStarterFishes() {
         console.log(fish);
     });
 
-    CreateStarterFish(GetRandomNormalFishType()).then(fish => {
+    createStarterFish(getRandomNormalFishType()).then(fish => {
         starterFishes.push(fish);
         fish.svgElement.css({ top: '', left: '' });
         fish.svgElement.css({ position: 'relative', scale: '3', transform: 'scaleX(1)' });
@@ -171,7 +105,7 @@ function PushStarterFishes() {
         console.log(fish);
     });
 
-    CreateStarterFish(GetRandomNormalFishType()).then(fish => {
+    createStarterFish(getRandomNormalFishType()).then(fish => {
         starterFishes.push(fish);
         fish.svgElement.css({ top: '', left: '' });
         fish.svgElement.css({ position: 'relative', scale: '3', transform: 'scaleX(1)' });
@@ -184,44 +118,44 @@ function PushStarterFishes() {
 $("#starterFish1ButtonHolder").click(function () {
     var fish = starterFishes[0];
     fish.svgElement.css({ position: 'absolute', top: 0, left: 0, scale: '', transform: 'scaleX(1)' });
-    CloseStarterFishModal();
-    SpawnFish(fish);
+    closeStarterFishModal();
+    spawnFish(fish);
 });
 
 $("#starterFish2ButtonHolder").click(function () {
     var fish = starterFishes[1];
     fish.svgElement.css({ position: 'absolute', top: 0, left: 0, scale: '', transform: 'scaleX(1)' });
-    CloseStarterFishModal();
-    SpawnFish(fish);
+    closeStarterFishModal();
+    spawnFish(fish);
 });
 
 $("#starterFish3ButtonHolder").click(function () {
     var fish = starterFishes[2];
     fish.svgElement.css({ position: 'absolute', top: 0, left: 0, scale: '', transform: 'scaleX(1)' });
-    CloseStarterFishModal();
-    SpawnFish(fish);
+    closeStarterFishModal();
+    spawnFish(fish);
 });
 
-function CreateStarterFish(fishType, hasPattern = false, hasSideFin = true) {
+function createStarterFish(fishType, hasPattern = false, hasSideFin = true) {
     return new Promise((resolve, reject) => {
-        const topAndBottomFinColor = GetRandomColor();
+        const topAndBottomFinColor = getRandomColor();
         const newFish = new Fish(
             "fish" + parseInt(aquarium.AmountOfFish + 1),
             fishType,
             1,
             1,
             true,
-            GetRandomColor(),
-            GetRandomColor(),
+            getRandomColor(),
+            getRandomColor(),
             topAndBottomFinColor,
             topAndBottomFinColor,
-            GetRandomNumber(1, 7),
+            getRandomNumber(1, 7),
             hasSideFin,
             hasPattern
         );
 
-        if (hasSideFin) newFish.sideFinColor = GetRandomColor();
-        if (hasPattern) newFish.patternColor = GetRandomColor();
+        if (hasSideFin) newFish.sideFinColor = getRandomColor();
+        if (hasPattern) newFish.patternColor = getRandomColor();
 
         $.get(`assets/media/fish/${fishType}.svg`, function (data) {
             const svg = $(data).find('svg');
@@ -247,9 +181,11 @@ function CreateStarterFish(fishType, hasPattern = false, hasSideFin = true) {
 }
 
 
-function SpawnRandomFish(fishType, hasPattern = false, hasSideFin = true) {
+/* THIS FUNCTION IS UNUSED NOW */
+
+function spawnRandomFish(fishType, hasPattern = false, hasSideFin = true) {
     console.log(`Spawning fish of type: ${fishType}, hasPattern: ${hasPattern}, hasSideFin: ${hasSideFin}`);
-    const topAndBottomFinColor = GetRandomColor();
+    const topAndBottomFinColor = getRandomColor();
 
     // name, fishtype, age, size, isAlive, bodyColor, tailFinColor, bottomFinColor, topFinColor, speed, hasSideFin, sideFinColor, hasPattern
     const newFish = new Fish(
@@ -258,22 +194,22 @@ function SpawnRandomFish(fishType, hasPattern = false, hasSideFin = true) {
         1, // age
         1, // size
         true, // isAlive
-        GetRandomColor(), // bodyColor
-        GetRandomColor(), // tailFinColor
+        getRandomColor(), // bodyColor
+        getRandomColor(), // tailFinColor
         topAndBottomFinColor, // bottomFinColor
         topAndBottomFinColor, // topFinColor
-        GetRandomNumber(1, 7), // speed
+        getRandomNumber(1, 7), // speed
         hasSideFin, // hasSideFin
         hasPattern
     );
 
 
     if (hasSideFin) {
-        newFish.sideFinColor = GetRandomColor(); // Assign a random color for the side fin
+        newFish.sideFinColor = getRandomColor(); // Assign a random color for the side fin
     }
 
     if (hasPattern) {
-        newFish.patternColor = GetRandomColor(); // Assign a random color for the pattern
+        newFish.patternColor = getRandomColor(); // Assign a random color for the pattern
     }
 
     aquarium.FishList.push(newFish);
@@ -306,18 +242,18 @@ function SpawnRandomFish(fishType, hasPattern = false, hasSideFin = true) {
         $('#swimZone').append(svg);
 
         newFish.svgElement = svg;
-        MoveFishRandomly(newFish);
+        moveFishRandomly(newFish);
     }, 'xml');
 }
 
-function SpawnFish(fish) {
+function spawnFish(fish) {
     aquarium.FishList.push(fish);
     $('#swimZone').append(fish.svgElement);
-    MoveFishRandomly(fish);
+    moveFishRandomly(fish);
 }
 
-function MoveFishRandomly(fish) {
-    HavePooChance(fish);
+function moveFishRandomly(fish) {
+    havePooChance(fish);
     const tankWidth = $('#swimZone').width();
     const tankHeight = $('#swimZone').height();
 
@@ -353,25 +289,25 @@ function MoveFishRandomly(fish) {
             duration: duration,
             easing: 'linear',
             step: function () {
-                HavePooChance(fish);
+                havePooChance(fish);
             },
             complete: function () {
-                MoveFishRandomly(fish);
+                moveFishRandomly(fish);
             }
         }
     );
 }
 
-function RestartMovingAllFish() {
+function restartMovingAllFish() {
     aquarium.FishList.forEach(fish => {
         if (fish.svgElement) {
             fish.svgElement.stop(true);
-            MoveFishRandomly(fish);
+            moveFishRandomly(fish);
         }
     });
 }
 
-function DirectFishToFood(fish, foodX, foodY) {
+function directFishToFood(fish, foodX, foodY) {
     const fishX = fish.svgElement.position().left;
     const fishY = fish.svgElement.position().top;
     const deltaX = foodX - fishX;
@@ -398,8 +334,8 @@ function DirectFishToFood(fish, foodX, foodY) {
         }, 750);
 
         aquarium.HasFood = false; // Reset food availability
-        UpdateStats(); // Update food amount display
-        RestartMovingAllFish();
+        updateStats(); // Update food amount display
+        restartMovingAllFish();
         return;
     }
 
@@ -422,37 +358,37 @@ function DirectFishToFood(fish, foodX, foodY) {
         {
             duration: 100, // miliseconds per step
             step: function () {
-                HavePooChance(fish);
+                havePooChance(fish);
             },
             complete: function () {
-                DirectFishToFood(fish, foodX, foodY);
+                directFishToFood(fish, foodX, foodY);
             }
         }
     );
 
 }
 
-function HavePooChance(fish) {
-    let random = GetRandomNumber(1, 10000 - fish.CostPrice * 20 - fish.Size * 25);
+function havePooChance(fish) {
+    let random = getRandomNumber(1, 10000 - fish.CostPrice * 20 - fish.Size * 25);
     if (random === 1) {
         const fishX = fish.svgElement.position().left;
         const fishY = fish.svgElement.position().top;
-        SpawnPoo(fishX, fishY);
+        spawnPoo(fishX, fishY);
     }
 }
 
-function GetRandomColor() {
-    const colorKeys = Object.keys(colors);
-    const randomIndex = Math.floor(Math.random() * colorKeys.length);
-    return colors[colorKeys[randomIndex]];
+function getRandomColor() {
+    return '#' + Math.floor(Math.random() * 0xFFFFFF)
+        .toString(16)
+        .padStart(6, '0');
 }
 
-function GetRandomNumber(min, max) {
+function getRandomNumber(min, max) {
     // Returns a random integer between min and max, inclusive
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-function UpdateStats() {
+function updateStats() {
     $('#fishFoodAmount').text(player.FoodAmount);
     $("#moneyAmount").text(player.MoneyAmount);
 }
@@ -461,7 +397,7 @@ function UpdateStats() {
 
 $("#openBottomMenuImg").click(function () {
     if (!aquarium.HasFood) {
-        OpenBottomMenu();
+        openBottomMenu();
     }
 });
 
@@ -475,29 +411,29 @@ $("#openBottomMenuImg").hover(function () {
 });
 
 $(document).on('click', '#closeBottomMenuImg', function () {
-    CloseBottomMenu();
+    closeBottomMenu();
 });
 
-function OpenBottomMenu() {
+function openBottomMenu() {
     $("#fishTank").css("height", "85vh");
     $("#bottomMenu").css("display", "flex");
     $("#openBottomMenuImg").css("display", "none");
     $("#closeBottomMenuImg").css("display", "inline-block");
     if (aquarium.HasFood === false) {
-        RestartMovingAllFish();
+        restartMovingAllFish();
     }
 }
 
-function CloseBottomMenu() {
+function closeBottomMenu() {
     $("#fishTank").css("height", "100vh");
     $("#bottomMenu").css("display", "none");
     $("#openBottomMenuImg").css("display", "inline-block");
     $("#closeBottomMenuImg").css("display", "none");
-    RestartMovingAllFish();
+    restartMovingAllFish();
 }
 
 $("#fishFoodImg").click(function () {
-    CloseBottomMenu();
+    closeBottomMenu();
     if ($("#swimZone").hasClass("dustpanCursor")) {
         $("#swimZone").removeClass("dustpanCursor");
     }
@@ -505,7 +441,7 @@ $("#fishFoodImg").click(function () {
 });
 
 $("#dustpanImg").click(function () {
-    CloseBottomMenu();
+    closeBottomMenu();
     if ($("#swimZone").hasClass("foodCursor")) {
         $("#swimZone").removeClass("foodCursor");
     }
@@ -522,10 +458,10 @@ $("#fishTank").click(function (event) {
 
     if (swimZone.hasClass("foodCursor")) {
         if (!aquarium.HasFood) {
-            CloseBottomMenu();
+            closeBottomMenu();
             try {
                 player.FoodAmount -= 1; // Decrease food amount
-                SpawnFood(x, y);
+                spawnFood(x, y);
             }
             catch (errorMsg) {
                 alert(errorMsg.message);
@@ -533,11 +469,11 @@ $("#fishTank").click(function (event) {
         }
     }
     else {
-        SpawnBubble(x, y);
+        spawnBubble(x, y);
     }
 });
 
-function SpawnBubble(x, y) {
+function spawnBubble(x, y) {
     // Create a new bubble element
     const bubble = $('<img class="bubble" src="images/airBubble.png" alt="air bubble">');
 
@@ -556,7 +492,7 @@ function SpawnBubble(x, y) {
     }, 2000); // match animation duration
 }
 
-function SpawnPoo(x, y) {
+function spawnPoo(x, y) {
     // Create a new bubble element
     const poo = $('<img class="poo" src="images/poo.png" alt="poo">');
 
@@ -570,7 +506,7 @@ function SpawnPoo(x, y) {
     $("#fishTank").append(poo);
 }
 
-function SpawnFood(x, y) {
+function spawnFood(x, y) {
     setTimeout(function () {
         if (!aquarium.HasFood) {
             const food = $('<img class="food" src="images/fishFood.png" alt="fish food">');
@@ -587,7 +523,7 @@ function SpawnFood(x, y) {
             aquarium.FishList.forEach(fish => {
                 if (fish.svgElement) {
                     fish.svgElement.stop(); // Stop any current animation
-                    DirectFishToFood(fish, x, y);
+                    directFishToFood(fish, x, y);
                 }
             });
         }
@@ -612,7 +548,7 @@ $('#fishTank').on("click", '.spawned-fish', function () {
     $('#modalFishImgContainer svg').css("transform", "scaleX(1)");
     $('#modalFishName strong').text(fish.Name);
     $('#modalTailColor b').text(`Tail Fin Color: ${fish.TailFinColor}`);
-    if (IsDarkColor(fish.TailFinColor)) {
+    if (isDarkColor(fish.TailFinColor)) {
         $('#modalTailColor b').css('color', 'white');
     }
     else {
@@ -620,7 +556,7 @@ $('#fishTank').on("click", '.spawned-fish', function () {
     }
     $('#modalTailColor').css("background-color", fish.TailFinColor);
     $('#modalBodyColor b').text(`Body Color: ${fish.BodyColor}`);
-    if (IsDarkColor(fish.BodyColor)) {
+    if (isDarkColor(fish.BodyColor)) {
         $('#modalBodyColor b').css('color', 'white');
     }
     else {
@@ -628,7 +564,7 @@ $('#fishTank').on("click", '.spawned-fish', function () {
     }
     $('#modalBodyColor').css("background-color", fish.BodyColor);
     $('#modalFinColor b').text(`Fin Color: ${fish.BottomFinColor}`);
-    if (IsDarkColor(fish.BottomFinColor)) {
+    if (isDarkColor(fish.BottomFinColor)) {
         $('#modalFinColor b').css('color', 'white');
     }
     else {
@@ -644,7 +580,7 @@ $('#fishTank').on("click", '.spawned-fish', function () {
 
     if (fish.HasSideFin) {
         $('#modalSideFinColor b').text(`Side Fin Color: ${fish.SideFinColor}`);
-        if (IsDarkColor(fish.SideFinColor)) {
+        if (isDarkColor(fish.SideFinColor)) {
             $('#modalSideFinColor b').css('color', 'white');
         }
         else {
@@ -660,7 +596,7 @@ $('#fishTank').on("click", '.spawned-fish', function () {
 
     if (fish.HasPattern) {
         $('#modalPatternColor b').text(`Pattern Color: ${fish.PatternColor}`);
-        if (IsDarkColor(fish.PatternColor)) {
+        if (isDarkColor(fish.PatternColor)) {
             $('#modalPatternColor b').css('color', 'white');
         }
         else {
@@ -676,7 +612,7 @@ $('#fishTank').on("click", '.spawned-fish', function () {
 });
 
 $(window).on('resize', function () {
-    CheckOrientation();
+    checkOrientation();
 });
 
 $('#closeFishInfoModal').click(function () {
@@ -685,10 +621,10 @@ $('#closeFishInfoModal').click(function () {
 });
 
 $('#closeStarterFishModal').click(function () {
-    CloseStarterFishModal();
+    closeStarterFishModal();
 });
 
-function CloseStarterFishModal() {
+function closeStarterFishModal() {
     $('#starterFishModal').hide();
     $("#modalStarterFishContainer").hide();
 }
@@ -707,7 +643,7 @@ $("#fishTank").on("click", ".poo", function () {
     if ($("#swimZone").hasClass("dustpanCursor")) {
         $(this).remove();
         player.MoneyAmount += 3;
-        UpdateStats();
+        updateStats();
     }
 });
 
@@ -716,7 +652,7 @@ $("#fishTank").on("click", ".poo", function () {
 /* vvv !!! CHATGPT WITH EXTRA COMMENTS; UNDERSTAND THIS !!! vvv */
 
 
-function IsDarkColor(color) {
+function isDarkColor(color) {
     if (!color || color.toLowerCase() === "transparent") {
         return false; // treat transparent as light
     }
@@ -769,7 +705,7 @@ function IsDarkColor(color) {
 
 /* TEMP FUNCTION TO TEST vvv */
 
-function GetBrightNessLevel(color) {
+function getBrightNessLevel(color) {
     if (!color || color.toLowerCase() === "transparent") {
         return false; // treat transparent as light
     }
