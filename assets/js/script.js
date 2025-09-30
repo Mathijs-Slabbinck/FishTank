@@ -515,14 +515,39 @@ $('#fishTank').on("click", '.spawned-fish', function () {
         $('#modalBodyColor b').css('color', 'black');
     }
     $('#modalBodyColor').css("background-color", fish.BodyColor);
-    $('#modalFinColor b').text(`Fin Color: ${fish.BottomFinColor}`);
-    if (isDarkColor(fish.BottomFinColor)) {
-        $('#modalFinColor b').css('color', 'white');
+
+    if (fish.HasTopFin) {
+        $('#modalTopFinColor b').text(`Top Fin Color: ${fish.TopFinColor}`);
+        if (isDarkColor(fish.TopFinColor)) {
+            $('#modalTopFinColor b').css('color', 'white');
+        }
+        else {
+            $('#modalTopFinColor b').css('color', 'black');
+        }
+        $('#modalTopFinColor').css("background-color", fish.TopFinColor);
     }
     else {
-        $('#modalFinColor b').css('color', 'black');
+        $('#modalTopFinColor b').text(`No Top Fin`);
+        $('#modalTopFinColor b').css("color", "black");
+        $('#modalTopFinColor').css("background-color", "transparent");
     }
-    $('#modalFinColor').css("background-color", fish.BottomFinColor);
+
+    if (fish.HasBottomFin) {
+        $('#modalBottomFinColor b').text(`Bottom Fin Color: ${fish.BottomFinColor}`);
+        if (isDarkColor(fish.BottomFinColor)) {
+            $('#modalBottomFinColor b').css('color', 'white');
+        }
+        else {
+            $('#modalBottomFinColor b').css('color', 'black');
+        }
+        $('#modalBottomFinColor').css("background-color", fish.BottomFinColor);
+    }
+    else {
+        $('#modalBottomFinColor b').text(`No Bottom Fin`);
+        $('#modalBottomFinColor b').css("color", "black");
+        $('#modalBottomFinColor').css("background-color", "transparent");
+    }
+
     $('#modalSpeed p').text(`${fish.Speed}`);
     $('#modalStatAge p').text(`${fish.Age}`);
     $('#modalStatSize p').text(`${fish.Size}`);
