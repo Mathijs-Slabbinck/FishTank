@@ -553,7 +553,6 @@ $('#fishTank').on("click", '.spawned-fish', function () {
     $('#modalStatSize p').text(`${fish.Size}`);
     $('#modalStatFoodEaten p').text(`${fish.FoodEaten}`);
     $("#modalStatCostPrice p").text(`${fish.CostPrice}`);
-    $("#modalStatHunger p").text(`${fish.HungerAmount}`);
 
     if (fish.HasSideFin) {
         $('#modalSideFinColor b').text(`Side Fin Color: ${fish.SideFinColor}`);

@@ -1,9 +1,13 @@
 /* disable users from selecting anything */
-body{
-    -webkit-user-select: none;  /* Chrome all / Safari all */
-    -moz-user-select: none;     /* Firefox all */
-    -ms-user-select: none;      /* IE 10+ */
-    user-select: none;          /* Likely future */
+body {
+    -webkit-user-select: none;
+    /* Chrome all / Safari all */
+    -moz-user-select: none;
+    /* Firefox all */
+    -ms-user-select: none;
+    /* IE 10+ */
+    user-select: none;
+    /* Likely future */
     background-image: url("../media/background.png");
     background-size: cover;
     background-repeat: no-repeat;
@@ -22,7 +26,9 @@ body{
     margin: 5vh 0 0 0;
 }
 
-.bar1, .bar2, .bar3 {
+.bar1,
+.bar2,
+.bar3 {
     width: 35px;
     height: 5px;
     background-color: white;
@@ -49,51 +55,51 @@ body{
     align-items: center;
 }
 
-.centerThis{
-	text-align: center;
+.centerThis {
+    text-align: center;
 }
 
-.cursorPointer{
-	cursor: pointer;
+.cursorPointer {
+    cursor: pointer;
 }
 
-.noWrap{
-	wrap: nowrap;
+.noWrap {
+    flex-wrap: nowrap;
 }
 
 
 @media only screen and (max-width: 576px) {
-    .hideFromSmallScreenOrSmaller{
+    .hideFromSmallScreenOrSmaller {
         display: none;
     }
 }
 
 @media only screen and (max-width: 768px) {
-    .hideFromMediumScreenOrSmaller{
+    .hideFromMediumScreenOrSmaller {
         display: none;
     }
 }
 
 @media only screen and (max-width: 992px) {
-    .hideFromLargeScreenOrSmaller{
+    .hideFromLargeScreenOrSmaller {
         display: none;
     }
 }
 
 @media only screen and (min-width: 576px) {
-    .hideFromSmallScreenOrLarger{
+    .hideFromSmallScreenOrLarger {
         display: none;
     }
 }
 
 @media only screen and (min-width: 768px) {
-    .hideFromMediumScreenOrLarger{
+    .hideFromMediumScreenOrLarger {
         display: none;
     }
 }
 
 @media only screen and (min-width: 992px) {
-    .hideFromLargeScreenOrLarger{
+    .hideFromLargeScreenOrLarger {
         display: none;
     }
 }
