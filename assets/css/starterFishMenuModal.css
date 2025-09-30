@@ -23,3 +23,7 @@
 #starterFish3Block {
     border-left: 3px solid black;
 }
+
+#starterFishMenu .modalTitle {
+    margin-top: 3vh;
+}
