@@ -192,10 +192,14 @@ function restartMovingAllFish() {
 }
 
 function directFishToFood(fish, foodX, foodY) {
+    // Use adjusted target for movement (slight offset if needed)
+    const targetX = foodX;
+    const targetY = foodY - 35; // offset for movement only
+
     const fishX = fish.SvgElement.position().left;
     const fishY = fish.SvgElement.position().top;
-    const deltaX = foodX - fishX;
-    const deltaY = foodY - fishY;
+    const deltaX = targetX - fishX;
+    const deltaY = targetY - fishY;
     const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
 
     if (distance < 6) {
@@ -204,6 +208,7 @@ function directFishToFood(fish, foodX, foodY) {
         console.log(`${fish.Name} has reached the food!`);
         fish.FoodEaten += 1; // Increment food eaten count
         $('#CBMI').attr('id', 'closeBottomMenuImg');
+
         setTimeout(function () {
             $(`img.food`).filter(function () {
                 const food = $(this)[0];
@@ -213,7 +218,10 @@ function directFishToFood(fish, foodX, foodY) {
                 // Convert rect to container-relative coordinates
                 const currentLeft = rect.left - parentRect.left;
                 const currentTop = rect.top - parentRect.top;
-                return Math.abs(currentLeft - foodX) < 10 && Math.abs(currentTop - foodY) < 10;
+
+                // Compare against ORIGINAL food coords, not offset
+                return Math.abs(currentLeft - foodX) < 10 &&
+                    Math.abs(currentTop - foodY) < 10;
             }).remove();
         }, 750);
 
@@ -240,16 +248,16 @@ function directFishToFood(fish, foodX, foodY) {
     fish.SvgElement.animate(
         { left: newX, top: newY },
         {
-            duration: 100, // miliseconds per step
+            duration: 100, // milliseconds per step
             step: function () {
                 havePooChance(fish);
             },
             complete: function () {
+                // Keep chasing until reached
                 directFishToFood(fish, foodX, foodY);
             }
         }
     );
-
 }
 
 function havePooChance(fish) {
