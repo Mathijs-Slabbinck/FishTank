@@ -220,7 +220,7 @@ b {
 
 #coinDisplayBlock {
     position: absolute;
-    z-index: 998;
+    z-index: 999;
     width: 4vw;
     height: auto;
     text-align: center;
@@ -231,6 +231,17 @@ b {
 #coinDisplayBlock img {
     width: 4vw;
     height: auto;
+}
+
+#openShopImg {
+    position: absolute;
+    z-index: 999;
+    width: 6vw;
+    height: auto;
+    text-align: center;
+    top: 0;
+    left: 0;
+    margin-left: 1vw;
 }
 
 @keyframes bubbleRise {

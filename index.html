@@ -10,11 +10,13 @@
     <link href="assets/css/screen.css" rel='stylesheet' type='text/css'>
     <link href="assets/css/fishInfoModal.css" rel='stylesheet' type='text/css'>
     <link href="assets/css/starterFishMenuModal.css" rel='stylesheet' type='text/css'>
+    <link href="assets/css/mainShopModal.css" rel='stylesheet' type='text/css'>
 </head>
 
 <body>
     <div class="container">
         <header>
+            <img class="clickAble" id="openShopImg" src="images/shoppingCart.png" alt="shopping cart">
             <figure id="coinDisplayBlock">
                 <img src="images/coins.png" alt="coins">
                 <figcaption id="moneyAmount"></figcaption>
@@ -149,31 +151,75 @@
                 </div>
             </div>
 
-            <div id="fishTank">
-                <div id="swimZone">
-                    <div id="bottomMenuButtonContainer">
-                        <img src="images/openBottomMenu.png" alt="open menu button" id="openBottomMenuImg"
-                            class="clickAble">
-                        <img src="images/closeBottomMenu.png" alt="close menu button" id="closeBottomMenuImg"
-                            class="clickAble">
+            <div class="modalContainer" id="modalShopContainer">
+                <div class="modal" id="shopModal">
+                    <img src="images/closeButton.png" alt="close button" id="closeShopModal"
+                        class="clickAble closeModal">
+
+                    <div class="modalContent">
+                        <div class="modalTitle">
+                            <strong>Shop</strong>
+                        </div>
+                        <div id="modalShopContentContainer">
+                            <div class="subShopContainer" id="fishShop">
+                                <strong>Fish Shop</strong>
+                                <div>
+                                    <img src="images/shopFishIcon.png" alt="fish shop icon" id="fishShopIcon"
+                                        class="shopIcon">
+                                </div>
+                                <div class="modalGreenButtonBlock" id="fishShopButtonHolder">
+                                    <p class="clickAble">choose</p>
+                                </div>
+                            </div>
+                            <div class="subShopContainer" id="decorationShop">
+                                <strong>Decoration Shop</strong>
+                                <div>
+                                    <img src="images/shopDecorationsIcon.png" alt="decoration shop icon"
+                                        id="decorationShopIcon" class="shopIcon">
+                                </div>
+                                <div class="modalGreenButtonBlock" id="decorationShopButtonHolder">
+                                    <p class="clickAble">choose</p>
+                                </div>
+                            </div>
+                            <div class="subShopContainer" id="itemShop">
+                                <strong>Item Shop</strong>
+                                <div>
+                                    <img src="images/shopToolsIcon.png" alt="item shop icon" id="itemShopIcon"
+                                        class="shopIcon">
+                                </div>
+                                <div class="modalGreenButtonBlock" id="itemShopButtonHolder">
+                                    <p class="clickAble">choose</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </main>
+    </div>
 
-        <footer>
-            <div id="bottomMenu">
-                <div><img src="images/fishFood.png" alt="fish food" id="fishFoodImg" class="clickAble">
-                    <p id="fishFoodAmount"></p>
-                </div>
-                <div><img src="images/dustpan.png" alt="dustpan" id="dustpanImg" class="clickAble">
-                    <p>1 (max)</p>
-                </div>
-                <div>3</div>
-                <div>4</div>
-                <div>5</div>
+    <div id="fishTank">
+        <div id="swimZone">
+            <div id="bottomMenuButtonContainer">
+                <img src="images/openBottomMenu.png" alt="open menu button" id="openBottomMenuImg" class="clickAble">
+                <img src="images/closeBottomMenu.png" alt="close menu button" id="closeBottomMenuImg" class="clickAble">
             </div>
-        </footer>
+        </div>
+    </div>
+    </main>
+
+    <footer>
+        <div id="bottomMenu">
+            <div><img src="images/fishFood.png" alt="fish food" id="fishFoodImg" class="clickAble">
+                <p id="fishFoodAmount"></p>
+            </div>
+            <div><img src="images/dustpan.png" alt="dustpan" id="dustpanImg" class="clickAble">
+                <p>1 (max)</p>
+            </div>
+            <div>3</div>
+            <div>4</div>
+            <div>5</div>
+        </div>
+    </footer>
     </div>
     <script type="text/javascript" src="assets/js/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="assets/js/enums/allFishTypes.js"></script>

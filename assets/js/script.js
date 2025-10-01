@@ -454,8 +454,16 @@ $("#starterFish3ButtonHolder").click(function () {
     spawnFish(fish);
 });
 
+$("#openShopImg").click(function () {
+    $("#modalShopContainer").css("display", "flex");
+});
+
 $('#closeStarterFishModal').click(function () {
     closeStarterFishModal();
+});
+
+$('#closeShopModal').click(function () {
+    $("#modalShopContainer").hide();
 });
 
 $(document).on('click', '#closeBottomMenuImg', function () {
