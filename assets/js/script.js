@@ -54,15 +54,23 @@ function checkOrientation() {
 }
 
 async function pushStarterFishes() {
-    const fish1 = await createStarterFish(getRandomNormalFishType());
+    let starterFishTypes = [];
+    while (starterFishTypes.length < 3) {
+        let fishType = getRandomNormalFishType();
+        if (!starterFishTypes.includes(fishType)) {
+            starterFishTypes.push(fishType);
+        }
+    }
+
+    const fish1 = await createStarterFish(starterFishTypes[0]);
     addFishToBlock(fish1, "#starterFish1Block");
     starterFishes.push(fish1);
 
-    const fish2 = await createStarterFish(getRandomNormalFishType());
+    const fish2 = await createStarterFish(starterFishTypes[1]);
     addFishToBlock(fish2, "#starterFish2Block");
     starterFishes.push(fish2);
 
-    const fish3 = await createStarterFish(getRandomNormalFishType());
+    const fish3 = await createStarterFish(starterFishTypes[2]);
     addFishToBlock(fish3, "#starterFish3Block");
     starterFishes.push(fish3);
 
