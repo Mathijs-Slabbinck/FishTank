@@ -145,8 +145,7 @@ b {
     text-align: center;
 }
 
-#fishFoodImg,
-#dustpanImg {
+#bottomMenu div img {
     height: 9vh;
     width: auto;
     border: 2px solid black;
