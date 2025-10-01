@@ -455,7 +455,18 @@ $("#starterFish3ButtonHolder").click(function () {
 });
 
 $("#openShopImg").click(function () {
-    $("#modalShopContainer").css("display", "flex");
+    if (!$("#modalStarterFishContainer").is(":visible") && !$("#modalShopContainer").is(":visible")) {
+        $("#modalShopContainer").css("display", "flex");
+    }
+});
+
+$("#openShopImg").hover(function () {
+    if ($("#modalStarterFishContainer").is(":visible") || $("#modalShopContainer").is(":visible")) {
+        $("#openShopImg").addClass("noClickCursor");
+    }
+    else {
+        $("#openShopImg").removeClass("noClickCursor");
+    }
 });
 
 $('#closeStarterFishModal').click(function () {
@@ -471,13 +482,13 @@ $(document).on('click', '#closeBottomMenuImg', function () {
 });
 
 $("#openBottomMenuImg").click(function () {
-    if (!aquarium.HasFood) {
+    if (!aquarium.HasFood && !$("#modalStarterFishContainer").is(":visible") && !$("#modalShopContainer").is(":visible")) {
         openBottomMenu();
     }
 });
 
 $("#openBottomMenuImg").hover(function () {
-    if (aquarium.HasFood) {
+    if (aquarium.HasFood || $("#modalStarterFishContainer").is(":visible") || $("#modalShopContainer").is(":visible")) {
         $("#openBottomMenuImg").addClass("noClickCursor");
     }
     else {
