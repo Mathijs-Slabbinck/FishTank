@@ -308,12 +308,10 @@ function moveFishRandomly(fish) {
 
     // Flip + rotate
     fishFlipWrapper.css({
-        transition: 'transform 0.3s ease',
         transform: `scaleX(${scaleX})`
     });
 
     fishRotateWrapper.css({
-        transition: 'transform 3s ease',
         transform: `rotate(${rotationToApply}deg)`
     });
 
@@ -404,12 +402,10 @@ function directFishToFood(fish, foodX, foodY) {
 
     // --- Apply transforms ---
     fishFlipWrapper.css({
-        transition: 'transform 0.3s ease',
         transform: `scaleX(${scaleX})`
     });
 
     fishRotateWrapper.css({
-        transition: 'transform 0.2s ease',
         transform: `rotate(${rotationToApply}deg)`
     });
 
