@@ -291,7 +291,7 @@ function moveFishRandomly(fish) {
     const dy = newY - currentPos.top;
 
     const distance = Math.sqrt(dx * dx + dy * dy);
-    const speed = ((fish.speed / 0.6) * 30); // px/sec
+    const speed = ((fish.Speed / 0.6) * 30); // px/sec
     const duration = (distance / speed) * 1000;
 
     // Flip direction

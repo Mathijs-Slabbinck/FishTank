@@ -1,76 +1,76 @@
 class Fish {
     constructor(
-        name,
-        fishTypeName,
-        bodyColor,
-        tailFinColor,
-        speed = 1,
-        size = 1,
-        sideFinColor = null,
-        patternColor = null,
-        topFinColor = null,
-        bottomFinColor = null,
-        eyeWhiteColor = "white",
-        pupilColor = "black",
-        hungerAmount = 0,
-        costPrice = 0,
-        svgElement = null,
-        foodEaten = 0,
-        isAlive = true,
-        age = 0,
-        currentValue = 0
+        _name,
+        _fishTypeName,
+        _bodyColor,
+        _tailFinColor,
+        _speed = 1,
+        _size = 1,
+        _sideFinColor = null,
+        _patternColor = null,
+        _topFinColor = null,
+        _bottomFinColor = null,
+        _eyeWhiteColor = "white",
+        _pupilColor = "black",
+        _hungerAmount = 0,
+        _costPrice = 0,
+        _svgElement = null,
+        _foodEaten = 0,
+        _isAlive = true,
+        _age = 0,
+        _currentValue = 0
     ) {
         // Basic properties
-        this.name = name;
-        this.FishTypeName = fishTypeName;
-        this.bodyColor = bodyColor;
-        this.tailFinColor = tailFinColor;
-        this.Speed = speed;
-        this.Size = size;
+        this._name = _name;
+        this.FishTypeName = _fishTypeName;
+        this._bodyColor = _bodyColor;
+        this._tailFinColor = _tailFinColor;
+        this.Speed = _speed;
+        this.Size = _size;
         // Optional with defaults
-        this.sideFinColor = sideFinColor;
-        this.patternColor = patternColor;
-        this.topFinColor = topFinColor;
-        this.bottomFinColor = bottomFinColor;
-        this.eyeWhiteColor = eyeWhiteColor;
-        this.pupilColor = pupilColor;
-        this.hungerAmount = hungerAmount;
-        this.costPrice = costPrice; // Cost price of the fish
-        this.SvgElement = svgElement; // SVG representation of the fish
-        this.foodEaten = foodEaten; // Amount of food eaten by the fish
-        this.isAlive = isAlive;
-        this.age = age;
-        this.currentValue = currentValue; // Current value of the fish based on age and size
+        this._sideFinColor = _sideFinColor;
+        this._patternColor = _patternColor;
+        this._topFinColor = _topFinColor;
+        this._bottomFinColor = _bottomFinColor;
+        this._eyeWhiteColor = _eyeWhiteColor;
+        this._pupilColor = _pupilColor;
+        this._hungerAmount = _hungerAmount;
+        this._costPrice = _costPrice; // Cost price of the fish
+        this._svgElement = _svgElement; // SVG representation of the fish
+        this._foodEaten = _foodEaten; // Amount of food eaten by the fish
+        this._isAlive = _isAlive;
+        this._age = _age;
+        this._currentValue = _currentValue; // Current value of the fish based on age and size
     }
 
     // Getters and setters
 
-    get Name() { return this.name; }
+    get Name() { return this._name; }
     set Name(value) {
         if (value === undefined || value === null || value.trim() === "") {
             throw new Error("The name of the fish can't be empty!");
         }
         else {
-            this.name = value;
+            this._name = value;
         }
     }
 
-    get FishTypeName() { return this.fishTypeName; }
+    get FishTypeName() { return this._fishTypeName; }
     set FishTypeName(value) {
         if (isInEnum(value, AllFishTypes)) {
-            this.fishTypeName = value;
+            this._fishTypeName = value;
         } else {
             throw new Error("This fishtype is not recognized!");
         }
     }
 
-    get BodyColor() { return this.bodyColor; }
-    set BodyColor(value) { this.bodyColor = value; }
+    get BodyColor() { return this._bodyColor; }
+    set BodyColor(value) { this._bodyColor = value; }
 
-    get TailFinColor() { return this.tailFinColor; }
-    set TailFinColor(value) { this.tailFinColor = value; }
+    get TailFinColor() { return this._tailFinColor; }
+    set TailFinColor(value) { this._tailFinColor = value; }
 
-    get Size() { return this.size; }
+    get Size() { return this._size; }
     set Size(value) {
         if (value < 1) {
             throw new Error("Size cannot be less than 1!");
@@ -78,10 +78,10 @@ class Fish {
         if (value > 7) {
             throw new Error("Size cannot exceed 7!");
         }
-        this.size = value;
+        this._size = value;
     }
 
-    get Speed() { return this.speed; }
+    get Speed() { return this._speed; }
     set Speed(value) {
         if (value < 0) {
             throw new Error("Speed cannot be negative!");
@@ -89,7 +89,7 @@ class Fish {
         if (value > 5) {
             throw new Error("Speed cannot exceed 5!");
         }
-        this.speed = value;
+        this._speed = value;
     }
 
     get HasBottomFin() {
@@ -163,47 +163,47 @@ class Fish {
         }
     }
 
-    get SideFinColor() { return this.sideFinColor; }
-    set SideFinColor(value) { this.sideFinColor = value; }
+    get SideFinColor() { return this._sideFinColor; }
+    set SideFinColor(value) { this._sideFinColor = value; }
 
-    get PatternColor() { return this.patternColor; }
-    set PatternColor(value) { this.patternColor = value; }
+    get PatternColor() { return this._patternColor; }
+    set PatternColor(value) { this._patternColor = value; }
 
-    get BottomFinColor() { return this.bottomFinColor; }
-    set BottomFinColor(value) { this.bottomFinColor = value; }
+    get BottomFinColor() { return this._bottomFinColor; }
+    set BottomFinColor(value) { this._bottomFinColor = value; }
 
-    get TopFinColor() { return this.topFinColor; }
-    set TopFinColor(value) { this.topFinColor = value; }
+    get TopFinColor() { return this._topFinColor; }
+    set TopFinColor(value) { this._topFinColor = value; }
 
-    get EyeWhiteColor() { return this.eyeWhiteColor; }
-    set EyeWhiteColor(value) { this.eyeWhiteColor = value; }
+    get EyeWhiteColor() { return this._eyeWhiteColor; }
+    set EyeWhiteColor(value) { this._eyeWhiteColor = value; }
 
-    get PupilColor() { return this.pupilColor; }
-    set PupilColor(value) { this.pupilColor = value; }
+    get PupilColor() { return this._pupilColor; }
+    set PupilColor(value) { this._pupilColor = value; }
 
-    get HungerAmount() { return this.hungerAmount; }
-    set HungerAmount(value) { this.hungerAmount = value; }
+    get HungerAmount() { return this._hungerAmount; }
+    set HungerAmount(value) { this._hungerAmount = value; }
 
-    get CostPrice() { return this.costPrice; }
-    set CostPrice(value) { this.costPrice = value; }
+    get CostPrice() { return this._costPrice; }
+    set CostPrice(value) { this._costPrice = value; }
 
-    get SvgElement() { return this.svgElement; }
+    get SvgElement() { return this._svgElement; }
     set SvgElement(value) {
         if (!value) {
-            this.svgElement = null;
+            this._svgElement = null;
         }
         else if (value.jquery) {
             // Already a jQuery object
-            this.svgElement = value;
+            this._svgElement = value;
         }
         else {
             // Wrap raw DOM node
-            this.svgElement = $(value);
+            this._svgElement = $(value);
         }
     }
 
     get FoodEaten() {
-        return this.foodEaten;
+        return this._foodEaten;
     }
     set FoodEaten(value) {
         if (value < 0) {
@@ -244,204 +244,17 @@ class Fish {
             this.SvgElement.attr('width', 100);
             this.SvgElement.attr('height', 40);
         }
-        this.foodEaten = value;
+        this._foodEaten = value;
     }
 
-    get IsAlive() { return this.isAlive; }
-    set IsAlive(value) { this.isAlive = value; }
+    get IsAlive() { return this._isAlive; }
+    set IsAlive(value) { this._isAlive = value; }
 
-    get Age() { return this.age; }
-    set Age(value) { this.age = value; }
+    get Age() { return this._age; }
+    set Age(value) { this._age = value; }
 
-    get CurrentValue() { return this.currentValue; }
-    set CurrentValue(value) { this.currentValue = value; }
-
-    get StandardBodyColor() {
-        switch (this.FishTypeName) {
-            case AllFishTypes.bubbleback:
-                return "#ff5c5c";
-            case AllFishTypes.bubblemark:
-                return "#00dddd";
-            case AllFishTypes.clownfish:
-                return "#ff6600";
-            case AllFishTypes.longpaddlefin:
-                return "#66ddff";
-            case AllFishTypes.normalBroadback:
-                return "#fc0";
-            case AllFishTypes.normalOvalfin:
-                return "#4af";
-            case AllFishTypes.normalPaddlefin:
-                return "#5d5";
-            case AllFishTypes.normalRoundback:
-                return "#59f";
-            case AllFishTypes.normalSlimtail:
-                return "#f77";
-            case AllFishTypes.piranha:
-                return "#1f9e6e";
-            case AllFishTypes.tigerstripes:
-                return "#ffdd00";
-            case AllFishTypes.wavyfin:
-                return "#f28c28";
-            default:
-                throw new Error("This fishtype is not recognized!");
-        }
-    }
-
-    get StandardTailFinColor() {
-        switch (this.FishTypeName) {
-            case AllFishTypes.bubbleback:
-                return "#ff3b3b";
-            case AllFishTypes.bubblemark:
-                return "#00cccc";
-            case AllFishTypes.clownfish:
-                return "#ff6600";
-            case AllFishTypes.longpaddlefin:
-                return "#0077aa";
-            case AllFishTypes.normalBroadback:
-                return "#fa5";
-            case AllFishTypes.normalOvalfin:
-                return "#6cc";
-            case AllFishTypes.normalPaddlefin:
-                return "#9f9";
-            case AllFishTypes.normalRoundback:
-                return "#7dd";
-            case AllFishTypes.normalSlimtail:
-                return "#f99";
-            case AllFishTypes.piranha:
-                return "#1f9e6e";
-            case AllFishTypes.tigerstripes:
-                return "#ffaa00";
-            case AllFishTypes.wavyfin:
-                return "#f28c28";
-            default:
-                throw new Error("This fishtype is not recognized!");
-        }
-    }
-
-    get StandardTopFinColor() {
-        if (this.HasTopFin) {
-            switch (this.fishTypeName) {
-                case AllFishTypes.bubbleback:
-                    return "#ff5c5c";
-                case AllFishTypes.bubblemark:
-                    return "#33eeee";
-                case AllFishTypes.clownfish:
-                    return "#ff6600";
-                case AllFishTypes.longpaddlefin:
-                    return "#3399cc";
-                case AllFishTypes.normalBroadback:
-                    return "#fc0";
-                case AllFishTypes.normalOvalfin:
-                    return "#7ad";
-                case AllFishTypes.normalPaddlefin:
-                    return "#6e6";
-                case AllFishTypes.normalRoundback:
-                    return "#6ac";
-                case AllFishTypes.normalSlimtail:
-                    return "#faa";
-                case AllFishTypes.piranha:
-                    return "#1f9e6e";
-                case AllFishTypes.tigerstripes:
-                    return "#ffcc00";
-                case AllFishTypes.wavyfin:
-                    return "#f28c28";
-                default:
-                    throw new Error("This fishtype is not recognized!");
-            }
-        }
-        else {
-            throw new Error("This fish has no top fin!");
-        }
-    }
-
-    get StandardBottomFinColor() {
-        if (this.HasBottomFin) {
-            switch (this.FishTypeName) {
-                case AllFishTypes.bubbleback:
-                    return "#ff5c5c";
-                case AllFishTypes.bubblemark:
-                    return "#33eeee";
-                case AllFishTypes.longpaddlefin:
-                    return "#3399cc";
-                case AllFishTypes.normalBroadback:
-                    return "#fc0";
-                case AllFishTypes.normalOvalfin:
-                    return "#7ad";
-                case AllFishTypes.normalPaddlefin:
-                    return "#6e6";
-                case AllFishTypes.normalRoundback:
-                    return "#6ac";
-                case AllFishTypes.normalSlimtail:
-                    return "#faa";
-                case AllFishTypes.piranha:
-                    return "#1f9e6e";
-                case AllFishTypes.tigerstripes:
-                    return "#ffcc00";
-                case AllFishTypes.wavyfin:
-                    return "#f28c28";
-                default:
-                    throw new Error("This fishtype is not recognized!");
-            }
-        }
-        else {
-            throw new Error("This fish has no bottom fin!");
-        }
-    }
-
-    get StandardSideFinColor() {
-        if (this.HasSideFin) {
-            switch (this.FishTypeName) {
-                case AllFishTypes.bubblemark:
-                    return "#00aaaa";
-                case AllFishTypes.clownfish:
-                    return "#ff6600";
-                case AllFishTypes.longpaddlefin:
-                    return "#006699";
-                case AllFishTypes.normalBroadback:
-                    return "#b80";
-                case AllFishTypes.normalOvalfin:
-                    return "#6cc";
-                case AllFishTypes.normalPaddlefin:
-                    return "#3c3";
-                case AllFishTypes.normalRoundback:
-                    return "#3a8";
-                case AllFishTypes.normalSlimtail:
-                    return "#c44";
-                case AllFishTypes.tigerstripes:
-                    return "#ffaa00";
-                default:
-                    throw new Error("This fishtype is not recognized!");
-            }
-        } else {
-            throw new Error("This fish has no side fin!");
-        }
-    }
-
-    get StandardPatternColor() {
-        if (this.HasPattern) {
-            switch (this.FishTypeName) {
-                case AllFishTypes.bubbleback:
-                    return "#fff";
-                case AllFishTypes.bubblemark:
-                    return "#fff";
-                case AllFishTypes.clownfish:
-                    return "#fff";
-                case AllFishTypes.longpaddlefin:
-                    return "#33aaff";
-                case AllFishTypes.piranha:
-                    return "#a1f0cc";
-                case AllFishTypes.tigerstripes:
-                    return "#000000";
-                case AllFishTypes.wavyfin:
-                    return "#fff";
-                default:
-                    throw new Error("This fishtype is not recognized!");
-            }
-        }
-        else {
-            throw new Error("This fish has no pattern!");
-        }
-    }
+    get CurrentValue() { return this._currentValue; }
+    set CurrentValue(value) { this._currentValue = value; }
 
     getSpeedInPixelsPerSecond() {
         return this.Speed * 10;
