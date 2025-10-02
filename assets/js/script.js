@@ -110,9 +110,6 @@ function createStarterFish(fishType) {
             svg.addClass('spawned-fish').css({
                 '--body-color': newFish.BodyColor,
                 '--tail-color': newFish.TailFinColor,
-                position: 'absolute',
-                top: 0,
-                left: 0,
             });
 
             if (newFish.HasPattern) svg.css('--pattern-color', newFish.PatternColor);
@@ -132,6 +129,10 @@ function createStarterFish(fishType) {
     });
 }
 
+function prepareFishCssForSpawning(fish) {
+    fish.SvgElement.css({ position: 'absolute', top: 100, left: 75, scale: '', transform: 'scaleX(1)', zIndex: 5 });
+}
+
 function spawnFish(fish) {
     aquarium.FishList.push(fish);
     $('#swimZone').append(fish.SvgElement);
@@ -140,14 +141,23 @@ function spawnFish(fish) {
 
 function moveFishRandomly(fish) {
     havePooChance(fish);
-    const tankWidth = $('#swimZone').width();
-    const tankHeight = $('#swimZone').height();
 
-    const maxX = tankWidth - fish.SvgElement.width();
-    const maxY = tankHeight - fish.SvgElement.height();
+    const swimZone = $('#swimZone');
+    const zoneOffset = swimZone.offset();
+    const tankOffset = $('#fishTank').offset();
 
-    const newX = Math.random() * maxX;
-    const newY = Math.random() * maxY;
+    // Calculate swimZone boundaries relative to #fishTank
+    const zoneX = zoneOffset.left - tankOffset.left;
+    const zoneY = zoneOffset.top - tankOffset.top;
+    const zoneWidth = swimZone.width();
+    const zoneHeight = swimZone.height();
+
+    const maxX = zoneX + zoneWidth - fish.SvgElement.width();
+    const maxY = zoneY + zoneHeight - fish.SvgElement.height();
+
+    // Pick a random point *within swimZone only*
+    const newX = zoneX + Math.random() * (zoneWidth - fish.SvgElement.width());
+    const newY = zoneY + Math.random() * (zoneHeight - fish.SvgElement.height());
 
     // Get current position
     const currentPos = fish.SvgElement.position();
@@ -158,32 +168,21 @@ function moveFishRandomly(fish) {
     const speed = ((fish.speed / 0.6) * 30); // px/sec
     const duration = (distance / speed) * 1000;
 
-    // Flip direction based on movement
-    if (dx < 0) {
-        fish.SvgElement.css('transform', 'scaleX(-1)');
-    } else {
-        fish.SvgElement.css('transform', 'scaleX(1)');
-    }
+    // Flip direction
+    fish.SvgElement.css('transform', dx < 0 ? 'scaleX(-1)' : 'scaleX(1)');
 
     // Animate movement
     fish.SvgElement.animate(
+        { left: newX, top: newY },
         {
-            left: newX,
-            top: newY
-        },
-        {
-            duration: duration,
+            duration,
             easing: 'linear',
-            step: function () {
-                havePooChance(fish);
-            },
+            step: function () { havePooChance(fish); },
             complete: function () {
-                // have a 1 / 5 chance the fish will wait (between 0 and 1 sec) before moving again
                 if (getRandomNumber(0, 4) === 0) {
-                    setTimeout(() => moveFishRandomly(fish), getRandomNumber(0, 1000))
-                }
-                else {
-                    moveFishRandomly(fish)
+                    setTimeout(() => moveFishRandomly(fish), getRandomNumber(0, 1000));
+                } else {
+                    moveFishRandomly(fish);
                 }
             }
         }
@@ -380,6 +379,11 @@ function closeBottomMenu() {
     restartMovingAllFish();
 }
 
+function isAnyModalOpen() {
+    console.log($("#modalStarterFishContainer").is(":visible") || $("#modalShopContainer").is(":visible") || $('#fishInfoModal').is(":visible"));
+    return $("#modalStarterFishContainer").is(":visible") || $("#modalShopContainer").is(":visible") || $('#fishInfoModal').is(":visible");
+}
+
 
 //#region EVENT HANDLERS
 
@@ -435,33 +439,33 @@ $('#closeFishInfoModal').click(function () {
 
 $("#starterFish1ButtonHolder").click(function () {
     var fish = starterFishes[0];
-    fish.SvgElement.css({ position: 'absolute', top: 0, left: 0, scale: '', transform: 'scaleX(1)' });
+    prepareFishCssForSpawning(fish);
     closeStarterFishModal();
     spawnFish(fish);
 });
 
 $("#starterFish2ButtonHolder").click(function () {
     var fish = starterFishes[1];
-    fish.SvgElement.css({ position: 'absolute', top: 0, left: 0, scale: '', transform: 'scaleX(1)' });
+    prepareFishCssForSpawning(fish);
     closeStarterFishModal();
     spawnFish(fish);
 });
 
 $("#starterFish3ButtonHolder").click(function () {
     var fish = starterFishes[2];
-    fish.SvgElement.css({ position: 'absolute', top: 0, left: 0, scale: '', transform: 'scaleX(1)' });
+    prepareFishCssForSpawning(fish);
     closeStarterFishModal();
     spawnFish(fish);
 });
 
 $("#openShopImg").click(function () {
-    if (!$("#modalStarterFishContainer").is(":visible") && !$("#modalShopContainer").is(":visible")) {
+    if (!isAnyModalOpen()) {
         $("#modalShopContainer").css("display", "flex");
     }
 });
 
 $("#openShopImg").hover(function () {
-    if ($("#modalStarterFishContainer").is(":visible") || $("#modalShopContainer").is(":visible")) {
+    if (isAnyModalOpen()) {
         $("#openShopImg").addClass("noClickCursor");
     }
     else {
@@ -482,13 +486,13 @@ $(document).on('click', '#closeBottomMenuImg', function () {
 });
 
 $("#openBottomMenuImg").click(function () {
-    if (!aquarium.HasFood && !$("#modalStarterFishContainer").is(":visible") && !$("#modalShopContainer").is(":visible")) {
+    if (!aquarium.HasFood && !isAnyModalOpen()) {
         openBottomMenu();
     }
 });
 
 $("#openBottomMenuImg").hover(function () {
-    if (aquarium.HasFood || $("#modalStarterFishContainer").is(":visible") || $("#modalShopContainer").is(":visible")) {
+    if (aquarium.HasFood || isAnyModalOpen()) {
         $("#openBottomMenuImg").addClass("noClickCursor");
     }
     else {

@@ -107,8 +107,8 @@ b {
 
 #swimZone {
     width: 100%;
-    height: 80vh;
-    padding-top: 5vh;
+    height: 75vh;
+    padding-top: 10vh;
 }
 
 .spawned-fish {
@@ -131,6 +131,7 @@ b {
     height: auto;
     position: absolute;
     bottom: 0;
+    z-index: 999;
 }
 
 #closeBottomMenuImg {
