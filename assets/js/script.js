@@ -243,7 +243,7 @@ function createNewFish(fishType, useRandomColors) {
             if (newFish.HasSideFin) svg.css('--side-fin-color', newFish.SideFinColor);
             if (newFish.HasPattern) svg.css('--pattern-color', newFish.PatternColor);
 
-            svg.attr({ width: 80, height: 30 });
+            svg.attr({ width: 80, height: 30, position: 'relative' });
             svg.add(svg.find('*')).css({
                 "stroke": "black",
                 "stroke-width": "0.6px",
@@ -257,20 +257,41 @@ function createNewFish(fishType, useRandomColors) {
     });
 }
 
-function prepareFishCssForSpawning(fish) {
-    fish.SvgElement.css({ position: 'absolute', top: 100, left: 75, scale: '', transform: 'scaleX(1)', zIndex: 5 });
+function prepareFishForSpawning(fish) {
+    fish.SvgElement.css({ scale: '' });
+
+    const fishFlipWrapper = $('<span class="fish-flip-wrapper"><span class="fish-rotate-wrapper"></span></span>');
+    fishFlipWrapper.find('.fish-rotate-wrapper').append(fish.SvgElement);
+
+    fishFlipWrapper.css({
+        position: 'absolute',
+        left: 200,
+        top: 200,
+        zIndex: 5
+    });
 }
 
 function spawnFish(fish) {
     aquarium.FishList.push(fish);
     fish.SvgElement.addClass('spawned-fish');
-    $('#swimZone').append(fish.SvgElement);
+
+    const fishFlipWrapper = fish.SvgElement.parent().parent();
+    $('#swimZone').append(fishFlipWrapper);
+
     moveFishRandomly(fish);
 }
+
+const normalizeAngle = angle => (((angle + 180) % 360 + 360) % 360) - 180;
 
 function moveFishRandomly(fish) {
     havePooChance(fish);
 
+    const computeRotation = (angle, scaleX) =>
+        normalizeAngle(scaleX === -1 ? 180 - angle : angle);
+
+
+    const fishFlipWrapper = fish.SvgElement.parent().parent();
+    const fishRotateWrapper = fish.SvgElement.parent();
     const swimZone = $('#swimZone');
     const zoneOffset = swimZone.offset();
     const tankOffset = $('#fishTank').offset();
@@ -281,35 +302,51 @@ function moveFishRandomly(fish) {
     const zoneWidth = swimZone.width();
     const zoneHeight = swimZone.height();
 
-    // Pick a random point *within swimZone only*
-    const newX = zoneX + Math.random() * (zoneWidth - fish.SvgElement.width());
-    const newY = zoneY + Math.random() * (zoneHeight - fish.SvgElement.height());
+    // Current position
+    const currentPos = fishFlipWrapper.position();
 
-    // Get current position
-    const currentPos = fish.SvgElement.position();
-    const dx = newX - currentPos.left;
-    const dy = newY - currentPos.top;
+    // Pick target pos far enough away
+    let newX, newY, dx, dy, distance, tries = 0;
+    do {
+        if (tries++ > 500) throw new Error("Could not find valid fish position.");
+        newX = zoneX + Math.random() * (zoneWidth - fishFlipWrapper.width());
+        newY = zoneY + Math.random() * (zoneHeight - fishFlipWrapper.height());
+        dx = newX - currentPos.left;
+        dy = newY - currentPos.top;
+        distance = Math.hypot(dx, dy);
+    } while (distance < 100);
 
-    const distance = Math.sqrt(dx * dx + dy * dy);
-    const speed = ((fish.Speed / 0.6) * 30); // px/sec
-    const duration = (distance / speed) * 1000;
+    // Direction and speed
+    const directionAngle = Math.atan2(dy, dx) * 180 / Math.PI;
+    const scaleX = dx < 0 ? -1 : 1;
+    const rotationToApply = computeRotation(directionAngle, scaleX);
 
-    // Flip direction
-    fish.SvgElement.css('transform', dx < 0 ? 'scaleX(-1)' : 'scaleX(1)');
+    const speed = (fish.Speed / 0.6) * 30; // px/sec
+    const duration = clamp((distance / speed) * 1000, 2000, 10000);
 
-    // Animate movement
-    fish.SvgElement.animate(
+    // Flip + rotate
+    fishFlipWrapper.css({
+        transition: 'transform 0.3s ease',
+        transform: `scaleX(${scaleX})`
+    });
+
+    fishRotateWrapper.css({
+        transition: 'transform 3s ease',
+        transform: `rotate(${rotationToApply}deg)`
+    });
+
+    // Animate position
+    fishFlipWrapper.animate(
         { left: newX, top: newY },
         {
             duration,
             easing: 'linear',
-            step: function () { havePooChance(fish); },
-            complete: function () {
-                if (getRandomNumber(0, 4) === 0) {
-                    setTimeout(() => moveFishRandomly(fish), getRandomNumber(0, 1000));
-                } else {
-                    moveFishRandomly(fish);
-                }
+            step: () => havePooChance(fish),
+            complete: () => {
+                const delay = getRandomNumber(0, 4) === 0
+                    ? getRandomNumber(0, 1000)
+                    : 0;
+                setTimeout(() => moveFishRandomly(fish), delay);
             }
         }
     );
@@ -318,77 +355,90 @@ function moveFishRandomly(fish) {
 function restartMovingAllFish() {
     aquarium.FishList.forEach(fish => {
         if (fish.SvgElement) {
-            fish.SvgElement.stop(true);
+            const fishFlipWrapper = fish.SvgElement.parent().parent();
+            fishFlipWrapper.stop(true);
             moveFishRandomly(fish);
+        }
+        else {
+            throw new Error(`Fish ${fish.Name} has no SVG element!`);
         }
     });
 }
 
 function directFishToFood(fish, foodX, foodY) {
-    // Use adjusted target for movement (slight offset if needed)
-    const targetX = foodX;
-    const targetY = foodY - 35; // offset for movement only
+    // Offset target so the fish doesn't "cover" the food awkwardly
+    const targetX = foodX - 10;
+    const targetY = foodY - 35;
 
-    const fishX = fish.SvgElement.position().left;
-    const fishY = fish.SvgElement.position().top;
-    const deltaX = targetX - fishX;
-    const deltaY = targetY - fishY;
-    const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+    const fishFlipWrapper = fish.SvgElement.parent().parent();
+    const fishRotateWrapper = fish.SvgElement.parent();
 
+    const fishX = fishFlipWrapper.position().left;
+    const fishY = fishFlipWrapper.position().top;
+
+    const dx = targetX - fishX;
+    const dy = targetY - fishY;
+    const distance = Math.hypot(dx, dy);
+
+    // --- Check if reached food ---
     if (distance < 6) {
-        // Fish has reached the food
         aquarium.HasFood = false;
         console.log(`${fish.Name} has reached the food!`);
-        fish.FoodEaten += 1; // Increment food eaten count
+        fish.FoodEaten += 1;
+
         $('#CBMI').attr('id', 'closeBottomMenuImg');
 
-        setTimeout(function () {
+        setTimeout(() => {
             $(`img.food`).filter(function () {
-                const food = $(this)[0];
-                const rect = food.getBoundingClientRect();
+                const rect = this.getBoundingClientRect();
                 const parentRect = $("#swimZone")[0].getBoundingClientRect();
-
-                // Convert rect to container-relative coordinates
                 const currentLeft = rect.left - parentRect.left;
                 const currentTop = rect.top - parentRect.top;
 
-                // Compare against ORIGINAL food coords, not offset
                 return Math.abs(currentLeft - foodX) < 10 &&
                     Math.abs(currentTop - foodY) < 10;
             }).remove();
         }, 750);
 
-        aquarium.HasFood = false; // Reset food availability
-        updateStats(); // Update food amount display
+        updateStats();
         restartMovingAllFish();
         return;
     }
 
-    // Move closer to the food position each step
-    const speed = ((fish.Speed / 0.75) * 7); // Adjust pixels per step for smoothness
-    const directionX = deltaX / distance;
-    const directionY = deltaY / distance;
-    const newX = fishX + directionX * speed;
-    const newY = fishY + directionY * speed;
+    // --- Movement step ---
+    const stepSize = (fish.Speed / 0.6) * 7; // tweak for realism
+    const directionX = dx / distance;
+    const directionY = dy / distance;
+    const newX = fishX + directionX * stepSize;
+    const newY = fishY + directionY * stepSize;
 
-    // Flip direction based on movement
-    if (deltaX < 0) {
-        fish.SvgElement.css('transform', 'scaleX(-1)');
-    } else {
-        fish.SvgElement.css('transform', 'scaleX(1)');
-    }
+    // --- Angle + flipping ---
+    const rawAngle = Math.atan2(dy, dx) * 180 / Math.PI;
+    const scaleX = dx < 0 ? -1 : 1;
 
-    fish.SvgElement.animate(
+    // Normalize rotation with flip
+    const normalizeAngle = angle => (((angle + 180) % 360 + 360) % 360) - 180;
+    const rotationToApply = normalizeAngle(scaleX === -1 ? 180 - rawAngle : rawAngle);
+
+    // --- Apply transforms ---
+    fishFlipWrapper.css({
+        transition: 'transform 0.3s ease',
+        transform: `scaleX(${scaleX})`
+    });
+
+    fishRotateWrapper.css({
+        transition: 'transform 0.2s ease',
+        transform: `rotate(${rotationToApply}deg)`
+    });
+
+    // --- Animate towards food ---
+    fishFlipWrapper.animate(
         { left: newX, top: newY },
         {
-            duration: 100, // milliseconds per step
-            step: function () {
-                havePooChance(fish);
-            },
-            complete: function () {
-                // Keep chasing until reached
-                directFishToFood(fish, foodX, foodY);
-            }
+            duration: 100, // smoother stepping
+            easing: 'linear',
+            step: () => havePooChance(fish),
+            complete: () => directFishToFood(fish, foodX, foodY)
         }
     );
 }
@@ -396,10 +446,31 @@ function directFishToFood(fish, foodX, foodY) {
 function havePooChance(fish) {
     let random = getRandomNumber(1, 10000 - fish.CostPrice * 20 - fish.Size * 25);
     if (random === 1) {
-        const fishX = fish.SvgElement.position().left;
-        const fishY = fish.SvgElement.position().top;
+        const fishFlipWrapper = fish.SvgElement.parent().parent();;
+        const fishY = fishFlipWrapper.position().top + 30;
+
+        let fishX;
+        if (getScaleX(fishFlipWrapper) === 1) {
+            fishX = fishFlipWrapper.position().left;
+        }
+        else {
+            fishX = fishFlipWrapper.position().left + 25;
+        }
         spawnPoo(fishX, fishY);
     }
+}
+
+function getScaleX(element) {
+    const transform = element.css('transform');
+    if (transform && transform !== 'none') {
+        const values = transform.match(/matrix\(([^)]+)\)/);
+        if (values) {
+            const parts = values[1].split(', ');
+            // parts[0] is scaleX
+            return parseFloat(parts[0]);
+        }
+    }
+    return 1; // default scaleX
 }
 
 function updateStats() {
@@ -451,13 +522,19 @@ function spawnFood(x, y) {
             $("#fishTank").append(food);
 
             aquarium.HasFood = true;
+
             $("#closeBottomMenuImg").off("click");
             $('#closeBottomMenuImg').attr('id', 'CBMI');
+
             // Make all fish swim toward the food
             aquarium.FishList.forEach(fish => {
                 if (fish.SvgElement) {
-                    fish.SvgElement.stop(); // Stop any current animation
+                    const fishFlipWrapper = fish.SvgElement.parent().parent();
+                    fishFlipWrapper.stop(); // Stop any current animation
                     directFishToFood(fish, x, y);
+                }
+                else {
+                    throw new Error(`Fish ${fish.Name} has no SVG element!`);
                 }
             });
         }
@@ -488,11 +565,10 @@ function closeBottomMenu() {
 }
 
 function isAnyModalOpen() {
-    console.log($("#modalStarterFishContainer").is(":visible") || $("#modalShopContainer").is(":visible") || $('#fishInfoModal').is(":visible"));
     return $("#modalStarterFishContainer").is(":visible") || $("#modalShopContainer").is(":visible") || $('#fishInfoModal').is(":visible");
 }
 
-//#region basic helper functions
+//#region BASIC HELPER FUNCTIONS
 
 function camelCaseToCapitalizedText(str) {
     if (!str) return "";
@@ -511,6 +587,75 @@ function getRandomNumber(min, max) {
     // Returns a random integer between min and max, inclusive
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+
+function isBetween(value, min, max) {
+    if (min > max) throw new Error("Min cannot be greater than max in isBetween function!");
+    return value >= min && value <= max;
+}
+
+function clamp(value, min, max) {
+    if (min > max) throw new Error("Min cannot be greater than max in clamp function!");
+    return Math.min(Math.max(value, min), max);
+}
+
+function swapSign(num) {
+    return -num;
+}
+
+
+function isDarkColor(color) {
+    if (!color || color.toLowerCase() === "transparent") {
+        return false; // treat transparent as light
+    }
+
+    // We'll normalize the color into an RGB array: [red, green, blue]
+    let rgb = color;
+
+    // Case 1: The color is in HEX format like "#ff8800"
+    if (rgb.startsWith("#")) {
+        // Remove the "#" and parse the hex string into a number
+        let bigint = parseInt(rgb.slice(1), 16);
+
+        // Extract red, green, and blue using bitwise operations
+        // Example: for #ff8800 (hex ff8800 = decimal 16744192)
+        // r = ff (255), g = 88 (136), b = 00 (0)
+        let r = (bigint >> 16) & 255; // shift 16 bits to the right → red
+        let g = (bigint >> 8) & 255;  // shift 8 bits → green
+        let b = bigint & 255;         // lowest 8 bits → blue
+
+        // Replace rgb variable with array of values
+        rgb = [r, g, b];
+
+        // Case 2: The color is already in "rgb(...)" or "rgba(...)" format
+    } else if (rgb.startsWith("rgb")) {
+        // Grab all the numbers inside the string (ignores "rgb", commas, parentheses)
+        // Example: "rgb(255, 136, 0)" → [255, 136, 0]
+        rgb = rgb.match(/\d+/g).map(Number).slice(0, 3);
+        // slice(0, 3) ensures we drop alpha if it's "rgba(...)"
+    } else {
+        throw new Error("Unrecognized color format: " + color);
+    }
+
+    // Destructure red, green, blue into their own variables
+    const [r, g, b] = rgb;
+
+    // Now we compute "perceived brightness" of the color.
+    // This isn't a simple average, because human eyes are more sensitive
+    // to green, less to blue. The formula weights the channels accordingly.
+    //
+    // Formula explanation (YIQ color space approximation):
+    // brightness = 0.299*R + 0.587*G + 0.114*B
+    //
+    // Multiplying by 1000 and using integers avoids floating-point mess.
+    const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+
+    // Pick a threshold to decide what's "dark."
+    // Brightness scale goes 0 (black) to 255 (white).
+    // 128 is a middle-ish cutoff. Below = "dark", above = "light."
+    return brightness < 100;
+}
+
+//#endregion
 
 
 //#region EVENT HANDLERS
@@ -567,21 +712,21 @@ $('#closeFishInfoModal').click(function () {
 
 $("#starterFish1ButtonHolder").click(function () {
     var fish = starterFishes[0];
-    prepareFishCssForSpawning(fish);
+    prepareFishForSpawning(fish);
     closeStarterFishModal();
     spawnFish(fish);
 });
 
 $("#starterFish2ButtonHolder").click(function () {
     var fish = starterFishes[1];
-    prepareFishCssForSpawning(fish);
+    prepareFishForSpawning(fish);
     closeStarterFishModal();
     spawnFish(fish);
 });
 
 $("#starterFish3ButtonHolder").click(function () {
     var fish = starterFishes[2];
-    prepareFishCssForSpawning(fish);
+    prepareFishForSpawning(fish);
     closeStarterFishModal();
     spawnFish(fish);
 });
@@ -756,59 +901,11 @@ $('#fishTank').on("click", '.spawned-fish', function () {
 
 //#endregion
 
-/* vvv !!! CHATGPT WITH EXTRA COMMENTS; UNDERSTAND THIS !!! vvv */
-
-
-function isDarkColor(color) {
-    if (!color || color.toLowerCase() === "transparent") {
-        return false; // treat transparent as light
+function spawnAllFishForTesting() {
+    for (let i = 0; i < AllFishTypes.length; i++) {
+        spawnNewRandomFish(AllFishTypes[i]);
     }
-
-    // We'll normalize the color into an RGB array: [red, green, blue]
-    let rgb = color;
-
-    // Case 1: The color is in HEX format like "#ff8800"
-    if (rgb.startsWith("#")) {
-        // Remove the "#" and parse the hex string into a number
-        let bigint = parseInt(rgb.slice(1), 16);
-
-        // Extract red, green, and blue using bitwise operations
-        // Example: for #ff8800 (hex ff8800 = decimal 16744192)
-        // r = ff (255), g = 88 (136), b = 00 (0)
-        let r = (bigint >> 16) & 255; // shift 16 bits to the right → red
-        let g = (bigint >> 8) & 255;  // shift 8 bits → green
-        let b = bigint & 255;         // lowest 8 bits → blue
-
-        // Replace rgb variable with array of values
-        rgb = [r, g, b];
-
-        // Case 2: The color is already in "rgb(...)" or "rgba(...)" format
-    } else if (rgb.startsWith("rgb")) {
-        // Grab all the numbers inside the string (ignores "rgb", commas, parentheses)
-        // Example: "rgb(255, 136, 0)" → [255, 136, 0]
-        rgb = rgb.match(/\d+/g).map(Number).slice(0, 3);
-        // slice(0, 3) ensures we drop alpha if it's "rgba(...)"
-    }
-
-    // Destructure red, green, blue into their own variables
-    const [r, g, b] = rgb;
-
-    // Now we compute "perceived brightness" of the color.
-    // This isn't a simple average, because human eyes are more sensitive
-    // to green, less to blue. The formula weights the channels accordingly.
-    //
-    // Formula explanation (YIQ color space approximation):
-    // brightness = 0.299*R + 0.587*G + 0.114*B
-    //
-    // Multiplying by 1000 and using integers avoids floating-point mess.
-    const brightness = (r * 299 + g * 587 + b * 114) / 1000;
-
-    // Pick a threshold to decide what's "dark."
-    // Brightness scale goes 0 (black) to 255 (white).
-    // 128 is a middle-ish cutoff. Below = "dark", above = "light."
-    return brightness < 100;
 }
-
 
 
 /* THIS FUNCTION IS CURRENTLY NOT IN USE */

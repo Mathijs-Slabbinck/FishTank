@@ -111,10 +111,22 @@ b {
     padding-top: 10vh;
 }
 
-.spawned-fish {
-    transform-origin: center;
-    position: absolute;
+.fish-flip-wrapper {
     transition: transform 0.3s ease;
+    transform-origin: center;
+    display: inline-block;
+}
+
+.fish-rotate-wrapper {
+    transition: transform 2s ease;
+    transform-origin: center;
+    display: inline-block;
+}
+
+.fish-flip-wrapper,
+.fish-rotate-wrapper {
+    position: relative;
+    display: inline-block;
 }
 
 #bottomMenuButtonContainer {
@@ -200,6 +212,7 @@ b {
     pointer-events: none;
     /* So clicks don't hit the bubble */
     animation: foodRise 1s ease-out forwards;
+    z-index: 6;
 }
 
 #rotatePhone {
