@@ -127,22 +127,6 @@ $(document).ready(function () {
     updateStats();
 });
 
-function getStandardColor(fishType, part) {
-    const fishData = StandardFishColors[fishType];
-    if (!fishData) throw new Error("This fishtype is not recognized!");
-
-    const color = fishData[part];
-    if (color == null) throw new Error("This fish has no " + part + "!");
-
-    return color;
-}
-
-
-function getRandomNormalFishType() {
-    const randomIndex = Math.floor(Math.random() * NormalFishTypes.length);
-    return NormalFishTypes[randomIndex];
-}
-
 function checkOrientation() {
     if (window.innerWidth < 600) {
         $('#rotatePhone').show();
@@ -183,13 +167,6 @@ async function pushStarterFishes() {
     const fish3 = await createNewFish(starterFishTypes[2], true);
     addFishToBlock(fish3, "#starterFish3Block");
     starterFishes.push(fish3);
-}
-
-function addFishToBlock(fish, blockSelector) {
-    fish.SvgElement.css({ top: '', left: '' });
-    fish.SvgElement.css({ position: 'relative', scale: '3', transform: 'scaleX(1)' });
-    fish.SvgElement.css("margin", "5vh auto 5vh auto");
-    $(blockSelector).append(fish.SvgElement);
 }
 
 function createNewFish(fishType, useRandomColors) {
@@ -257,6 +234,13 @@ function createNewFish(fishType, useRandomColors) {
     });
 }
 
+function addFishToBlock(fish, blockSelector) {
+    fish.SvgElement.css({ top: '', left: '' });
+    fish.SvgElement.css({ position: 'relative', scale: '3', transform: 'scaleX(1)' });
+    fish.SvgElement.css("margin", "5vh auto 5vh auto");
+    $(blockSelector).append(fish.SvgElement);
+}
+
 function prepareFishForSpawning(fish) {
     fish.SvgElement.css({ scale: '' });
 
@@ -280,8 +264,6 @@ function spawnFish(fish) {
 
     moveFishRandomly(fish);
 }
-
-const normalizeAngle = angle => (((angle + 180) % 360 + 360) % 360) - 180;
 
 function moveFishRandomly(fish) {
     havePooChance(fish);
@@ -460,19 +442,6 @@ function havePooChance(fish) {
     }
 }
 
-function getScaleX(element) {
-    const transform = element.css('transform');
-    if (transform && transform !== 'none') {
-        const values = transform.match(/matrix\(([^)]+)\)/);
-        if (values) {
-            const parts = values[1].split(', ');
-            // parts[0] is scaleX
-            return parseFloat(parts[0]);
-        }
-    }
-    return 1; // default scaleX
-}
-
 function updateStats() {
     $('#fishFoodAmount').text(player.FoodAmount);
     $("#moneyAmount").text(player.MoneyAmount);
@@ -542,8 +511,11 @@ function spawnFood(x, y) {
 }
 
 function closeStarterFishModal() {
-    $('#starterFishModal').hide();
     $("#modalStarterFishContainer").hide();
+}
+
+function closeFishInfoModal() {
+    $("#modalFishInfoContainer").hide();
 }
 
 function openBottomMenu() {
@@ -564,8 +536,8 @@ function closeBottomMenu() {
     restartMovingAllFish();
 }
 
-function isAnyModalOpen() {
-    return $("#modalStarterFishContainer").is(":visible") || $("#modalShopContainer").is(":visible") || $('#fishInfoModal').is(":visible");
+function closeShopModal() {
+    $("#modalShopContainer").hide();
 }
 
 //#region BASIC HELPER FUNCTIONS
@@ -658,6 +630,46 @@ function isDarkColor(color) {
 //#endregion
 
 
+//#region helper functions
+
+function getScaleX(element) {
+    const transform = element.css('transform');
+    if (transform && transform !== 'none') {
+        const values = transform.match(/matrix\(([^)]+)\)/);
+        if (values) {
+            const parts = values[1].split(', ');
+            // parts[0] is scaleX
+            return parseFloat(parts[0]);
+        }
+    }
+    return 1; // default scaleX
+}
+
+function isAnyModalOpen() {
+    return $("#modalStarterFishContainer").is(":visible") || $("#modalShopContainer").is(":visible") || $('#fishInfoModal').is(":visible");
+}
+
+const normalizeAngle = angle => (((angle + 180) % 360 + 360) % 360) - 180;
+
+function getRandomNormalFishType() {
+    const randomIndex = Math.floor(Math.random() * NormalFishTypes.length);
+    return NormalFishTypes[randomIndex];
+}
+
+function getStandardColor(fishType, part) {
+    const fishData = StandardFishColors[fishType];
+    if (!fishData) throw new Error("This fishtype is not recognized!");
+
+    const color = fishData[part];
+    if (color == null) throw new Error("This fish has no " + part + "!");
+
+    return color;
+}
+
+
+//#endregion
+
+
 //#region EVENT HANDLERS
 
 $(window).on('resize', function () {
@@ -706,8 +718,7 @@ $("#dustpanImg").click(function () {
 })
 
 $('#closeFishInfoModal').click(function () {
-    $('#fishInfoModal').hide();
-    $("#modalFishInfoContainer").hide();
+    closeFishInfoModal();
 });
 
 $("#starterFish1ButtonHolder").click(function () {
@@ -751,7 +762,7 @@ $('#closeStarterFishModal').click(function () {
 });
 
 $('#closeShopModal').click(function () {
-    $("#modalShopContainer").hide();
+    closeShopModal();
 });
 
 $(document).on('click', '#closeBottomMenuImg', function () {
@@ -901,14 +912,10 @@ $('#fishTank').on("click", '.spawned-fish', function () {
 
 //#endregion
 
-function spawnAllFishForTesting() {
-    for (let i = 0; i < AllFishTypes.length; i++) {
-        spawnNewRandomFish(AllFishTypes[i]);
-    }
-}
 
+//#region test functions
 
-/* THIS FUNCTION IS CURRENTLY NOT IN USE */
+/* THESE FUNCTIONS ARE CURRENTLY NOT IN USE */
 
 function spawnNewRandomFish(fishType) {
     const newFish = new Fish(
@@ -968,3 +975,11 @@ function spawnNewRandomFish(fishType) {
         moveFishRandomly(newFish);
     }, 'xml');
 }
+
+function spawnAllFishForTesting() {
+    for (let i = 0; i < AllFishTypes.length; i++) {
+        spawnNewRandomFish(AllFishTypes[i]);
+    }
+}
+
+//#endregion
