@@ -4,7 +4,7 @@ class Fish {
         fishTypeName,
         bodyColor,
         tailFinColor,
-        speed,
+        speed = 1,
         size = 1,
         sideFinColor = null,
         patternColor = null,
@@ -202,7 +202,6 @@ class Fish {
         }
     }
 
-
     get FoodEaten() {
         return this.foodEaten;
     }
@@ -256,6 +255,193 @@ class Fish {
 
     get CurrentValue() { return this.currentValue; }
     set CurrentValue(value) { this.currentValue = value; }
+
+    get StandardBodyColor() {
+        switch (this.FishTypeName) {
+            case AllFishTypes.bubbleback:
+                return "#ff5c5c";
+            case AllFishTypes.bubblemark:
+                return "#00dddd";
+            case AllFishTypes.clownfish:
+                return "#ff6600";
+            case AllFishTypes.longpaddlefin:
+                return "#66ddff";
+            case AllFishTypes.normalBroadback:
+                return "#fc0";
+            case AllFishTypes.normalOvalfin:
+                return "#4af";
+            case AllFishTypes.normalPaddlefin:
+                return "#5d5";
+            case AllFishTypes.normalRoundback:
+                return "#59f";
+            case AllFishTypes.normalSlimtail:
+                return "#f77";
+            case AllFishTypes.piranha:
+                return "#1f9e6e";
+            case AllFishTypes.tigerstripes:
+                return "#ffdd00";
+            case AllFishTypes.wavyfin:
+                return "#f28c28";
+            default:
+                throw new Error("This fishtype is not recognized!");
+        }
+    }
+
+    get StandardTailFinColor() {
+        switch (this.FishTypeName) {
+            case AllFishTypes.bubbleback:
+                return "#ff3b3b";
+            case AllFishTypes.bubblemark:
+                return "#00cccc";
+            case AllFishTypes.clownfish:
+                return "#ff6600";
+            case AllFishTypes.longpaddlefin:
+                return "#0077aa";
+            case AllFishTypes.normalBroadback:
+                return "#fa5";
+            case AllFishTypes.normalOvalfin:
+                return "#6cc";
+            case AllFishTypes.normalPaddlefin:
+                return "#9f9";
+            case AllFishTypes.normalRoundback:
+                return "#7dd";
+            case AllFishTypes.normalSlimtail:
+                return "#f99";
+            case AllFishTypes.piranha:
+                return "#1f9e6e";
+            case AllFishTypes.tigerstripes:
+                return "#ffaa00";
+            case AllFishTypes.wavyfin:
+                return "#f28c28";
+            default:
+                throw new Error("This fishtype is not recognized!");
+        }
+    }
+
+    get StandardTopFinColor() {
+        if (this.HasTopFin) {
+            switch (this.fishTypeName) {
+                case AllFishTypes.bubbleback:
+                    return "#ff5c5c";
+                case AllFishTypes.bubblemark:
+                    return "#33eeee";
+                case AllFishTypes.clownfish:
+                    return "#ff6600";
+                case AllFishTypes.longpaddlefin:
+                    return "#3399cc";
+                case AllFishTypes.normalBroadback:
+                    return "#fc0";
+                case AllFishTypes.normalOvalfin:
+                    return "#7ad";
+                case AllFishTypes.normalPaddlefin:
+                    return "#6e6";
+                case AllFishTypes.normalRoundback:
+                    return "#6ac";
+                case AllFishTypes.normalSlimtail:
+                    return "#faa";
+                case AllFishTypes.piranha:
+                    return "#1f9e6e";
+                case AllFishTypes.tigerstripes:
+                    return "#ffcc00";
+                case AllFishTypes.wavyfin:
+                    return "#f28c28";
+                default:
+                    throw new Error("This fishtype is not recognized!");
+            }
+        }
+        else {
+            throw new Error("This fish has no top fin!");
+        }
+    }
+
+    get StandardBottomFinColor() {
+        if (this.HasBottomFin) {
+            switch (this.FishTypeName) {
+                case AllFishTypes.bubbleback:
+                    return "#ff5c5c";
+                case AllFishTypes.bubblemark:
+                    return "#33eeee";
+                case AllFishTypes.longpaddlefin:
+                    return "#3399cc";
+                case AllFishTypes.normalBroadback:
+                    return "#fc0";
+                case AllFishTypes.normalOvalfin:
+                    return "#7ad";
+                case AllFishTypes.normalPaddlefin:
+                    return "#6e6";
+                case AllFishTypes.normalRoundback:
+                    return "#6ac";
+                case AllFishTypes.normalSlimtail:
+                    return "#faa";
+                case AllFishTypes.piranha:
+                    return "#1f9e6e";
+                case AllFishTypes.tigerstripes:
+                    return "#ffcc00";
+                case AllFishTypes.wavyfin:
+                    return "#f28c28";
+                default:
+                    throw new Error("This fishtype is not recognized!");
+            }
+        }
+        else {
+            throw new Error("This fish has no bottom fin!");
+        }
+    }
+
+    get StandardSideFinColor() {
+        if (this.HasSideFin) {
+            switch (this.FishTypeName) {
+                case AllFishTypes.bubblemark:
+                    return "#00aaaa";
+                case AllFishTypes.clownfish:
+                    return "#ff6600";
+                case AllFishTypes.longpaddlefin:
+                    return "#006699";
+                case AllFishTypes.normalBroadback:
+                    return "#b80";
+                case AllFishTypes.normalOvalfin:
+                    return "#6cc";
+                case AllFishTypes.normalPaddlefin:
+                    return "#3c3";
+                case AllFishTypes.normalRoundback:
+                    return "#3a8";
+                case AllFishTypes.normalSlimtail:
+                    return "#c44";
+                case AllFishTypes.tigerstripes:
+                    return "#ffaa00";
+                default:
+                    throw new Error("This fishtype is not recognized!");
+            }
+        } else {
+            throw new Error("This fish has no side fin!");
+        }
+    }
+
+    get StandardPatternColor() {
+        if (this.HasPattern) {
+            switch (this.FishTypeName) {
+                case AllFishTypes.bubbleback:
+                    return "#fff";
+                case AllFishTypes.bubblemark:
+                    return "#fff";
+                case AllFishTypes.clownfish:
+                    return "#fff";
+                case AllFishTypes.longpaddlefin:
+                    return "#33aaff";
+                case AllFishTypes.piranha:
+                    return "#a1f0cc";
+                case AllFishTypes.tigerstripes:
+                    return "#000000";
+                case AllFishTypes.wavyfin:
+                    return "#fff";
+                default:
+                    throw new Error("This fishtype is not recognized!");
+            }
+        }
+        else {
+            throw new Error("This fish has no pattern!");
+        }
+    }
 
     getSpeedInPixelsPerSecond() {
         return this.Speed * 10;

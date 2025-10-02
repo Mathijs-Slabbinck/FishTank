@@ -18,8 +18,8 @@
     <path d="M 110 105 Q 125 115 140 105 L 135 85 Q 120 95 110 105 Z" fill="var(--bottom-fin-color, #1f9e6e)" stroke="#0c5f3b" stroke-width="3" />
 
     <!-- Eye -->
-    <circle cx="152" cy="55" r="8" fill="#fff" stroke="#000" stroke-width="1.5" />
-    <circle cx="152" cy="55" r="4" fill="#000" />
-        <!-- Eye highlight -->
-    <circle cx="154" cy="53" r="1" fill="white" />
+    <circle cx="152" cy="55" r="8" fill="#ffffff" stroke="#000000" stroke-width="1.5" />
+    <circle cx="152" cy="55" r="4" fill="#000000" />
+    <!-- Eye highlight -->
+    <circle cx="154" cy="53" r="1" fill="#ffffff" />
 </svg>
