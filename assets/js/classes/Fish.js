@@ -101,6 +101,7 @@ class Fish {
             this.FishTypeName === AllFishTypes.normalOvalfin ||
             this.FishTypeName === AllFishTypes.normalPaddlefin ||
             this.FishTypeName === AllFishTypes.normalRoundback ||
+            this.FishTypeName === AllFishTypes.normalSlimtail ||
             this.FishTypeName === AllFishTypes.piranha ||
             this.FishTypeName === AllFishTypes.tigerstripes ||
             this.FishTypeName === AllFishTypes.wavyfin
@@ -121,6 +122,7 @@ class Fish {
             this.FishTypeName === AllFishTypes.normalOvalfin ||
             this.FishTypeName === AllFishTypes.normalPaddlefin ||
             this.FishTypeName === AllFishTypes.normalRoundback ||
+            this.FishTypeName === AllFishTypes.normalSlimtail ||
             this.FishTypeName === AllFishTypes.piranha ||
             this.FishTypeName === AllFishTypes.tigerstripes ||
             this.FishTypeName === AllFishTypes.wavyfin

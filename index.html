@@ -30,26 +30,44 @@
 
             <div class="modalContainer" id="modalFishInfoContainer">
                 <div class="modal" id="fishInfoModal">
-                    <img src="images/closeButton.png" alt="close button" id="closeFishInfoModal"
+                    <img src="images/GUI/modals/closeButton.png" alt="close button" id="closeFishInfoModal"
                         class="clickAble closeModal">
 
                     <div class="modalContent">
                         <div id="modalFishName" class="modalTitle">
                             <strong></strong>
+                            <span class="redoButton clickAble" id="redoNameButton">
+                                <img src="images/redoButtonArrows.png" alt="redo button arrows">
+                            </span>
                         </div>
 
                         <div id="colorInfoBlock">
                             <div class="colorInfo">
                                 <div id="modalTailColor">
-                                    <b></b>
+                                    <span class="colorInfoBlock">
+                                        <b></b>
+                                        <span class="redoButton clickAble" id="redoTailColorButton">
+                                            <img src="images/redoButtonArrows.png" alt="redo button arrows">
+                                        </span>
+                                    </span>
                                 </div>
 
                                 <div id="modalTopFinColor">
-                                    <b></b>
+                                    <span class="colorInfoBlock">
+                                        <b></b>
+                                        <span class="redoButton clickAble" id="redoTopFinColorButton">
+                                            <img src="images/redoButtonArrows.png" alt="redo button arrows">
+                                        </span>
+                                    </span>
                                 </div>
 
                                 <div id="modalBottomFinColor">
-                                    <b></b>
+                                    <span class="colorInfoBlock">
+                                        <b></b>
+                                        <span class="redoButton clickAble" id="redoBottomFinColorButton">
+                                            <img src="images/redoButtonArrows.png" alt="redo button arrows">
+                                        </span>
+                                    </span>
                                 </div>
                             </div>
 
@@ -57,15 +75,30 @@
 
                             <div class="colorInfo">
                                 <div id="modalBodyColor">
-                                    <b></b>
+                                    <span class="colorInfoBlock">
+                                        <b></b>
+                                        <span class="redoButton clickAble" id="redoBodyColorButton">
+                                            <img src="images/redoButtonArrows.png" alt="redo button arrows">
+                                        </span>
+                                    </span>
                                 </div>
 
                                 <div id="modalSideFinColor">
-                                    <b></b>
+                                    <span class="colorInfoBlock">
+                                        <b></b>
+                                        <span class="redoButton clickAble" id="redoSideFinColorButton">
+                                            <img src="images/redoButtonArrows.png" alt="redo button arrows">
+                                        </span>
+                                    </span>
                                 </div>
 
                                 <div id="modalPatternColor">
-                                    <b></b>
+                                    <span class="colorInfoBlock">
+                                        <b></b>
+                                        <span class="redoButton clickAble" id="redoPatternColorButton">
+                                            <img src="images/redoButtonArrows.png" alt="redo button arrows">
+                                        </span>
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -95,6 +128,12 @@
                             <div id="modalStatCostPrice">
                                 <span>
                                     <b>Cost Price:</b>
+                                    <p></p>
+                                </span>
+                            </div>
+                            <div id="modalStatCurrentValue">
+                                <span>
+                                    <b>Current Value:</b>
                                     <p></p>
                                 </span>
                             </div>
@@ -153,7 +192,7 @@
 
             <div class="modalContainer" id="modalShopContainer">
                 <div class="modal" id="shopModal">
-                    <img src="images/closeButton.png" alt="close button" id="closeShopModal"
+                    <img src="images/GUI/modals/closeButton.png" alt="close button" id="closeShopModal"
                         class="clickAble closeModal">
 
                     <div class="modalContent">
@@ -164,7 +203,7 @@
                             <div class="subShopContainer" id="fishShop">
                                 <strong>Fish Shop</strong>
                                 <div>
-                                    <img src="images/shopFishIcon.png" alt="fish shop icon" id="fishShopIcon"
+                                    <img src="images/GUI/modals/shopFishIcon.png" alt="fish shop icon" id="fishShopIcon"
                                         class="shopIcon">
                                 </div>
                                 <div class="modalGreenButtonBlock" id="fishShopButtonHolder">
@@ -174,7 +213,7 @@
                             <div class="subShopContainer" id="decorationShop">
                                 <strong>Decoration Shop</strong>
                                 <div>
-                                    <img src="images/shopDecorationsIcon.png" alt="decoration shop icon"
+                                    <img src="images/GUI/modals/shopDecorationsIcon.png" alt="decoration shop icon"
                                         id="decorationShopIcon" class="shopIcon">
                                 </div>
                                 <div class="modalGreenButtonBlock" id="decorationShopButtonHolder">
@@ -184,8 +223,8 @@
                             <div class="subShopContainer" id="itemShop">
                                 <strong>Item Shop</strong>
                                 <div>
-                                    <img src="images/shopToolsIcon.png" alt="item shop icon" id="itemShopIcon"
-                                        class="shopIcon">
+                                    <img src="images/GUI/modals/shopToolsIcon.png" alt="item shop icon"
+                                        id="itemShopIcon" class="shopIcon">
                                 </div>
                                 <div class="modalGreenButtonBlock" id="itemShopButtonHolder">
                                     <p class="clickAble">choose</p>

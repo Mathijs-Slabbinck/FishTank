@@ -422,7 +422,7 @@ function directFishToFood(fish, foodX, foodY) {
 }
 
 function havePooChance(fish) {
-    let random = getRandomNumber(1, 10000 - fish.CostPrice * 20 - fish.Size * 25);
+    let random = getRandomNumber(1, 100000 - fish.CostPrice * 20 - fish.Size * 25);
     if (random === 1) {
         const fishFlipWrapper = fish.SvgElement.parent().parent();;
         const fishY = fishFlipWrapper.position().top + 30;
@@ -534,6 +534,19 @@ function closeBottomMenu() {
 
 function closeShopModal() {
     $("#modalShopContainer").hide();
+}
+
+function rotateArrows(element) {
+    const arrowImg = $(element).find("img");
+    if (arrowImg.hasClass("rotateArrows")) {
+        arrowImg.removeClass("rotateArrows");
+        arrowImg.addClass("rotateArrowsBack");
+        $(element).css("background-color", "darkgreen");
+    } else {
+        arrowImg.removeClass("rotateArrowsBack");
+        arrowImg.addClass("rotateArrows");
+        $(element).css("background-color", "yellowgreen");
+    }
 }
 
 //#region BASIC HELPER FUNCTIONS
@@ -837,6 +850,7 @@ $('#fishTank').on("click", '.spawned-fish', function () {
 
     if (fish.HasTopFin) {
         $('#modalTopFinColor b').text(`Top Fin Color: ${fish.TopFinColor}`);
+        $('#redoTopFinColorButton').show();
         if (isDarkColor(fish.TopFinColor)) {
             $('#modalTopFinColor b').css('color', 'white');
         }
@@ -847,12 +861,15 @@ $('#fishTank').on("click", '.spawned-fish', function () {
     }
     else {
         $('#modalTopFinColor b').text(`No Top Fin`);
+        $('#redoTopFinColorButton').css("visibility", "hidden");
+        $('#modalTopFinColor>span').css("justify-content", "left");
         $('#modalTopFinColor b').css("color", "black");
         $('#modalTopFinColor').css("background-color", "transparent");
     }
 
     if (fish.HasBottomFin) {
         $('#modalBottomFinColor b').text(`Bottom Fin Color: ${fish.BottomFinColor}`);
+        $('#redoBottomFinColorButton').show();
         if (isDarkColor(fish.BottomFinColor)) {
             $('#modalBottomFinColor b').css('color', 'white');
         }
@@ -863,7 +880,10 @@ $('#fishTank').on("click", '.spawned-fish', function () {
     }
     else {
         $('#modalBottomFinColor b').text(`No Bottom Fin`);
+        $('#redoBottomFinColorButton').css("visibility", "hidden");
+        $('#modalBottomFinColor>span').css("justify-content", "left");
         $('#modalBottomFinColor b').css("color", "black");
+        $('#modalBottomFinColor b').css("margin", "1vh 0 1vh 0");
         $('#modalBottomFinColor').css("background-color", "transparent");
     }
 
@@ -872,9 +892,11 @@ $('#fishTank').on("click", '.spawned-fish', function () {
     $('#modalStatSize p').text(`${fish.Size}`);
     $('#modalStatFoodEaten p').text(`${fish.FoodEaten}`);
     $("#modalStatCostPrice p").text(`${fish.CostPrice}`);
+    $("#modalStatCurrentValue p").text(`${fish.CurrentValue}`);
 
     if (fish.HasSideFin) {
         $('#modalSideFinColor b').text(`Side Fin Color: ${fish.SideFinColor}`);
+        $('#redoSideFinColorButton').show();
         if (isDarkColor(fish.SideFinColor)) {
             $('#modalSideFinColor b').css('color', 'white');
         }
@@ -885,12 +907,15 @@ $('#fishTank').on("click", '.spawned-fish', function () {
     }
     else {
         $('#modalSideFinColor b').text(`No Side Fin`);
+        $('#redoSideFinColorButton').css("visibility", "hidden");
+        $('#modalSideFinColor>span').css("justify-content", "left");
         $('#modalSideFinColor b').css("color", "black");
         $('#modalSideFinColor').css("background-color", "transparent");
     }
 
     if (fish.HasPattern) {
         $('#modalPatternColor b').text(`Pattern Color: ${fish.PatternColor}`);
+        $('#redoPatternColorButton').show();
         if (isDarkColor(fish.PatternColor)) {
             $('#modalPatternColor b').css('color', 'white');
         }
@@ -901,9 +926,46 @@ $('#fishTank').on("click", '.spawned-fish', function () {
     }
     else {
         $('#modalPatternColor b').text(`No Pattern`);
+        $('#redoPatternColorButton').css("visibility", "hidden");
+        $('#modalPatternColor>span').css("justify-content", "left");
         $('#modalPatternColor b').css("color", "black");
         $('#modalPatternColor').css("background-color", "transparent");
     }
+});
+
+$("#redoTailColorButton").click(function () {
+    const element = this;
+    rotateArrows(element);
+});
+
+$("#redoBodyColorButton").click(function () {
+    const element = this;
+    rotateArrows(element);
+});
+
+$("#redoTopFinColorButton").click(function () {
+    const element = this;
+    rotateArrows(element);
+});
+
+$("#redoBottomFinColorButton").click(function () {
+    const element = this;
+    rotateArrows(element);
+});
+
+$("#redoSideFinColorButton").click(function () {
+    const element = this;
+    rotateArrows(element);
+});
+
+$("#redoPatternColorButton").click(function () {
+    const element = this;
+    rotateArrows(element);
+});
+
+$("#redoNameButton").click(function () {
+    const element = this;
+    rotateArrows(element);
 });
 
 //#endregion
