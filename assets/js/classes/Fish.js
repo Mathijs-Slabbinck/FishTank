@@ -4,6 +4,7 @@ class Fish {
         _fishTypeName,
         _bodyColor,
         _tailFinColor,
+        _fishId,
         _speed = 1,
         _size = 1,
         _sideFinColor = null,
@@ -25,9 +26,10 @@ class Fish {
         this.FishTypeName = _fishTypeName;
         this._bodyColor = _bodyColor;
         this._tailFinColor = _tailFinColor;
+        this._fishId = _fishId;
+        // Optional with defaults
         this.Speed = _speed;
         this.Size = _size;
-        // Optional with defaults
         this._sideFinColor = _sideFinColor;
         this._patternColor = _patternColor;
         this._topFinColor = _topFinColor;
@@ -80,6 +82,9 @@ class Fish {
         }
         this._size = value;
     }
+
+    get FishId() { return this._fishId; }
+    set FishId(value) { this._fishId = value; }
 
     get Speed() { return this._speed; }
     set Speed(value) {

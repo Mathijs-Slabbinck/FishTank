@@ -35,37 +35,43 @@
 
                     <div class="modalContent">
                         <div id="modalFishName" class="modalTitle">
-                            <strong></strong>
+                            <strong></strong><input type="hidden" id="fishNameInput" placeholder="name your fish...">
                             <span class="redoButton clickAble" id="redoNameButton">
-                                <img src="images/redoButtonArrows.png" alt="redo button arrows">
+                                <img src="images/GUI/modals/redoButtonArrows.png" alt="redo button arrows">
                             </span>
                         </div>
 
                         <div id="colorInfoBlock">
                             <div class="colorInfo">
-                                <div id="modalTailColor">
+                                <div id="modalTailFinColor">
                                     <span class="colorInfoBlock">
-                                        <b></b>
-                                        <span class="redoButton clickAble" id="redoTailColorButton">
-                                            <img src="images/redoButtonArrows.png" alt="redo button arrows">
+                                        <strong>Tail Fin Color:</strong><b></b>
+                                        <input type="hidden" id="tailFinColorInput" placeholder="#FFFFFF"
+                                            class="colorInput">
+                                        <span class="redoButton clickAble" id="redoTailFinColorButton">
+                                            <img src="images/GUI/modals/redoButtonArrows.png" alt="redo button arrows">
                                         </span>
                                     </span>
                                 </div>
 
                                 <div id="modalTopFinColor">
                                     <span class="colorInfoBlock">
-                                        <b></b>
+                                        <strong>Top Fin Color:</strong><b></b>
+                                        <input type="hidden" id="topFinColorInput" placeholder="#FFFFFF"
+                                            class="colorInput">
                                         <span class="redoButton clickAble" id="redoTopFinColorButton">
-                                            <img src="images/redoButtonArrows.png" alt="redo button arrows">
+                                            <img src="images/GUI/modals/redoButtonArrows.png" alt="redo button arrows">
                                         </span>
                                     </span>
                                 </div>
 
                                 <div id="modalBottomFinColor">
                                     <span class="colorInfoBlock">
-                                        <b></b>
+                                        <strong>Bottom Fin Color:</strong><b></b>
+                                        <input type="hidden" id="bottomFinColorInput" placeholder="#FFFFFF"
+                                            class="colorInput">
                                         <span class="redoButton clickAble" id="redoBottomFinColorButton">
-                                            <img src="images/redoButtonArrows.png" alt="redo button arrows">
+                                            <img src="images/GUI/modals/redoButtonArrows.png" alt="redo button arrows">
                                         </span>
                                     </span>
                                 </div>
@@ -76,27 +82,33 @@
                             <div class="colorInfo">
                                 <div id="modalBodyColor">
                                     <span class="colorInfoBlock">
-                                        <b></b>
+                                        <strong>Body Color:</strong><b></b>
+                                        <input type="hidden" id="bodyColorInput" placeholder="#FFFFFF"
+                                            class="colorInput">
                                         <span class="redoButton clickAble" id="redoBodyColorButton">
-                                            <img src="images/redoButtonArrows.png" alt="redo button arrows">
+                                            <img src="images/GUI/modals/redoButtonArrows.png" alt="redo button arrows">
                                         </span>
                                     </span>
                                 </div>
 
                                 <div id="modalSideFinColor">
                                     <span class="colorInfoBlock">
-                                        <b></b>
+                                        <strong>Side Fin Color:</strong><b></b>
+                                        <input type="hidden" id="sideFinColorInput" placeholder="#FFFFFF"
+                                            class="colorInput">
                                         <span class="redoButton clickAble" id="redoSideFinColorButton">
-                                            <img src="images/redoButtonArrows.png" alt="redo button arrows">
+                                            <img src="images/GUI/modals/redoButtonArrows.png" alt="redo button arrows">
                                         </span>
                                     </span>
                                 </div>
 
                                 <div id="modalPatternColor">
                                     <span class="colorInfoBlock">
-                                        <b></b>
+                                        <strong>Pattern Color:</strong><b></b>
+                                        <input type="hidden" id="patternColorInput" placeholder="#FFFFFF"
+                                            class="colorInput">
                                         <span class="redoButton clickAble" id="redoPatternColorButton">
-                                            <img src="images/redoButtonArrows.png" alt="redo button arrows">
+                                            <img src="images/GUI/modals/redoButtonArrows.png" alt="redo button arrows">
                                         </span>
                                     </span>
                                 </div>
@@ -151,7 +163,7 @@
                             </div>
                         </div>
 
-                        <div class="modalGreenButtonBlock" id="modalSaveBlock">
+                        <div class="modalGreenButtonBlock" id="modalFishInfoSaveBlock">
                             <p class="clickAble">save</p>
                         </div>
 
@@ -238,12 +250,10 @@
 
     <div id="fishTank">
         <div id="swimZone">
-            <div id="bottomMenuButtonContainer">
-                <img src="images/GUI/openBottomMenu.png" alt="open menu button" id="openBottomMenuImg"
-                    class="clickAble">
-                <img src="images/GUI/closeBottomMenu.png" alt="close menu button" id="closeBottomMenuImg"
-                    class="clickAble">
-            </div>
+        </div>
+        <div id="bottomMenuButtonContainer">
+            <img src="images/GUI/openBottomMenu.png" alt="open menu button" id="openBottomMenuImg" class="clickAble">
+            <img src="images/GUI/closeBottomMenu.png" alt="close menu button" id="closeBottomMenuImg" class="clickAble">
         </div>
     </div>
     </main>

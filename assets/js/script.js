@@ -111,6 +111,7 @@ const StandardFishColors = {
 
 let notRotatedAtStart = false;
 let starterFishes = [];
+let clickedFish = null;
 
 var aquarium = new AquariumService("My Aquarium");
 var player = new PlayerService("Player1", 10, 100);
@@ -192,7 +193,8 @@ function createNewFish(fishType, useRandomColors) {
             // bodyColor
             bodyColor,
             // tailFinColor
-            tailFinColor
+            tailFinColor,
+            aquarium.AmountOfFish + 1, // id
         );
 
         if (useRandomColors) {
@@ -422,6 +424,7 @@ function directFishToFood(fish, foodX, foodY) {
 }
 
 function havePooChance(fish) {
+    // increase when buying fish gets possible
     let random = getRandomNumber(1, 10000 - fish.CostPrice * 20 - fish.Size * 25);
     if (random === 1) {
         const fishFlipWrapper = fish.SvgElement.parent().parent();;
@@ -488,7 +491,7 @@ function spawnFood(x, y) {
 
             aquarium.HasFood = true;
 
-            $("#closeBottomMenuImg").off("click");
+            $("#closeBottomMenuImg").off("click touchstart");
             $('#closeBottomMenuImg').attr('id', 'CBMI');
 
             // Make all fish swim toward the food
@@ -536,17 +539,189 @@ function closeShopModal() {
     $("#modalShopContainer").hide();
 }
 
-function rotateArrows(element) {
+function handleRedoClick(element) {
     const arrowImg = $(element).find("img");
+    const elementBlock = $(element).parent();
+    const inputField = elementBlock.find("input");
+
     if (arrowImg.hasClass("rotateArrows")) {
         arrowImg.removeClass("rotateArrows");
         arrowImg.addClass("rotateArrowsBack");
         $(element).css("background-color", "darkgreen");
+        inputField.val("");
+        inputField.attr("type", "hidden");
+
+        if (elementBlock.attr("id") === "modalFishName") {
+            elementBlock.find("strong").show();
+        }
+        else {
+            elementBlock.find("b").show();
+        }
+    } else if (arrowImg.hasClass("checkMark")) {
+        if (elementBlock.attr("id") !== "modalFishName") {
+            handleColorInput(elementBlock);
+        }
+        else {
+            handleNameInput(elementBlock);
+        }
+        arrowImg.removeClass("checkMark");
+        arrowImg.attr("src", "images/GUI/modals/redoButtonArrows.png");
+        arrowImg.addClass("rotateArrowsBack");
+        $(element).css("background-color", "darkgreen");
+        inputField.attr("type", "hidden");
+        if (elementBlock.attr("id") === "modalFishName") {
+            elementBlock.find("strong").show();
+        }
+        else {
+            elementBlock.find("b").show();
+        }
     } else {
         arrowImg.removeClass("rotateArrowsBack");
         arrowImg.addClass("rotateArrows");
         $(element).css("background-color", "yellowgreen");
+        elementBlock.find("input").attr("type", "text");
+        if (elementBlock.attr("id") === "modalFishName") {
+            elementBlock.find("strong").hide();
+        }
+        else {
+            elementBlock.find("b").hide();
+        }
     }
+}
+
+function handleColorInput(element) {
+    const inputField = element.find("input");
+    const input = inputField.val().trim().replace(/[\u200B-\u200D\uFEFF]/g, "");
+    if (isValidHex(input)) {
+        console.log(clickedFish);
+        if (clickedFish) {
+            switch (element.parent().attr("id")) {
+                case "modalBodyColor":
+                    $("#modalFishImgContainer svg").css('--body-color', input);
+                    break;
+                case "modalTailFinColor":
+                    $("#modalFishImgContainer svg").css('--tail-color', input);
+                    break;
+                case "modalTopFinColor":
+                    if (clickedFish.HasTopFin) $("#modalFishImgContainer svg").css('--top-fin-color', input);
+                    break;
+                case "modalBottomFinColor":
+                    if (clickedFish.HasBottomFin) $("#modalFishImgContainer svg").css('--bottom-fin-color', input);
+                    break;
+                case "modalSideFinColor":
+                    if (clickedFish.HasSideFin) $("#modalFishImgContainer svg").css('--side-fin-color', input);
+                    break;
+                case "modalPatternColor":
+                    if (clickedFish.HasPattern) $("#modalFishImgContainer svg").css('--pattern-color', input);
+                    break;
+                default:
+                    throw new Error("Unknown color part for fish!");
+            }
+            element.parent().css("background-color", input);
+            element.parent().find("b").text(input);
+            if (isDarkColor(input)) {
+                element.parent().find("b").css("color", "white");
+                element.parent().find("strong").css("color", "white");
+            } else {
+                element.parent().find("b").css("color", "black");
+                element.parent().find("strong").css("color", "black");
+            }
+        }
+        else {
+            // this should never happen, it's an extra failsafe
+            throw new Error("No fish selected for color change!");
+        }
+    }
+    else {
+        alert("Please enter a valid hex color code (e.g., #ff8800).");
+    }
+}
+
+function handleNameInput(element) {
+    const inputField = element.find("input");
+    const input = inputField.val().trim();
+    if (input !== "") {
+        if (input.length > 35) {
+            alert("Name cannot be longer than 35 characters!");
+        }
+        else {
+            if (clickedFish) {
+                element.find("strong").text(input);
+            }
+            else {
+                // this should never happen, it's an extra failsafe
+                throw new Error("No fish selected for name change!");
+            }
+        }
+    }
+    else {
+        alert("Name cannot be empty!");
+    }
+}
+
+function updateFishColors(element) {
+    const $el = $(element); // wrap once
+    const inputField = $el.find("input");
+    const input = inputField.val().trim();
+
+    switch ($el.parent().attr("id")) {
+        case "modalBodyColor":
+            clickedFish.BodyColor = input;
+            break;
+        case "modalTailFinColor":
+            clickedFish.TailFinColor = input;
+            break;
+        case "modalTopFinColor":
+            if (clickedFish.HasTopFin) clickedFish.TopFinColor = input;
+            break;
+        case "modalBottomFinColor":
+            if (clickedFish.HasBottomFin) clickedFish.BottomFinColor = input;
+            break;
+        case "modalSideFinColor":
+            if (clickedFish.HasSideFin) clickedFish.SideFinColor = input;
+            break;
+        case "modalPatternColor":
+            if (clickedFish.HasPattern) clickedFish.PatternColor = input;
+            break;
+        default:
+            throw new Error("Unknown color part for fish!");
+    }
+}
+
+
+function changeArrowsToCheckMark(element) {
+    let elementBlock;
+    if ($(element).parent().attr("id") === "modalFishName") {
+        elementBlock = $(element).parent();
+    }
+    else {
+        elementBlock = $(element).parent().parent();
+    }
+    const arrowImg = elementBlock.find(".redoButton").find("img");
+    arrowImg.removeClass("rotateArrows");
+    arrowImg.removeClass("rotateArrowsBack");
+    arrowImg.attr("src", "images/GUI/modals/checkMark.png");
+    arrowImg.addClass("checkMark");
+}
+
+function updateFishInAquarium() {
+    console.log("updating colors of fish in aquarium");
+    $(".colorInfoBlock").each(function () {
+        if ($(this).find("input").val().trim() !== "") {
+            updateFishColors(this);
+        }
+    });
+    aquarium.FishList.forEach(fish => {
+        if (fish.FishId === clickedFish.FishId) {
+            fish.Name = $("#modalFishName strong").text();
+            fish.SvgElement.css('--body-color', clickedFish.BodyColor);
+            fish.SvgElement.css('--tail-color', clickedFish.TailFinColor);
+            if (clickedFish.HasTopFin) fish.SvgElement.css('--top-fin-color', clickedFish.TopFinColor);
+            if (clickedFish.HasBottomFin) fish.SvgElement.css('--bottom-fin-color', clickedFish.BottomFinColor);
+            if (clickedFish.HasSideFin) fish.SvgElement.css('--side-fin-color', clickedFish.SideFinColor);
+            if (clickedFish.HasPattern) fish.SvgElement.css('--pattern-color', clickedFish.PatternColor);
+        }
+    });
 }
 
 //#region BASIC HELPER FUNCTIONS
@@ -583,6 +758,11 @@ function swapSign(num) {
     return -num;
 }
 
+function isValidHex(hex) {
+    // Start with #, then either 3 or 6 hex digits only
+    const hexRegex = /^#(?:[A-Fa-f0-9]{3}|[A-Fa-f0-9]{6})$/;
+    return hexRegex.test(hex);
+}
 
 function isDarkColor(color) {
     if (!color || color.toLowerCase() === "transparent") {
@@ -685,7 +865,7 @@ $(window).on('resize', function () {
     checkOrientation();
 });
 
-$("#fishTank").click(function (event) {
+$("#fishTank").on("click touchstart", function (event) {
     // Check if the click target is the #swimZone
     const swimZone = $("#swimZone");
     if (event.target !== swimZone[0]) return;
@@ -710,7 +890,7 @@ $("#fishTank").click(function (event) {
     }
 });
 
-$("#fishFoodImg").click(function () {
+$("#fishFoodImg").on("click touchstart", function () {
     closeBottomMenu();
     if ($("#swimZone").hasClass("dustpanCursor")) {
         $("#swimZone").removeClass("dustpanCursor");
@@ -718,7 +898,7 @@ $("#fishFoodImg").click(function () {
     $("#swimZone").toggleClass("foodCursor");
 });
 
-$("#dustpanImg").click(function () {
+$("#dustpanImg").on("click touchstart", function () {
     closeBottomMenu();
     if ($("#swimZone").hasClass("foodCursor")) {
         $("#swimZone").removeClass("foodCursor");
@@ -726,32 +906,32 @@ $("#dustpanImg").click(function () {
     $("#swimZone").toggleClass("dustpanCursor");
 })
 
-$('#closeFishInfoModal').click(function () {
+$('#closeFishInfoModal').on("click touchstart", function () {
     closeFishInfoModal();
 });
 
-$("#starterFish1ButtonHolder").click(function () {
+$("#starterFish1ButtonHolder").on("click touchstart", function () {
     var fish = starterFishes[0];
     prepareFishForSpawning(fish);
     closeStarterFishModal();
     spawnFish(fish);
 });
 
-$("#starterFish2ButtonHolder").click(function () {
+$("#starterFish2ButtonHolder").on("click touchstart", function () {
     var fish = starterFishes[1];
     prepareFishForSpawning(fish);
     closeStarterFishModal();
     spawnFish(fish);
 });
 
-$("#starterFish3ButtonHolder").click(function () {
+$("#starterFish3ButtonHolder").on("click touchstart", function () {
     var fish = starterFishes[2];
     prepareFishForSpawning(fish);
     closeStarterFishModal();
     spawnFish(fish);
 });
 
-$("#openShopImg").click(function () {
+$("#openShopImg").on("click touchstart", function () {
     if (!isAnyModalOpen()) {
         $("#modalShopContainer").css("display", "flex");
     }
@@ -766,19 +946,19 @@ $("#openShopImg").hover(function () {
     }
 });
 
-$('#closeStarterFishModal').click(function () {
+$('#closeStarterFishModal').on("click touchstart", function () {
     closeStarterFishModal();
 });
 
-$('#closeShopModal').click(function () {
+$('#closeShopModal').on("click touchstart", function () {
     closeShopModal();
 });
 
-$(document).on('click', '#closeBottomMenuImg', function () {
+$(document).on('click touchstart', '#closeBottomMenuImg', function () {
     closeBottomMenu();
 });
 
-$("#openBottomMenuImg").click(function () {
+$("#openBottomMenuImg").on("click touchstart", function () {
     if (!aquarium.HasFood && !isAnyModalOpen()) {
         openBottomMenu();
     }
@@ -803,7 +983,7 @@ $("#fishTank").on("mouseleave", ".poo", function () {
     $(this).removeClass("dustpanGreenCursor");
 });
 
-$("#fishTank").on("click", ".poo", function () {
+$("#fishTank").on("click touchstart", ".poo", function () {
     if ($("#swimZone").hasClass("dustpanCursor")) {
         $(this).remove();
         player.MoneyAmount += 3;
@@ -811,8 +991,9 @@ $("#fishTank").on("click", ".poo", function () {
     }
 });
 
-$('#fishTank').on("click", '.spawned-fish', function () {
+$('#fishTank').on("click touchstart", '.spawned-fish', function () {
     const fish = $(this).data('fish');
+    clickedFish = fish;
     console.log("--------------------------------------------------");
     console.log("Clicked on fish:");
     console.log(fish);
@@ -831,30 +1012,36 @@ $('#fishTank').on("click", '.spawned-fish', function () {
     $('#modalFishImgContainer svg').css("transform", "scaleX(1)");
     $('#modalFishName strong').text(fish.Name);
     $('#modalStatFishType p').text(camelCaseToCapitalizedText(fish.FishTypeName));
-    $('#modalTailColor b').text(`Tail Fin Color: ${fish.TailFinColor}`);
+    $('#modalTailFinColor b').text(`${fish.TailFinColor}`);
     if (isDarkColor(fish.TailFinColor)) {
-        $('#modalTailColor b').css('color', 'white');
+        $("#modalTailFinColor strong").css("color", "white");
+        $('#modalTailFinColor b').css('color', 'white');
     }
     else {
-        $('#modalTailColor b').css('color', 'black');
+        $("#modalTailFinColor strong").css("color", "black");
+        $('#modalTailFinColor b').css('color', 'black');
     }
-    $('#modalTailColor').css("background-color", fish.TailFinColor);
-    $('#modalBodyColor b').text(`Body Color: ${fish.BodyColor}`);
+    $('#modalTailFinColor').css("background-color", fish.TailFinColor);
+    $('#modalBodyColor b').text(`${fish.BodyColor}`);
     if (isDarkColor(fish.BodyColor)) {
+        $("#modalBodyColor strong").css("color", "white");
         $('#modalBodyColor b').css('color', 'white');
     }
     else {
+        $("#modalBodyColor strong").css("color", "black");
         $('#modalBodyColor b').css('color', 'black');
     }
     $('#modalBodyColor').css("background-color", fish.BodyColor);
 
     if (fish.HasTopFin) {
-        $('#modalTopFinColor b').text(`Top Fin Color: ${fish.TopFinColor}`);
+        $('#modalTopFinColor b').text(`${fish.TopFinColor}`);
         $('#redoTopFinColorButton').show();
         if (isDarkColor(fish.TopFinColor)) {
+            $("#modalTopFinColor strong").css("color", "white");
             $('#modalTopFinColor b').css('color', 'white');
         }
         else {
+            $("#modalTopFinColor strong").css("color", "black");
             $('#modalTopFinColor b').css('color', 'black');
         }
         $('#modalTopFinColor').css("background-color", fish.TopFinColor);
@@ -868,12 +1055,14 @@ $('#fishTank').on("click", '.spawned-fish', function () {
     }
 
     if (fish.HasBottomFin) {
-        $('#modalBottomFinColor b').text(`Bottom Fin Color: ${fish.BottomFinColor}`);
+        $('#modalBottomFinColor b').text(`${fish.BottomFinColor}`);
         $('#redoBottomFinColorButton').show();
         if (isDarkColor(fish.BottomFinColor)) {
+            $("#modalBottomFinColor strong").css("color", "white");
             $('#modalBottomFinColor b').css('color', 'white');
         }
         else {
+            $("#modalBottomFinColor strong").css("color", "black");
             $('#modalBottomFinColor b').css('color', 'black');
         }
         $('#modalBottomFinColor').css("background-color", fish.BottomFinColor);
@@ -895,12 +1084,14 @@ $('#fishTank').on("click", '.spawned-fish', function () {
     $("#modalStatCurrentValue p").text(`${fish.CurrentValue}`);
 
     if (fish.HasSideFin) {
-        $('#modalSideFinColor b').text(`Side Fin Color: ${fish.SideFinColor}`);
+        $('#modalSideFinColor b').text(`${fish.SideFinColor}`);
         $('#redoSideFinColorButton').show();
         if (isDarkColor(fish.SideFinColor)) {
+            $("#modalSideFinColor strong").css("color", "white");
             $('#modalSideFinColor b').css('color', 'white');
         }
         else {
+            $("#modalSideFinColor strong").css("color", "black");
             $('#modalSideFinColor b').css('color', 'black');
         }
         $('#modalSideFinColor').css("background-color", fish.SideFinColor);
@@ -914,12 +1105,14 @@ $('#fishTank').on("click", '.spawned-fish', function () {
     }
 
     if (fish.HasPattern) {
-        $('#modalPatternColor b').text(`Pattern Color: ${fish.PatternColor}`);
+        $('#modalPatternColor b').text(`${fish.PatternColor}`);
         $('#redoPatternColorButton').show();
         if (isDarkColor(fish.PatternColor)) {
+            $("#modalPatternColor strong").css("color", "white");
             $('#modalPatternColor b').css('color', 'white');
         }
         else {
+            $("#modalPatternColor strong").css("color", "black");
             $('#modalPatternColor b').css('color', 'black');
         }
         $('#modalPatternColor').css("background-color", fish.PatternColor);
@@ -933,39 +1126,79 @@ $('#fishTank').on("click", '.spawned-fish', function () {
     }
 });
 
-$("#redoTailColorButton").click(function () {
+$("#redoTailFinColorButton").on("click touchstart", function () {
     const element = this;
-    rotateArrows(element);
+    handleRedoClick(element);
 });
 
-$("#redoBodyColorButton").click(function () {
+$("#redoBodyColorButton").on("click touchstart", function () {
     const element = this;
-    rotateArrows(element);
+    handleRedoClick(element);
 });
 
-$("#redoTopFinColorButton").click(function () {
+$("#redoTopFinColorButton").on("click touchstart", function () {
     const element = this;
-    rotateArrows(element);
+    handleRedoClick(element);
 });
 
-$("#redoBottomFinColorButton").click(function () {
+$("#redoBottomFinColorButton").on("click touchstart", function () {
     const element = this;
-    rotateArrows(element);
+    handleRedoClick(element);
 });
 
-$("#redoSideFinColorButton").click(function () {
+$("#redoSideFinColorButton").on("click touchstart", function () {
     const element = this;
-    rotateArrows(element);
+    handleRedoClick(element);
 });
 
-$("#redoPatternColorButton").click(function () {
+$("#redoPatternColorButton").on("click touchstart", function () {
     const element = this;
-    rotateArrows(element);
+    handleRedoClick(element);
 });
 
-$("#redoNameButton").click(function () {
+$("#redoNameButton").on("click touchstart", function () {
     const element = this;
-    rotateArrows(element);
+    handleRedoClick(element);
+});
+
+$("#tailFinColorInput").on("input", function () {
+    const element = this;
+    changeArrowsToCheckMark(element);
+});
+
+$("#bodyColorInput").on("input", function () {
+    const element = this;
+    changeArrowsToCheckMark(element);
+});
+
+$("#topFinColorInput").on("input", function () {
+    const element = this;
+    changeArrowsToCheckMark(element);
+});
+
+$("#bottomFinColorInput").on("input", function () {
+    const element = this;
+    changeArrowsToCheckMark(element);
+});
+
+$("#sideFinColorInput").on("input", function () {
+    const element = this;
+    changeArrowsToCheckMark(element);
+});
+
+$("#patternColorInput").on("input", function () {
+    const element = this;
+    changeArrowsToCheckMark(element);
+});
+
+$("#fishNameInput").on("input", function () {
+    const element = this;
+    changeArrowsToCheckMark(element);
+});
+
+$("#modalFishInfoSaveBlock").on("click touchstart", function () {
+    updateFishInAquarium();
+    closeFishInfoModal();
 });
 
 //#endregion
@@ -977,67 +1210,69 @@ $("#redoNameButton").click(function () {
 
 function spawnNewRandomFish(fishType) {
     const newFish = new Fish(
-        "fish" + parseInt(aquarium.AmountOfFish + 1), // name
-        fishType, // fishTypeName
-        getRandomColor(), // bodyColor
-        getRandomColor(), // tailFinColor
-        getRandomNumber(1, 7), // speed
+        "fish" + (aquarium.AmountOfFish + 1),
+        fishType,
+        getRandomColor(),
+        getRandomColor(),
+        aquarium.AmountOfFish + 1
     );
 
-
-    if (newFish.HasSideFin) newFish.SideFinColor = getRandomColor(); // sideFinColor
-    if (newFish.HasPattern) newFish.PatternColor = getRandomColor(); // patternColor
-    if (newFish.HasTopFin) newFish.TopFinColor = getRandomColor(); // topFinColor
-    if (newFish.HasBottomFin) newFish.BottomFinColor = getRandomColor(); // bottomFinColor
+    if (newFish.HasSideFin) newFish.SideFinColor = getRandomColor();
+    if (newFish.HasPattern) newFish.PatternColor = getRandomColor();
+    if (newFish.HasTopFin) newFish.TopFinColor = getRandomColor();
+    if (newFish.HasBottomFin) newFish.BottomFinColor = getRandomColor();
 
     aquarium.FishList.push(newFish);
 
     $.get(`assets/media/fish/${fishType}.svg`, function (data) {
         const svg = $(data).find('svg');
 
-        svg.addClass('spawned-fish');
-        svg.css({
+        svg.addClass('spawned-fish').css({
             '--body-color': newFish.BodyColor,
             '--tail-color': newFish.TailFinColor,
             position: 'absolute',
             top: 0,
-            left: 0
+            left: 0,
+            width: 80,
+            height: 30,
+            stroke: 'black',
+            'stroke-width': 1,
+            'stroke-linejoin': 'round',
+            scale: ''
         });
 
-        if (newFish.HasPattern) {
-            svg.css('--pattern-color', newFish.PatternColor);
-        }
+        if (newFish.HasPattern) svg.css('--pattern-color', newFish.PatternColor);
+        if (newFish.HasSideFin) svg.css('--side-fin-color', newFish.SideFinColor);
+        if (newFish.HasTopFin) svg.css('--top-fin-color', newFish.TopFinColor);
+        if (newFish.HasBottomFin) svg.css('--bottom-fin-color', newFish.BottomFinColor);
 
-        if (newFish.HasSideFin) {
-            svg.css('--side-fin-color', newFish.SideFinColor);
-        }
-
-        if (newFish.HasTopFin) {
-            svg.css('--top-fin-color', newFish.TopFinColor);
-        }
-
-        if (newFish.HasBottomFin) {
-            svg.css('--bottom-fin-color', newFish.BottomFinColor);
-        }
-
-        svg.attr('width', 80);
-        svg.attr('height', 30);
-        svg.css("stroke", "black");
-        svg.css("stroke-width", 1);
-        svg.css("stroke-linejoin", "round");
         svg.data('fish', newFish);
-
-        $('#swimZone').append(svg);
-
         newFish.SvgElement = svg;
+
+        // Wrap SVG
+        const fishFlipWrapper = $('<span class="fish-flip-wrapper"><span class="fish-rotate-wrapper"></span></span>');
+        fishFlipWrapper.find('.fish-rotate-wrapper').append(svg);
+
+        fishFlipWrapper.css({
+            position: 'absolute',
+            left: 200,
+            top: 200,
+            zIndex: 5
+        });
+
+        // Append wrapper to swimZone
+        $('#swimZone').append(fishFlipWrapper);
+
         moveFishRandomly(newFish);
     }, 'xml');
 }
 
+
 function spawnAllFishForTesting() {
-    for (let i = 0; i < AllFishTypes.length; i++) {
-        spawnNewRandomFish(AllFishTypes[i]);
-    }
+    console.log("spawning all fish types for testing");
+    Object.values(AllFishTypes).forEach(fishType => {
+        spawnNewRandomFish(fishType);
+    });
 }
 
 //#endregion
