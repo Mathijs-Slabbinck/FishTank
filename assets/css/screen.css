@@ -81,6 +81,7 @@ b {
     margin: 3vh 0;
     display: flex;
     justify-content: center;
+    z-index: 2;
 }
 
 .modalGreenButtonBlock p {
@@ -281,5 +282,11 @@ b {
 
     100% {
         transform: translateY(-10px);
+    }
+}
+
+@media only screen and (max-width: 1000px) {
+    #bottomMenu {
+        height: 17vh;
     }
 }

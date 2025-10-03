@@ -121,6 +121,7 @@ $(document).ready(function () {
         $('#rotatePhone').show();
         $('#fishTank').hide();
         $('#coinDisplayBlock').hide();
+        $('#openShopImg').hide();
         notRotatedAtStart = true;
     } else {
         pushStarterFishes();
@@ -133,10 +134,12 @@ function checkOrientation() {
         $('#rotatePhone').show();
         $('#fishTank').hide();
         $('#coinDisplayBlock').hide();
+        $('#openShopImg').hide();
     } else {
         $('#rotatePhone').hide();
         $('#fishTank').show();
         $('#coinDisplayBlock').show();
+        $('#openShopImg').show();
 
         if (notRotatedAtStart) {
             pushStarterFishes();
@@ -251,8 +254,8 @@ function prepareFishForSpawning(fish) {
 
     fishFlipWrapper.css({
         position: 'absolute',
-        left: 200,
-        top: 200,
+        left: 100,
+        top: 100,
         zIndex: 5
     });
 }
