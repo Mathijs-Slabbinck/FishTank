@@ -348,21 +348,18 @@ function restartMovingAllFish() {
 }
 
 function directFishToFood(fish, foodX, foodY) {
-    // Offset target so the fish doesn't "cover" the food awkwardly
-    const targetX = foodX - 10;
-    const targetY = foodY - 35;
-
     const fishFlipWrapper = fish.SvgElement.parent().parent();
     const fishRotateWrapper = fish.SvgElement.parent();
 
-    const fishX = fishFlipWrapper.position().left;
-    const fishY = fishFlipWrapper.position().top;
+    const fishOffset = fishFlipWrapper.position(); // relative to parent
+    const fishX = fishOffset.left;
+    const fishY = fishOffset.top;
 
-    const dx = targetX - fishX;
-    const dy = targetY - fishY;
+    const dx = foodX - fishX;
+    const dy = foodY - fishY;
     const distance = Math.hypot(dx, dy);
 
-    // --- Check if reached food ---
+    // --- Check if fish reached the food ---
     if (distance < 6) {
         aquarium.HasFood = false;
         console.log(`${fish.Name} has reached the food!`);
@@ -370,17 +367,13 @@ function directFishToFood(fish, foodX, foodY) {
 
         $('#CBMI').attr('id', 'closeBottomMenuImg');
 
-        setTimeout(() => {
-            $(`img.food`).filter(function () {
-                const rect = this.getBoundingClientRect();
-                const parentRect = $("#swimZone")[0].getBoundingClientRect();
-                const currentLeft = rect.left - parentRect.left;
-                const currentTop = rect.top - parentRect.top;
-
-                return Math.abs(currentLeft - foodX) < 10 &&
-                    Math.abs(currentTop - foodY) < 10;
-            }).remove();
-        }, 750);
+        // Remove the food using the stored target data
+        $('img.food').each(function () {
+            const foodPos = $(this).data('foodTarget');
+            if (!foodPos) return;
+            const dist = Math.hypot(foodPos.x - foodX, foodPos.y - foodY);
+            if (dist < 10) $(this).remove();
+        });
 
         updateStats();
         restartMovingAllFish();
@@ -397,25 +390,17 @@ function directFishToFood(fish, foodX, foodY) {
     // --- Angle + flipping ---
     const rawAngle = Math.atan2(dy, dx) * 180 / Math.PI;
     const scaleX = dx < 0 ? -1 : 1;
-
-    // Normalize rotation with flip
     const normalizeAngle = angle => (((angle + 180) % 360 + 360) % 360) - 180;
     const rotationToApply = normalizeAngle(scaleX === -1 ? 180 - rawAngle : rawAngle);
 
-    // --- Apply transforms ---
-    fishFlipWrapper.css({
-        transform: `scaleX(${scaleX})`
-    });
-
-    fishRotateWrapper.css({
-        transform: `rotate(${rotationToApply}deg)`
-    });
+    fishFlipWrapper.css({ transform: `scaleX(${scaleX})` });
+    fishRotateWrapper.css({ transform: `rotate(${rotationToApply}deg)` });
 
     // --- Animate towards food ---
     fishFlipWrapper.animate(
         { left: newX, top: newY },
         {
-            duration: 100, // smoother stepping
+            duration: 100,
             easing: 'linear',
             step: () => havePooChance(fish),
             complete: () => directFishToFood(fish, foodX, foodY)
@@ -482,32 +467,47 @@ function spawnPoo(x, y) {
 function spawnFood(x, y) {
     setTimeout(function () {
         if (!aquarium.HasFood) {
+            const swimZone = $('#swimZone');
+            const zoneOffset = swimZone.offset();
+
+            // Food position relative to #swimZone
+            const foodX = x - zoneOffset.left;
+            const foodY = y - zoneOffset.top;
+
+            // Offset for fish animation if you move them up visually
+            const fishTargetY = foodY - 100;
+
             const food = $('<img class="food" src="images/fishFood.png" alt="fish food">');
             food.css({
-                left: `${x}px`,
-                top: `${y + 60}px`
+                position: 'absolute',
+                left: `${foodX}px`,
+                top: `${foodY}px` // food stays at original visual position
             });
-            $("#fishTank").append(food);
+
+            // Store the **same target the fish are swimming to**
+            food.data('foodTarget', { x: foodX, y: fishTargetY });
+
+            swimZone.append(food);
 
             aquarium.HasFood = true;
 
             $("#closeBottomMenuImg").off("click touchstart");
             $('#closeBottomMenuImg').attr('id', 'CBMI');
 
-            // Make all fish swim toward the food
+            // Make all fish swim toward the **offset target**
             aquarium.FishList.forEach(fish => {
                 if (fish.SvgElement) {
                     const fishFlipWrapper = fish.SvgElement.parent().parent();
-                    fishFlipWrapper.stop(); // Stop any current animation
-                    directFishToFood(fish, x, y);
-                }
-                else {
+                    fishFlipWrapper.stop();
+                    directFishToFood(fish, foodX, fishTargetY);
+                } else {
                     throw new Error(`Fish ${fish.Name} has no SVG element!`);
                 }
             });
         }
     }, 100);
 }
+
 
 function closeStarterFishModal() {
     $("#modalStarterFishContainer").hide();
