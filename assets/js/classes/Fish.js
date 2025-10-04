@@ -5,6 +5,7 @@ class Fish {
         _bodyColor,
         _tailFinColor,
         _fishId,
+        _isStarterFish = false,
         _speed = 1,
         _size = 1,
         _sideFinColor = null,
@@ -14,12 +15,11 @@ class Fish {
         _eyeWhiteColor = "white",
         _pupilColor = "black",
         _hungerAmount = 0,
-        _costPrice = 0,
         _svgElement = null,
         _foodEaten = 0,
         _isAlive = true,
         _age = 0,
-        _currentValue = 0
+        _currentValue = 0,
     ) {
         // Basic properties
         this._name = _name;
@@ -28,6 +28,7 @@ class Fish {
         this._tailFinColor = _tailFinColor;
         this._fishId = _fishId;
         // Optional with defaults
+        this._isStarterFish = _isStarterFish; // Indicates if the fish is a starter fish
         this.Speed = _speed;
         this.Size = _size;
         this._sideFinColor = _sideFinColor;
@@ -37,7 +38,6 @@ class Fish {
         this._eyeWhiteColor = _eyeWhiteColor;
         this._pupilColor = _pupilColor;
         this._hungerAmount = _hungerAmount;
-        this._costPrice = _costPrice; // Cost price of the fish
         this._svgElement = _svgElement; // SVG representation of the fish
         this._foodEaten = _foodEaten; // Amount of food eaten by the fish
         this._isAlive = _isAlive;
@@ -191,8 +191,52 @@ class Fish {
     get HungerAmount() { return this._hungerAmount; }
     set HungerAmount(value) { this._hungerAmount = value; }
 
-    get CostPrice() { return this._costPrice; }
-    set CostPrice(value) { this._costPrice = value; }
+    get CostPrice() {
+        if (this.IsStarterFish) {
+            return 0;
+        }
+
+        if (this.FishTypeName === AllFishTypes.bubbleback) {
+            return 85;
+        }
+        else if (this.FishTypeName === AllFishTypes.bubblemark) {
+            return 80;
+        }
+        else if (this.FishTypeName === AllFishTypes.clownfish) {
+            return 90;
+        }
+        else if (this.FishTypeName === AllFishTypes.longpaddlefin) {
+            return 80;
+        }
+        else if (this.FishTypeName === AllFishTypes.normalBroadback) {
+            return 40;
+        }
+        else if (this.FishTypeName === AllFishTypes.normalOvalfin) {
+            return 40;
+        }
+        else if (this.FishTypeName === AllFishTypes.normalPaddlefin) {
+            return 40;
+        }
+        else if (this.FishTypeName === AllFishTypes.normalRoundback) {
+            return 40;
+        }
+        else if (this.FishTypeName === AllFishTypes.normalSlimtail) {
+            return 40;
+        }
+        else if (this.FishTypeName === AllFishTypes.piranha) {
+            return 100;
+        }
+        else if (this.FishTypeName === AllFishTypes.tigerstripes) {
+            return 80;
+        }
+        else if (this.FishTypeName === AllFishTypes.wavyfin) {
+            return 85;
+        }
+        else {
+            // should never happen
+            throw new Error("This fishtype is not recognized!");
+        }
+    }
 
     get SvgElement() { return this._svgElement; }
     set SvgElement(value) {
@@ -262,6 +306,9 @@ class Fish {
 
     get CurrentValue() { return this._currentValue; }
     set CurrentValue(value) { this._currentValue = value; }
+
+    get IsStarterFish() { return this._isStarterFish; }
+    set IsStarterFish(value) { this._isStarterFish = value; }
 
     getSpeedInPixelsPerSecond() {
         return this.Speed * 10;

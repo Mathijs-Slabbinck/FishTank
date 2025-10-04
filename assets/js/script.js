@@ -111,6 +111,7 @@ const StandardFishColors = {
 
 let notRotatedAtStart = false;
 let starterFishes = [];
+let allFishes = [];
 let clickedFish = null;
 
 var aquarium = new AquariumService("My Aquarium");
@@ -125,6 +126,7 @@ $(document).ready(function () {
         notRotatedAtStart = true;
     } else {
         pushStarterFishes();
+        pushShopFishes();
     }
     updateStats();
 });
@@ -143,9 +145,7 @@ function checkOrientation() {
 
         if (notRotatedAtStart) {
             pushStarterFishes();
-        }
-
-        if (notRotatedAtStart) {
+            pushShopFishes();
             notRotatedAtStart = false;
         }
     }
@@ -160,20 +160,76 @@ async function pushStarterFishes() {
         }
     }
 
-    const fish1 = await createNewFish(starterFishTypes[0], true);
+    const fish1 = await createNewFish(starterFishTypes[0], true, true);
     addFishToBlock(fish1, "#starterFish1Block");
     starterFishes.push(fish1);
 
-    const fish2 = await createNewFish(starterFishTypes[1], true);
+    const fish2 = await createNewFish(starterFishTypes[1], true, true);
     addFishToBlock(fish2, "#starterFish2Block");
     starterFishes.push(fish2);
 
-    const fish3 = await createNewFish(starterFishTypes[2], true);
+    const fish3 = await createNewFish(starterFishTypes[2], true, true);
     addFishToBlock(fish3, "#starterFish3Block");
     starterFishes.push(fish3);
 }
 
-function createNewFish(fishType, useRandomColors) {
+async function pushShopFishes() {
+    const allFishTypeValues = Object.values(AllFishTypes);
+
+    for (let i = 0; i < allFishTypeValues.length; i += 3) {
+
+        const fishType1 = allFishTypeValues[i];
+        const fishType2 = allFishTypeValues[i + 1];
+        const fishType3 = allFishTypeValues[i + 2];
+
+        const newBlock = $('<div class="fishShopFishRow"><div class="fishBlock" id="fishBlock' + i + '"><p id="fishTypeName' + i + '">' + fishType1 + '</p></div><div class="fishBlock" id="fishBlock' + (i + 1) + '"><p id="fishTypeName' + (i + 1) + '">' + fishType2 + '</p></div><div class="fishBlock" id="fishBlock' + (i + 2) + '"><p id="fishTypeName' + (i + 2) + '">' + fishType3 + '</p></div></div>');
+
+        const buyButton1 = $('<div class="modalGreenButtonBlock buyFishButton" id="modalBuyFish' + i + '"><p class="clickAble">buy</p></div>');
+        const buyButton2 = $('<div class="modalGreenButtonBlock buyFishButton" id="modalBuyFish' + (i + 1) + '"><p class="clickAble">buy</p></div>');
+        const buyButton3 = $('<div class="modalGreenButtonBlock buyFishButton" id="modalBuyFish' + (i + 2) + '"><p class="clickAble">buy</p></div>');
+
+        $('#fishShopItemsContainer').append(newBlock);
+
+        const fishTypeNameBlock1 = newBlock.find('#fishTypeName' + i);
+        const fishTypeNameBlock2 = newBlock.find('#fishTypeName' + (i + 1));
+        const fishTypeNameBlock3 = newBlock.find('#fishTypeName' + (i + 2));
+
+        fishTypeNameBlock1.text(camelCaseToCapitalizedText(fishType1));
+        fishTypeNameBlock2.text(camelCaseToCapitalizedText(fishType2));
+        fishTypeNameBlock3.text(camelCaseToCapitalizedText(fishType3));
+
+        const innerFishBlock1 = newBlock.find('#fishBlock' + i);
+        const innerFishBlock2 = newBlock.find('#fishBlock' + (i + 1));
+        const innerFishBlock3 = newBlock.find('#fishBlock' + (i + 2));
+
+        const fish1 = await createNewFish(fishType1, false);
+        const fish2 = await createNewFish(fishType2, false);
+        const fish3 = await createNewFish(fishType3, false);
+
+        allFishes.push(fish1);
+        allFishes.push(fish2);
+        allFishes.push(fish3);
+
+        const CostPriceBlock = $('<p class="costPrice">Price: ' + fish1.CostPrice + '</p>')
+        const CostPriceBlock2 = $('<p class="costPrice">Price: ' + fish2.CostPrice + '</p>')
+        const CostPriceBlock3 = $('<p class="costPrice">Price: ' + fish3.CostPrice + '</p>')
+
+
+        addFishToBlock(fish1, innerFishBlock1);
+        addFishToBlock(fish2, innerFishBlock2);
+        addFishToBlock(fish3, innerFishBlock3);
+
+        innerFishBlock1.append(buyButton1);
+        innerFishBlock2.append(buyButton2);
+        innerFishBlock3.append(buyButton3);
+
+        innerFishBlock1.append(CostPriceBlock);
+        innerFishBlock2.append(CostPriceBlock2);
+        innerFishBlock3.append(CostPriceBlock3);
+    }
+}
+
+function createNewFish(fishType, useRandomColors, isStarterFish = false) {
     let bodyColor;
     let tailFinColor;
 
@@ -198,6 +254,7 @@ function createNewFish(fishType, useRandomColors) {
             // tailFinColor
             tailFinColor,
             aquarium.AmountOfFish + 1, // id
+            isStarterFish, // isStarterFish
         );
 
         if (useRandomColors) {
@@ -413,9 +470,9 @@ function directFishToFood(fish, foodX, foodY) {
 
 function havePooChance(fish) {
     // increase when buying fish gets possible
-    let random = getRandomNumber(1, 10000 - fish.CostPrice * 20 - fish.Size * 25);
+    let random = getRandomNumber(1, 100000 - (fish.CostPrice * 5 + fish.Size * 5));
     if (random === 1) {
-        const fishFlipWrapper = fish.SvgElement.parent().parent();;
+        const fishFlipWrapper = fish.SvgElement.parent().parent();
         const fishY = fishFlipWrapper.position().top + 30;
 
         let fishX;
@@ -460,7 +517,7 @@ function spawnPoo(x, y) {
     // Position the bubble at the click location
     poo.css({
         left: `${x}px`,
-        top: `${y}px`
+        top: `${y + 120}px`
     });
 
     // Append to poo tank
@@ -540,6 +597,10 @@ function closeBottomMenu() {
 
 function closeShopModal() {
     $("#modalShopContainer").hide();
+}
+
+function closeFishShopModal() {
+    $("#modalFishShopContainer").hide();
 }
 
 function handleRedoClick(element) {
@@ -868,7 +929,7 @@ $(window).on('resize', function () {
     checkOrientation();
 });
 
-$("#fishTank").on("click touchstart", function (event) {
+$("#fishTank").on("pointerdown", function (event) {
     // Check if the click target is the #swimZone
     const swimZone = $("#swimZone");
     if (event.target !== swimZone[0]) return;
@@ -893,7 +954,7 @@ $("#fishTank").on("click touchstart", function (event) {
     }
 });
 
-$("#fishFoodImg").on("click touchstart", function () {
+$("#fishFoodImg").on("pointerdown", function () {
     closeBottomMenu();
     if ($("#swimZone").hasClass("dustpanCursor")) {
         $("#swimZone").removeClass("dustpanCursor");
@@ -901,7 +962,7 @@ $("#fishFoodImg").on("click touchstart", function () {
     $("#swimZone").toggleClass("foodCursor");
 });
 
-$("#dustpanImg").on("click touchstart", function () {
+$("#dustpanImg").on("pointerdown", function () {
     closeBottomMenu();
     if ($("#swimZone").hasClass("foodCursor")) {
         $("#swimZone").removeClass("foodCursor");
@@ -909,32 +970,32 @@ $("#dustpanImg").on("click touchstart", function () {
     $("#swimZone").toggleClass("dustpanCursor");
 })
 
-$('#closeFishInfoModal').on("click touchstart", function () {
+$('#closeFishInfoModal').on("pointerdown", function () {
     closeFishInfoModal();
 });
 
-$("#starterFish1ButtonHolder").on("click touchstart", function () {
+$("#starterFish1ButtonHolder").on("pointerdown", function () {
     var fish = starterFishes[0];
     prepareFishForSpawning(fish);
     closeStarterFishModal();
     spawnFish(fish);
 });
 
-$("#starterFish2ButtonHolder").on("click touchstart", function () {
+$("#starterFish2ButtonHolder").on("pointerdown", function () {
     var fish = starterFishes[1];
     prepareFishForSpawning(fish);
     closeStarterFishModal();
     spawnFish(fish);
 });
 
-$("#starterFish3ButtonHolder").on("click touchstart", function () {
+$("#starterFish3ButtonHolder").on("pointerdown", function () {
     var fish = starterFishes[2];
     prepareFishForSpawning(fish);
     closeStarterFishModal();
     spawnFish(fish);
 });
 
-$("#openShopImg").on("click touchstart", function () {
+$("#openShopImg").on("pointerdown", function () {
     if (!isAnyModalOpen()) {
         $("#modalShopContainer").css("display", "flex");
     }
@@ -949,19 +1010,19 @@ $("#openShopImg").hover(function () {
     }
 });
 
-$('#closeStarterFishModal').on("click touchstart", function () {
+$('#closeStarterFishModal').on("pointerdown", function () {
     closeStarterFishModal();
 });
 
-$('#closeShopModal').on("click touchstart", function () {
+$('#closeShopModal').on("pointerdown", function () {
     closeShopModal();
 });
 
-$(document).on('click touchstart', '#closeBottomMenuImg', function () {
+$(document).on('pointerdown', '#closeBottomMenuImg', function () {
     closeBottomMenu();
 });
 
-$("#openBottomMenuImg").on("click touchstart", function () {
+$("#openBottomMenuImg").on("pointerdown", function () {
     if (!aquarium.HasFood && !isAnyModalOpen()) {
         openBottomMenu();
     }
@@ -986,7 +1047,7 @@ $("#fishTank").on("mouseleave", ".poo", function () {
     $(this).removeClass("dustpanGreenCursor");
 });
 
-$("#fishTank").on("click touchstart", ".poo", function () {
+$("#fishTank").on("pointerdown", ".poo", function () {
     if ($("#swimZone").hasClass("dustpanCursor")) {
         $(this).remove();
         player.MoneyAmount += 3;
@@ -994,7 +1055,7 @@ $("#fishTank").on("click touchstart", ".poo", function () {
     }
 });
 
-$('#fishTank').on("click touchstart", '.spawned-fish', function () {
+$('#fishTank').on("pointerdown", '.spawned-fish', function () {
     const fish = $(this).data('fish');
     clickedFish = fish;
     console.log("--------------------------------------------------");
@@ -1129,42 +1190,42 @@ $('#fishTank').on("click touchstart", '.spawned-fish', function () {
     }
 });
 
-$("#redoTailFinColorButton").on("click touchstart", function () {
+$("#redoTailFinColorButton").on("pointerdown", function () {
     const element = this;
     handleRedoClick(element);
 });
 
-$("#redoBodyColorButton").on("click touchstart", function () {
+$("#redoBodyColorButton").on("pointerdown", function () {
     const element = this;
     handleRedoClick(element);
 });
 
-$("#redoTopFinColorButton").on("click touchstart", function () {
+$("#redoTopFinColorButton").on("pointerdown", function () {
     const element = this;
     handleRedoClick(element);
 });
 
-$("#redoBottomFinColorButton").on("click touchstart", function () {
+$("#redoBottomFinColorButton").on("pointerdown", function () {
     const element = this;
     handleRedoClick(element);
 });
 
-$("#redoSideFinColorButton").on("click touchstart", function () {
+$("#redoSideFinColorButton").on("pointerdown", function () {
     const element = this;
     handleRedoClick(element);
 });
 
-$("#redoPatternColorButton").on("click touchstart", function () {
+$("#redoPatternColorButton").on("pointerdown", function () {
     const element = this;
     handleRedoClick(element);
 });
 
-$("#redoNameButton").on("click touchstart", function () {
+$("#redoNameButton").on("pointerdown", function () {
     const element = this;
     handleRedoClick(element);
 });
 
-$("#tailFinColorInput").on("input", function () {
+$("#tailFinColorInput").on("pointerdown", function () {
     const element = this;
     changeArrowsToCheckMark(element);
 });
@@ -1199,9 +1260,131 @@ $("#fishNameInput").on("input", function () {
     changeArrowsToCheckMark(element);
 });
 
-$("#modalFishInfoSaveBlock").on("click touchstart", function () {
+$("#modalFishInfoSaveBlock").on("pointerdown", function () {
     updateFishInAquarium();
     closeFishInfoModal();
+});
+
+$("#closeFishShopModal").on("pointerdown", function () {
+    closeFishShopModal();
+});
+
+// Helper to create a clean fish instance from a template
+function createFishFromTemplate(template) {
+    // Clone only the *data* properties, not DOM references
+    const fish = {
+        Name: "fish" + (aquarium.AmountOfFish + 1),
+        FishTypeName: template.FishTypeName,
+        BodyColor: template.BodyColor,
+        TailFinColor: template.TailFinColor,
+        Speed: 1,
+        FishId: (aquarium.AmountOfFish + 1),
+        FoodEaten: 0
+    };
+
+    fish.Age = template.Age;
+    fish.Size = template.Size;
+    fish.CostPrice = template.CostPrice;
+    fish.CurrentValue = template.CurrentValue;
+    fish.SideFinColor = template.SideFinColor;
+    fish.TopFinColor = template.TopFinColor;
+    fish.BottomFinColor = template.BottomFinColor;
+    fish.PatternColor = template.PatternColor;
+    fish.EyewWhiteColor = template.EyewWhiteColor;
+    fish.PupilColor = template.PupilColor;
+    fish.HungerAmount = template.HungerAmount;
+    fish.FoodEaten = 0;
+    fish.IsAlive = true;
+
+    // Now clone the SVG element separately
+    if (template.SvgElement && template.SvgElement.length) {
+        fish.SvgElement = template.SvgElement.clone(false); // clone DOM node only
+        fish.SvgElement.removeAttr('id');
+    } else {
+        fish.SvgElement = null;
+    }
+
+    return fish;
+}
+
+
+// Prepare (wrap) and append fish to DOM inside #swimZone, returns fish with wrappers set
+function prepareAndAppendFishToSwimZone(fish) {
+    if (!fish.SvgElement) {
+        throw new Error("Fish has no SvgElement to spawn");
+    }
+
+    const swimZone = $('#swimZone');
+
+    // Create *fresh* wrappers
+    const fishFlipWrapper = $('<span class="fish-flip-wrapper"><span class="fish-rotate-wrapper"></span></span>');
+    const fishRotateWrapper = fishFlipWrapper.find('.fish-rotate-wrapper');
+
+    // Append SVG clone into rotate wrapper
+    fishRotateWrapper.append(fish.SvgElement);
+
+    // Put it in a valid start position (numeric left/top)
+    const zoneW = swimZone.width();
+    const zoneH = swimZone.height();
+    const startX = Math.floor(Math.random() * Math.max(0, zoneW - 150));
+    const startY = Math.floor(Math.random() * Math.max(0, zoneH - 80));
+
+    fishFlipWrapper.css({
+        position: 'absolute',
+        left: startX + 'px',
+        top: startY + 'px',
+        zIndex: 5
+    });
+
+    // Append wrapper to swimZone (this is crucial)
+    swimZone.append(fishFlipWrapper);
+
+    // Keep references on fish object
+    fish.SvgElement.data('fish', fish);
+    fish.SvgElement.css("scale", "");
+    fish.FlipWrapper = fishFlipWrapper;
+    fish.RotateWrapper = fishRotateWrapper;
+
+    // Set a class so CSS is consistent
+    fish.SvgElement.addClass('spawned-fish');
+
+    return fish;
+}
+
+// Final spawn: push into aquarium and start movement
+function finalSpawn(fish) {
+    aquarium.FishList.push(fish);
+    moveFishRandomly(fish);
+}
+
+// Usage in buy handler
+$(document).on("click", ".buyFishButton", function () {
+    const id = this.id || $(this).attr('id') || '';
+    const idx = parseInt(id.replace(/^modalBuyFish/, ''), 10);
+    if (!Number.isInteger(idx)) throw new Error("Could not parse fish index from id: " + id);
+
+    if (player.MoneyAmount >= allFishes[idx].CostPrice) {
+        player.MoneyAmount -= allFishes[idx].CostPrice;
+        updateStats();
+    }
+    else {
+        return alert("You don't have enough money to buy this fish!");
+    }
+
+    const template = allFishes[idx];
+    if (!template) return console.error('no template for index', idx);
+
+    // create instance from template
+    const fish = createFishFromTemplate(template);
+
+    // prepare and append to DOM and then finalize spawn
+    prepareAndAppendFishToSwimZone(fish);
+    finalSpawn(fish);
+});
+
+$("#fishShopButtonHolder").on("click", function () {
+    closeShopModal();
+    $("#modalFishShopContainer").css("display", "flex");
 });
 
 //#endregion
