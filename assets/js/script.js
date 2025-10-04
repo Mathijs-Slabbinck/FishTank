@@ -1358,7 +1358,7 @@ function finalSpawn(fish) {
 }
 
 // Usage in buy handler
-$(document).on("click", ".buyFishButton", function () {
+$(document).on("pointerdown", ".buyFishButton", function () {
     const id = this.id || $(this).attr('id') || '';
     const idx = parseInt(id.replace(/^modalBuyFish/, ''), 10);
     if (!Number.isInteger(idx)) throw new Error("Could not parse fish index from id: " + id);
@@ -1382,7 +1382,7 @@ $(document).on("click", ".buyFishButton", function () {
     finalSpawn(fish);
 });
 
-$("#fishShopButtonHolder").on("click", function () {
+$("#fishShopButtonHolder").on("pointerdown", function () {
     closeShopModal();
     $("#modalFishShopContainer").css("display", "flex");
 });
