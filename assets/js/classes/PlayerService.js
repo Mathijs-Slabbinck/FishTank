@@ -1,36 +1,59 @@
 class PlayerService {
-    constructor(name, foodAmount, moneyAmount) {
-        this._name = name;
-        this._foodAmount = foodAmount;
-        this._moneyAmount = moneyAmount;
+    constructor(
+        _name,
+        _dateMade = new Date(),
+        _foodAmount = 10,
+        _moneyAmount = 100,
+        _aquariumList = []
+    ) {
+        this._name = _name;
+        this._dateMade = _dateMade;
+        this._foodAmount = _foodAmount;
+        this._moneyAmount = _moneyAmount;
+        this._aquariumList = _aquariumList;
     }
 
-    // Getter and setter for name
-    get Name() {
-        return this._name;
-    }
-    set Name(value) {
-        this._name = value;
-    }
+    // --- Getters & Setters ---
+    get Name() { return this._name; }
+    set Name(value) { this._name = value; }
 
-    // Getter and setter for foodAmount
-    get FoodAmount() {
-        return this._foodAmount;
-    }
+    get DateMade() { return this._dateMade; }
+    set DateMade(value) { this._dateMade = value; }
+
+    get FoodAmount() { return this._foodAmount; }
     set FoodAmount(value) {
-        if (value < 0) {
-            throw new Error("You can't use more food then you have!");
-        }
-        else {
-            this._foodAmount = value;
-        }
+        if (value < 0) throw new Error("You can't use more food than you have!");
+        this._foodAmount = value;
     }
 
-    // Getter and setter for moneyAmount
-    get MoneyAmount() {
-        return this._moneyAmount;
+    get MoneyAmount() { return this._moneyAmount; }
+    set MoneyAmount(value) { this._moneyAmount = value; }
+
+    get AquariumList() { return this._aquariumList; }
+    set AquariumList(value) { this._aquariumList = value; }
+
+    get FishAmount() {
+        return this._aquariumList.reduce((total, aquarium) => total + aquarium.FishList.length, 0);
     }
-    set MoneyAmount(value) {
-        this._moneyAmount = value;
+
+    // --- Serialization (to JSON-safe object) ---
+    toJSON() {
+        return {
+            Name: this.Name,
+            DateMade: this.DateMade,
+            FoodAmount: this.FoodAmount,
+            MoneyAmount: this.MoneyAmount,
+            AquariumList: this.AquariumList.map(aq => aq.toJSON())
+        };
+    }
+
+    static fromJSON(json) {
+        return new PlayerService(
+            json.Name,
+            json.DateMade,
+            json.FoodAmount,
+            json.MoneyAmount,
+            (json.AquariumList || []).map(aq => AquariumService.fromJSON(aq))
+        );
     }
 }

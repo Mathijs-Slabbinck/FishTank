@@ -1,0 +1,57 @@
+#modalShopContainer {
+    justify-content: space-around;
+}
+
+#modalShopContentContainer {
+    display: flex;
+    justify-content: space-around;
+}
+
+.subShopContainer {
+    width: 30%;
+    border: 3px solid black;
+    text-align: center;
+    padding: 2vh 0;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    margin-bottom: 3vh;
+}
+
+.subShopContainer strong {
+    text-align: center;
+    font-size: 2em;
+}
+
+.subShopContainer div img {
+    width: 75%;
+    height: auto;
+}
+
+.fishShopFishRow {
+    display: flex;
+    justify-content: space-around;
+    margin: 2vh 0;
+    text-align: center;
+}
+
+.fishBlock {
+    border: 2px solid black;
+    width: 100%;
+    height: 100%;
+}
+
+.fishBlock p {
+    margin-top: 1vh;
+    font-weight: bold;
+}
+
+.costPrice {
+    margin: -1vh 0 1vh 0;
+}
+
+@media only screen and (max-width: 1000px) {
+    .fishBlock svg {
+        padding-top: 2vh;
+    }
+}

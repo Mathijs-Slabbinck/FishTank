@@ -8,9 +8,11 @@
     <link rel="shortcut icon" href="assets/media/favicon.ico" type="image/x-icon">
     <link href="assets/css/reset.css" rel='stylesheet' type='text/css'>
     <link href="assets/css/screen.css" rel='stylesheet' type='text/css'>
-    <link href="assets/css/fishInfoModal.css" rel='stylesheet' type='text/css'>
-    <link href="assets/css/starterFishMenuModal.css" rel='stylesheet' type='text/css'>
-    <link href="assets/css/mainShopModal.css" rel='stylesheet' type='text/css'>
+    <link href="assets/css/modals/modals.css" rel='stylesheet' type='text/css'>
+    <link href="assets/css/modals/fishInfoModal.css" rel='stylesheet' type='text/css'>
+    <link href="assets/css/modals/starterFishMenuModal.css" rel='stylesheet' type='text/css'>
+    <link href="assets/css/modals/mainShopModal.css" rel='stylesheet' type='text/css'>
+    <link href="assets/css/modals/startMenuModal.css" rel='stylesheet' type='text/css'>
 </head>
 
 <body>
@@ -163,7 +165,7 @@
                             </div>
                         </div>
 
-                        <div class="modalGreenButtonBlock" id="modalFishInfoSaveBlock">
+                        <div class="modalButtonBlock greenButton" id="modalFishInfoSaveBlock">
                             <p class="clickAble">save</p>
                         </div>
 
@@ -187,13 +189,13 @@
                             </div>
                         </div>
                         <div id="starterFishButtonsContainer">
-                            <div class="modalGreenButtonBlock" id="starterFish1ButtonHolder">
+                            <div class="modalButtonBlock greenButton" id="starterFish1ButtonHolder">
                                 <p>choose</p>
                             </div>
-                            <div class="modalGreenButtonBlock" id="starterFish2ButtonHolder">
+                            <div class="modalButtonBlock greenButton" id="starterFish2ButtonHolder">
                                 <p class="clickAble">choose</p>
                             </div>
-                            <div class="modalGreenButtonBlock" id="starterFish3ButtonHolder">
+                            <div class="modalButtonBlock greenButton" id="starterFish3ButtonHolder">
                                 <p class="clickAble">choose</p>
                             </div>
                         </div>
@@ -218,27 +220,27 @@
                                     <img src="images/GUI/modals/shopFishIcon.png" alt="fish shop icon" id="fishShopIcon"
                                         class="shopIcon">
                                 </div>
-                                <div class="modalGreenButtonBlock" id="fishShopButtonHolder">
+                                <div class="modalButtonBlock greenButton" id="fishShopButtonHolder">
                                     <p class="clickAble">choose</p>
                                 </div>
                             </div>
-                            <div class="subShopContainer" id="decorationShop">
+                            <div class="subShopContainer greenButton" id="decorationShop">
                                 <strong>Decoration Shop</strong>
                                 <div>
                                     <img src="images/GUI/modals/shopDecorationsIcon.png" alt="decoration shop icon"
                                         id="decorationShopIcon" class="shopIcon">
                                 </div>
-                                <div class="modalGreenButtonBlock" id="decorationShopButtonHolder">
+                                <div class="modalButtonBlock greenButton" id="decorationShopButtonHolder">
                                     <p class="clickAble">choose</p>
                                 </div>
                             </div>
-                            <div class="subShopContainer" id="itemShop">
+                            <div class="subShopContainer greenButton" id="itemShop">
                                 <strong>Item Shop</strong>
                                 <div>
                                     <img src="images/GUI/modals/shopToolsIcon.png" alt="item shop icon"
                                         id="itemShopIcon" class="shopIcon">
                                 </div>
-                                <div class="modalGreenButtonBlock" id="itemShopButtonHolder">
+                                <div class="modalButtonBlock greenButton" id="itemShopButtonHolder">
                                     <p class="clickAble">choose</p>
                                 </div>
                             </div>
@@ -257,6 +259,43 @@
                             <strong>Fish Shop</strong>
                         </div>
                         <div id="fishShopItemsContainer">
+                            <!-- Fish items will be dynamically added here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="modalContainer" id="modalLoadNewGameContainer">
+                <div class="modal" id="loadNewGameModal">
+                    <div class="modalContent">
+                        <div class="modalTitle">
+                            <strong>Load or start a new game:</strong>
+                        </div>
+                        <div id="modalSaveFilesContainer">
+
+                            <!-- Save File Template
+                            <div class="saveFileBlock" id="saveFile1">
+                                <div class="saveFileInfo">
+                                    <strong>Save File 1</strong>
+                                    <p>Amount of Fish: <span id="saveFile1FishAmount">0</span></p>
+                                    <p>Coins: <span id="saveFile1MoneyAmount">0</span></p>
+                                </div>
+                                <div id="startMenuButtonsContainer">
+                                    <div class="modalButtonBlock greenButton saveFileButtonHolder">
+                                        <p class="clickAble" id="loadSaveFile1Button">load</p>
+                                    </div>
+                                    <div class="modalButtonBlock yellowButton saveFileButtonHolder">
+                                        <p class="clickAble" id="newGameSaveFile1Button">new game</p>
+                                    </div>
+                                    <div class="modalButtonBlock redButton saveFileButtonHolder">
+                                        <p class="clickAble" id="deleteSaveFile1Button">delete</p>
+                                    </div>
+                                </div>
+                            </div>
+                            -->
+
                         </div>
                     </div>
                 </div>
@@ -317,6 +356,7 @@
         </div>
     </footer>
     <script type="text/javascript" src="assets/js/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="assets/js/enums/fishSvgpaths.js"></script>
     <script type="text/javascript" src="assets/js/enums/allFishTypes.js"></script>
     <script type="text/javascript" src="assets/js/enums/fishParts.js"></script>
     <script type="text/javascript" src="assets/js/classes/AquariumService.js"></script>

@@ -77,8 +77,8 @@ class Fish {
         if (value < 1) {
             throw new Error("Size cannot be less than 1!");
         }
-        if (value > 7) {
-            throw new Error("Size cannot exceed 7!");
+        if (value > 8) {
+            throw new Error("Size cannot exceed 8!");
         }
         this._size = value;
     }
@@ -261,37 +261,37 @@ class Fish {
             throw new Error("Food eaten cannot be negative!");
         }
         else if (value > 100) {
-            this.Size = 7;
+            this.Size = 8;
             this.SvgElement.attr('width', 170);
             this.SvgElement.attr('height', 100);
         }
         else if (value > 75) {
-            this.Size = 6;
+            this.Size = 7;
             this.SvgElement.attr('width', 160);
             this.SvgElement.attr('height', 90);
         }
         else if (value > 50) {
-            this.Size = 5;
+            this.Size = 6;
             this.SvgElement.attr('width', 150);
             this.SvgElement.attr('height', 80);
         }
         else if (value > 30) {
-            this.Size = 4;
+            this.Size = 5;
             this.SvgElement.attr('width', 140);
             this.SvgElement.attr('height', 70);
         }
         else if (value > 20) {
-            this.Size = 3;
+            this.Size = 4;
             this.SvgElement.attr('width', 130);
             this.SvgElement.attr('height', 60);
         }
         else if (value > 10) {
-            this.Size = 2;
+            this.Size = 3;
             this.SvgElement.attr('width', 120);
             this.SvgElement.attr('height', 50);
         }
         else if (value > 5) {
-            this.Size = 1;
+            this.Size = 2;
             this.SvgElement.attr('width', 100);
             this.SvgElement.attr('height', 40);
         }
@@ -316,6 +316,56 @@ class Fish {
 
     toString() {
         return this.Name;
+    }
+
+    toJSON() {
+        return {
+            _name: this._name,
+            _fishTypeName: this.FishTypeName,
+            _bodyColor: this.BodyColor,
+            _tailFinColor: this.TailFinColor,
+            _fishId: this.FishId,
+            _isStarterFish: this.IsStarterFish,
+            _speed: this.Speed,
+            _size: this.Size,
+            _sideFinColor: this.SideFinColor,
+            _patternColor: this.PatternColor,
+            _topFinColor: this.TopFinColor,
+            _bottomFinColor: this.BottomFinColor,
+            _eyeWhiteColor: this.EyeWhiteColor,
+            _pupilColor: this.PupilColor,
+            _hungerAmount: this.HungerAmount,
+            _foodEaten: this.FoodEaten,
+            _isAlive: this.IsAlive,
+            _age: this.Age,
+            _currentValue: this.CurrentValue
+            // note: no SvgElement here
+        };
+    }
+
+    static fromJSON(json) {
+        return new Fish(
+            json._name,
+            json._fishTypeName,
+            json._bodyColor,
+            json._tailFinColor,
+            json._fishId,
+            json._isStarterFish,
+            json._speed,
+            json._size,
+            json._sideFinColor,
+            json._patternColor,
+            json._topFinColor,
+            json._bottomFinColor,
+            json._eyeWhiteColor,
+            json._pupilColor,
+            json._hungerAmount,
+            null, // SvgElement will be assigned later
+            json._foodEaten,
+            json._isAlive,
+            json._age,
+            json._currentValue
+        );
     }
 }
 
