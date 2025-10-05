@@ -137,13 +137,15 @@ $(document).ready(function () {
     //updateStats();
 });
 
+// check if this works
+
 function autoSaver() {
     // Stop if auto-save is off
     if (!player.AutoSaveOn) return;
 
     // Perform save
     saveToLocalStorage();
-    console.log("Game auto-saved.");
+    console.log("Game auto-saved on " + new Date().toLocaleString() + ".");
     spawnGameSavedText();
 
     // Clear any previous scheduled timeout to prevent double scheduling
@@ -151,8 +153,8 @@ function autoSaver() {
         clearTimeout(autoSaveTimeoutId);
     }
 
-    // Schedule next auto-save in 30 minutes (1800000 ms)
-    autoSaveTimeoutId = setTimeout(autoSaver, 1800000);
+    // Schedule next auto-save in 1 minute (60000 ms)
+    autoSaveTimeoutId = setTimeout(autoSaver, 60000);
 }
 
 function stopAutoSaver() {
@@ -212,13 +214,6 @@ function applyFishColors(fish) {
         '--side-fin-color': fish.SideFinColor,
         '--pattern-color': fish.PatternColor
     });
-
-    $svg.find('path').each(function () {
-        if (this.hasAttribute('stroke') && this.getAttribute('stroke').includes('var(')) {
-            this.style.stroke = `var(--pattern-color)`;
-        }
-    });
-
 }
 
 function toggleMusic() {
@@ -431,11 +426,13 @@ function createNewFish(fishType, useRandomColors, isStarterFish = false) {
             if (newFish.HasPattern) svg.css('--pattern-color', newFish.PatternColor);
 
             svg.attr({ width: 80, height: 30, position: 'relative' });
+            /*
             svg.add(svg.find('*')).css({
                 "stroke": "black",
                 "stroke-width": "0.6px",
                 "stroke-linejoin": "round"
             });
+            */
             svg.data('fish', newFish);
             newFish.SvgElement = svg;
 
@@ -801,6 +798,7 @@ function handleRedoClick(element) {
     if (arrowImg.hasClass("rotateArrows")) {
         arrowImg.removeClass("rotateArrows");
         arrowImg.addClass("rotateArrowsBack");
+        arrowImg.attr("placeholder", "redo button arrows");
         $(element).css("background-color", "darkgreen");
         inputField.val("");
         inputField.attr("type", "hidden");
@@ -814,9 +812,11 @@ function handleRedoClick(element) {
     } else if (arrowImg.hasClass("checkMark")) {
         if (elementBlock.attr("id") !== "modalFishName") {
             handleColorInput(elementBlock);
+            arrowImg.attr("placeholder", "check mark");
         }
         else {
             handleNameInput(elementBlock);
+            arrowImg.attr("placeholder", "check mark");
         }
         arrowImg.removeClass("checkMark");
         arrowImg.attr("src", "images/GUI/modals/redoButtonArrows.png");
@@ -966,6 +966,7 @@ function changeArrowsToCheckMark(element) {
     arrowImg.removeClass("rotateArrowsBack");
     arrowImg.attr("src", "images/GUI/modals/checkMark.png");
     arrowImg.addClass("checkMark");
+    arrowImg.attr("placeholder", "check mark");
 }
 
 function saveGameViaMenu() {
@@ -1665,6 +1666,17 @@ function prepareAndAppendFishToSwimZone(fish) {
         "stroke-width": "0.6px",
         "stroke-linejoin": "round"
     });
+
+    // Then reapply proper pattern stroke for paths using CSS vars
+    fish.SvgElement.find('path').each(function () {
+        const strokeAttr = this.getAttribute('stroke');
+        if (strokeAttr && strokeAttr.includes('var(--pattern-color')) {
+            // Restore the color + make pattern thicker again
+            this.style.stroke = `var(--pattern-color)`;
+            this.style.strokeWidth = "6px"; // or any value you want
+        }
+    });
+
 
     // Append wrapper to swimZone (this is crucial)
     swimZone.append(fishFlipWrapper);
