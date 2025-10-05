@@ -183,6 +183,13 @@ function applyFishColors(fish) {
         '--side-fin-color': fish.SideFinColor,
         '--pattern-color': fish.PatternColor
     });
+
+    $svg.find('path').each(function () {
+        if (this.hasAttribute('stroke') && this.getAttribute('stroke').includes('var(')) {
+            this.style.stroke = `var(--pattern-color)`;
+        }
+    });
+
 }
 
 function toggleMusic() {
