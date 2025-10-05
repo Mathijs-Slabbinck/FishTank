@@ -48,7 +48,8 @@ class PlayerService {
             DateMade: this.DateMade,
             FoodAmount: this.FoodAmount,
             MoneyAmount: this.MoneyAmount,
-            AquariumList: this.AquariumList.map(aq => aq.toJSON())
+            AquariumList: this.AquariumList.map(aq => aq.toJSON()),
+            SoundOn: this.SoundOn
         };
     }
 

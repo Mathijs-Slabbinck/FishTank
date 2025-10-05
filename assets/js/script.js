@@ -210,11 +210,11 @@ function toggleMusic() {
 }
 
 function startBackGroundMusic() {
+    if (player.SoundOn === false) return;
     backgroundMusic = new Audio('/assets/media/audio/backgroundMusic1.mp3');
     backgroundMusic.loop = true;
     backgroundMusic.volume = 1;
     backgroundMusic.play();
-    pushStarterFishes();
 }
 
 async function loadAquarium() {
@@ -1437,6 +1437,9 @@ $(document).on("pointerdown", "#startNewGameButton", function () {
     $("#modalLoadNewGameContainer").hide();
     saveToLocalStorage();
     startBackGroundMusic();
+    pushStarterFishes()
+    $("#modalStarterFishContainer").css("display", "flex");
+    updateStats();
 });
 
 $(document).on("pointerdown", ".loadFileButtonHolder", function () {
@@ -1461,6 +1464,7 @@ $(document).on("pointerdown", ".loadFileButtonHolder", function () {
             updateStats();
             await loadAquarium();
             if (player.AquariumList.length === 1 && player.AquariumList[0].FishList.length === 0) {
+                pushStarterFishes();
                 $("#modalStarterFishContainer").css("display", "flex");
             }
             $btn.data('disabled', false); // re-enable
