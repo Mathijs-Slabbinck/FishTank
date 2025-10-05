@@ -950,7 +950,9 @@ function saveToLocalStorage() {
 
 function loadFromLocalStorage() {
     const savedData = JSON.parse(localStorage.getItem("playerSaves")) || [];
-    saveFiles = savedData.map(data => PlayerService.fromJSON(data));
+    saveFiles = savedData
+        .filter(d => d && typeof d === "object") // ignore null or garbage
+        .map(data => PlayerService.fromJSON(data));
 }
 
 function changeArrowsToCheckMark(element) {
@@ -1508,11 +1510,13 @@ $(document).on("pointerdown", "#startNewGameButton", function () {
     newPlayer.AquariumList.push(aquarium);
     saveFiles.push(newPlayer);
     player = newPlayer;
+    selectedSaveFileIndex = saveFiles.length - 1;
 
     $("#modalLoadNewGameContainer").hide();
     saveToLocalStorage();
     startBackGroundMusic();
-    pushStarterFishes()
+    pushStarterFishes();
+    pushShopFishes();
     $("#modalStarterFishContainer").css("display", "flex");
     updateStats();
 });
