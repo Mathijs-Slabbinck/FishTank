@@ -615,7 +615,7 @@ function directFishToFood(fish, foodX, foodY) {
 
 function havePooChance(fish) {
     // increase when buying fish gets possible
-    let random = getRandomNumber(1, 100000 - (fish.CostPrice * 5 + fish.Size * 5));
+    let random = getRandomNumber(1, 13000 - (((fish.CostPrice * 5) * (fish.Size * 5))));
     if (random === 1) {
         const fishFlipWrapper = fish.SvgElement.parent().parent();
         const fishY = fishFlipWrapper.position().top + 30;
