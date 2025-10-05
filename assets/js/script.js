@@ -1660,6 +1660,12 @@ function prepareAndAppendFishToSwimZone(fish) {
         zIndex: 5
     });
 
+    fish.SvgElement.add(fish.SvgElement.find('*')).css({
+        "stroke": "black",
+        "stroke-width": "0.6px",
+        "stroke-linejoin": "round"
+    });
+
     // Append wrapper to swimZone (this is crucial)
     swimZone.append(fishFlipWrapper);
 
