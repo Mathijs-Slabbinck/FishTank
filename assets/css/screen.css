@@ -7,8 +7,6 @@ body {
     /* IE 10+ */
     user-select: none;
     /* Likely future */
-
-    overflow-y: hidden;
 }
 
 strong,
