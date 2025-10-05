@@ -1599,46 +1599,37 @@ $("#modalMusicButtonHolder").on("pointerdown", function () {
 
 // Helper to create a clean fish instance from a template
 function createFishFromTemplate(template) {
-    // Clone only the *data* properties, not DOM references
-    const fish = {
-        Name: "fish" + (player.AquariumList[selectedAquariumIndex].AmountOfFish + 1),
-        FishTypeName: template.FishTypeName,
-        BodyColor: template.BodyColor,
-        TailFinColor: template.TailFinColor,
-        Speed: 1,
-        FishId: (player.AquariumList[selectedAquariumIndex].AmountOfFish + 1),
-        FoodEaten: 0
-    };
+    const fish = new Fish(
+        "fish" + (player.AquariumList[selectedAquariumIndex].AmountOfFish + 1),
+        template.FishTypeName,
+        template.BodyColor,
+        template.TailFinColor,
+        player.AquariumList[selectedAquariumIndex].AmountOfFish + 1,
+        false, // isStarterFish
+        template.Speed || 1,
+        template.Size || 1,
+        template.SideFinColor,
+        template.PatternColor,
+        template.TopFinColor,
+        template.BottomFinColor,
+        template.EyeWhiteColor,
+        template.PupilColor,
+        template.HungerAmount || 0,
+        null, // SvgElement will be assigned later
+        template.FoodEaten || 0,
+        true, // IsAlive
+        template.Age || 0,
+        template.CurrentValue || 0
+    );
 
-    fish.Age = template.Age;
-    fish.Size = template.Size;
-    fish.CostPrice = template.CostPrice;
-    fish.CurrentValue = template.CurrentValue;
-    fish.SideFinColor = template.SideFinColor;
-    fish.TopFinColor = template.TopFinColor;
-    fish.BottomFinColor = template.BottomFinColor;
-    fish.PatternColor = template.PatternColor;
-    fish.EyewWhiteColor = template.EyewWhiteColor;
-    fish.PupilColor = template.PupilColor;
-    fish.HungerAmount = template.HungerAmount;
-    fish.FoodEaten = 0;
-    fish.IsAlive = true;
-    fish.HasSideFin = template.HasSideFin;
-    fish.HasTopFin = template.HasTopFin;
-    fish.HasBottomFin = template.HasBottomFin;
-    fish.HasPattern = template.HasPattern;
-
-    // Now clone the SVG element separately
+    // Assign fresh SVG separately (don’t save it!)
     if (template.SvgElement && template.SvgElement.length) {
-        fish.SvgElement = template.SvgElement.clone(false); // clone DOM node only
+        fish.SvgElement = template.SvgElement.clone(false);
         fish.SvgElement.removeAttr('id');
-    } else {
-        fish.SvgElement = null;
     }
 
     return fish;
 }
-
 
 // Prepare (wrap) and append fish to DOM inside #swimZone, returns fish with wrappers set
 function prepareAndAppendFishToSwimZone(fish) {
