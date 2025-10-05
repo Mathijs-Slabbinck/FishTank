@@ -1827,7 +1827,7 @@ $("#modalAutoSaveButtonHolder").on("pointerdown", function () {
         player.AutoSaveOn = true;
         $("#modalAutoSaveButtonHolder p").css("background-color", "darkgreen");
         $("#modalAutoSaveButtonHolder p").text("auto-save: ON");
-        startAutoSaver();
+        autoSaver();
     }
 });
 

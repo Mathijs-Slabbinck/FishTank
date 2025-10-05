@@ -2,6 +2,7 @@
     width: auto;
     height: 15vh;
     margin-left: 1vw;
+    cursor: pointer;
 }
 
 #saveGameIcon {
