@@ -29,6 +29,15 @@ b {
     left: 0;
 }
 
+#bottomMenu {
+    background-color: lightblue;
+    border: 2px solid black;
+}
+
+.bottomMenuSlot {
+    z-index: 988;
+}
+
 .fish-flip-wrapper {
     transition: transform 0.3s ease;
     transform-origin: center;

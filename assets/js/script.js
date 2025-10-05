@@ -115,6 +115,7 @@ let allFishes = [];
 let clickedFish = null;
 let selectedAquariumIndex = 0;
 let selectedSaveFileIndex = 0;
+let autoSaveTimeoutId = null;
 let saveFiles = [];
 var player;
 let backgroundMusic;
@@ -137,13 +138,28 @@ $(document).ready(function () {
 });
 
 function autoSaver() {
-    if (player.AutoSaveOn) {
-        saveToLocalStorage();
-        console.log("Game auto-saved.");
-        spawnGameSavedText();
+    // Stop if auto-save is off
+    if (!player.AutoSaveOn) return;
+
+    // Perform save
+    saveToLocalStorage();
+    console.log("Game auto-saved.");
+    spawnGameSavedText();
+
+    // Clear any previous scheduled timeout to prevent double scheduling
+    if (autoSaveTimeoutId !== null) {
+        clearTimeout(autoSaveTimeoutId);
     }
-    else return;
-    setTimeout(autoSaver, 60000); // every minute
+
+    // Schedule next auto-save in 30 minutes (1800000 ms)
+    autoSaveTimeoutId = setTimeout(autoSaver, 1800000);
+}
+
+function stopAutoSaver() {
+    if (autoSaveTimeoutId !== null) {
+        clearTimeout(autoSaveTimeoutId);
+        autoSaveTimeoutId = null;
+    }
 }
 
 function checkOrientation() {
@@ -486,7 +502,7 @@ function moveFishRandomly(fish) {
     do {
         if (tries++ > 500) throw new Error("Could not find valid fish position.");
         newX = zoneX + Math.random() * (zoneWidth - fishFlipWrapper.width());
-        newY = zoneY + Math.random() * (zoneHeight - fishFlipWrapper.height());
+        newY = zoneY - 40 + Math.random() * (zoneHeight - fishFlipWrapper.height() + 40);
         dx = newX - currentPos.left;
         dy = newY - currentPos.top;
         distance = Math.hypot(dx, dy);
@@ -640,6 +656,7 @@ function updateStats() {
         $("#modalAutoSaveButtonHolder").removeClass("greenButton").addClass("redButton").find("p").text("auto-save: OFF");
         $('#autoSaveOnIcon').hide();
         $('#autoSaveOffIcon').show();
+        stopAutoSaver();
     }
 
     $('#fishFoodAmount').text(player.FoodAmount);
@@ -1775,11 +1792,13 @@ $("#modalAutoSaveButtonHolder").on("pointerdown", function () {
         player.AutoSaveOn = false;
         $("#modalAutoSaveButtonHolder p").css("background-color", "darkred");
         $("#modalAutoSaveButtonHolder p").text("auto-save: OFF");
+        stopAutoSaver();
     }
     else {
         player.AutoSaveOn = true;
         $("#modalAutoSaveButtonHolder p").css("background-color", "darkgreen");
         $("#modalAutoSaveButtonHolder p").text("auto-save: ON");
+        startAutoSaver();
     }
 });
 
