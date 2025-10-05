@@ -53,7 +53,7 @@ class AquariumService {
             FoodAmount: this.FoodAmount,
             WaterQuality: this.WaterQuality,
             WaterColor: this.WaterColor,
-            HasFood: this.HasFood,
+            HasFood: false, // reset to false on load
             FishList: this.FishList.map(f => f.toJSON()) // serialize fish data only
         };
     }
@@ -66,7 +66,7 @@ class AquariumService {
         aquarium.FoodAmount = json.FoodAmount;
         aquarium.WaterQuality = json.WaterQuality;
         aquarium.WaterColor = json.WaterColor;
-        aquarium.HasFood = json.HasFood;
+        aquarium.HasFood = false; // reset to false on load
         aquarium.FishList = (json.FishList || []).map(f => Fish.fromJSON(f)); // recreate fish objects
         return aquarium;
     }
