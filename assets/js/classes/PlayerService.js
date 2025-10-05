@@ -4,13 +4,15 @@ class PlayerService {
         _dateMade = new Date(),
         _foodAmount = 10,
         _moneyAmount = 100,
-        _aquariumList = []
+        _aquariumList = [],
+        _soundOn = true
     ) {
         this._name = _name;
         this._dateMade = _dateMade;
         this._foodAmount = _foodAmount;
         this._moneyAmount = _moneyAmount;
         this._aquariumList = _aquariumList;
+        this._soundOn = _soundOn;
     }
 
     // --- Getters & Setters ---
@@ -31,6 +33,9 @@ class PlayerService {
 
     get AquariumList() { return this._aquariumList; }
     set AquariumList(value) { this._aquariumList = value; }
+
+    get SoundOn() { return this._soundOn; }
+    set SoundOn(value) { this._soundOn = value; }
 
     get FishAmount() {
         return this._aquariumList.reduce((total, aquarium) => total + aquarium.FishList.length, 0);
@@ -53,7 +58,8 @@ class PlayerService {
             json.DateMade,
             json.FoodAmount,
             json.MoneyAmount,
-            (json.AquariumList || []).map(aq => AquariumService.fromJSON(aq))
+            (json.AquariumList || []).map(aq => AquariumService.fromJSON(aq)),
+            json.SoundOn
         );
     }
 }

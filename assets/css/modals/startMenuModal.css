@@ -2,7 +2,7 @@
     display: flex;
 }
 
-.modalTitle {
+#modalLoadNewGameContainer .modalTitle {
     margin-top: 4vh;
 }
 

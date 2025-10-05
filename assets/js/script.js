@@ -117,6 +117,7 @@ let selectedAquariumIndex = 0;
 let selectedSaveFileIndex = 0;
 let saveFiles = [];
 var player;
+let backgroundMusic;
 
 $(document).ready(function () {
     if (window.innerWidth < 600) {
@@ -184,6 +185,30 @@ function applyFishColors(fish) {
     });
 }
 
+function toggleMusic() {
+    if (player.SoundOn) {
+        $("#modalMusicButtonHolder").removeClass("greenButton").addClass("redButton").find("p").text("music off");
+        backgroundMusic.pause();
+        player.SoundOn = false;
+        $('#musicOnIcon').hide();
+        $('#musicOffIcon').show();
+    }
+    else {
+        $("#modalMusicButtonHolder").removeClass("redButton").addClass("greenButton").find("p").text("music on");
+        backgroundMusic.play();
+        player.SoundOn = true;
+        $('#musicOnIcon').show();
+        $('#musicOffIcon').hide();
+    }
+}
+
+function startBackGroundMusic() {
+    backgroundMusic = new Audio('/assets/media/audio/backgroundMusic1.mp3');
+    backgroundMusic.loop = true;
+    backgroundMusic.volume = 1;
+    backgroundMusic.play();
+    pushStarterFishes();
+}
 
 async function loadAquarium() {
     $("#swimZone").empty(); // clear the DOM
@@ -870,6 +895,15 @@ function changeArrowsToCheckMark(element) {
     arrowImg.addClass("checkMark");
 }
 
+function saveGameViaMenu() {
+    saveToLocalStorage();
+    updateStats();
+    $("#saveGameButtonHolder").find("p").css("background-color", "yellowgreen");
+    setTimeout(function () {
+        $("#saveGameButtonHolder").find("p").css("background-color", "darkgreen");
+    }, 300);
+}
+
 function updateFishInAquarium() {
     console.log("updating colors of fish in aquarium");
     $(".colorInfoBlock").each(function () {
@@ -1016,7 +1050,7 @@ function getScaleX(element) {
 }
 
 function isAnyModalOpen() {
-    return $("#modalStarterFishContainer").is(":visible") || $("#modalShopContainer").is(":visible") || $('#fishInfoModal').is(":visible");
+    return $("#modalStarterFishContainer").is(":visible") || $("#modalShopContainer").is(":visible") || $('#fishInfoModal').is(":visible") || $("#modalFishShopContainer").is(":visible") || $("#modalSettingsContainer").is(":visible") || $("#modalSaveFilesContainer").is(":visible");
 }
 
 const normalizeAngle = angle => (((angle + 180) % 360 + 360) % 360) - 180;
@@ -1395,6 +1429,7 @@ $(document).on("pointerdown", "#startNewGameButton", function () {
 
     $("#modalLoadNewGameContainer").hide();
     saveToLocalStorage();
+    startBackGroundMusic();
 });
 
 $(document).on("pointerdown", ".loadFileButtonHolder", function () {
@@ -1419,11 +1454,11 @@ $(document).on("pointerdown", ".loadFileButtonHolder", function () {
             updateStats();
             await loadAquarium();
             if (player.AquariumList.length === 1 && player.AquariumList[0].FishList.length === 0) {
-                pushStarterFishes();
                 $("#modalStarterFishContainer").css("display", "flex");
             }
             $btn.data('disabled', false); // re-enable
             $("#modalLoadNewGameContainer").hide();
+            startBackGroundMusic();
         }, 300);
     }
 });
@@ -1464,6 +1499,17 @@ $(document).on("pointerdown", ".deleteFileButtonHolder", function () {
     }, 300);
 });
 
+$("#musicOnIcon").on("pointerdown", function () {
+    toggleMusic();
+});
+
+$("#musicOffIcon").on("pointerdown", function () {
+    toggleMusic();
+});
+
+$("#modalMusicButtonHolder").on("pointerdown", function () {
+    toggleMusic();
+});
 
 // Helper to create a clean fish instance from a template
 function createFishFromTemplate(template) {
@@ -1643,6 +1689,24 @@ $(document).on("pointerdown", ".buyFishButton", function () {
 $("#fishShopButtonHolder").on("pointerdown", function () {
     closeShopModal();
     $("#modalFishShopContainer").css("display", "flex");
+});
+
+$("#settingsImg").on("pointerdown", function () {
+    if (!isAnyModalOpen()) {
+        $("#modalSettingsContainer").css("display", "flex");
+    }
+});
+
+$("#closeSettingsModal").on("pointerdown", function () {
+    $("#modalSettingsContainer").css("display", "none");
+});
+
+$("#saveGameIcon").on("pointerdown", function () {
+    saveGameViaMenu();
+});
+
+$("#saveGameButtonHolder").on("pointerdown", function () {
+    saveGameViaMenu();
 });
 
 //#endregion

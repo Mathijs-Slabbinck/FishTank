@@ -164,15 +164,18 @@ b {
     height: auto;
 }
 
-#openShopImg {
-    position: absolute;
-    z-index: 999;
+#openShopImg,
+#settingsImg {
     width: 6vw;
     height: auto;
-    text-align: center;
+    margin-left: 1vw;
+}
+
+#topLeftMenu {
+    position: absolute;
+    z-index: 999;
     top: 0;
     left: 0;
-    margin-left: 1vw;
 }
 
 @keyframes bubbleRise {

@@ -1,0 +1,32 @@
+.settingsMenuLeftIcon {
+    width: auto;
+    height: 15vh;
+    margin-left: 1vw;
+}
+
+#musicOffIcon {
+    display: none;
+}
+
+.settingsOption {
+    border: 2px solid black;
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-bottom: 2vh;
+}
+
+.settingsOption img {
+    margin-right: 10px;
+    /* optional spacing */
+}
+
+.settingsOption p {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 0;
+    text-align: center;
+    width: max-content;
+    /* optional: keeps width tight around text */
+}

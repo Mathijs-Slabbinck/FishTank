@@ -9,6 +9,7 @@
     <link href="assets/css/reset.css" rel='stylesheet' type='text/css'>
     <link href="assets/css/screen.css" rel='stylesheet' type='text/css'>
     <link href="assets/css/modals/modals.css" rel='stylesheet' type='text/css'>
+    <link href="assets/css/modals/settingsModal.css" rel='stylesheet' type='text/css'>
     <link href="assets/css/modals/fishInfoModal.css" rel='stylesheet' type='text/css'>
     <link href="assets/css/modals/starterFishMenuModal.css" rel='stylesheet' type='text/css'>
     <link href="assets/css/modals/mainShopModal.css" rel='stylesheet' type='text/css'>
@@ -16,9 +17,13 @@
 </head>
 
 <body>
+    <audio id="backgroundMusic" src="assets/media/audio/backgroundMusic1.mp3" preload="auto"></audio>
     <div class="container">
         <header>
-            <img class="clickAble" id="openShopImg" src="images/GUI/shoppingCart.png" alt="shopping cart">
+            <div id="topLeftMenu">
+                <img class="clickAble" id="settingsImg" src="images/gui/settings.png" alt="settings">
+                <img class="clickAble" id="openShopImg" src="images/GUI/shoppingCart.png" alt="shopping cart">
+            </div>
             <figure id="coinDisplayBlock">
                 <img src="images/GUI/coins.png" alt="coins">
                 <figcaption id="moneyAmount"></figcaption>
@@ -259,7 +264,7 @@
                             <strong>Fish Shop</strong>
                         </div>
                         <div id="fishShopItemsContainer">
-                            <!-- Fish items will be dynamically added here -->
+                            <!-- fish items will be dynamically added here -->
                         </div>
                     </div>
                 </div>
@@ -274,95 +279,107 @@
                             <strong>Load or start a new game:</strong>
                         </div>
                         <div id="modalSaveFilesContainer">
-
-                            <!-- Save File Template
-                            <div class="saveFileBlock" id="saveFile1">
-                                <div class="saveFileInfo">
-                                    <strong>Save File 1</strong>
-                                    <p>Amount of Fish: <span id="saveFile1FishAmount">0</span></p>
-                                    <p>Coins: <span id="saveFile1MoneyAmount">0</span></p>
-                                </div>
-                                <div id="startMenuButtonsContainer">
-                                    <div class="modalButtonBlock greenButton saveFileButtonHolder">
-                                        <p class="clickAble" id="loadSaveFile1Button">load</p>
-                                    </div>
-                                    <div class="modalButtonBlock yellowButton saveFileButtonHolder">
-                                        <p class="clickAble" id="newGameSaveFile1Button">new game</p>
-                                    </div>
-                                    <div class="modalButtonBlock redButton saveFileButtonHolder">
-                                        <p class="clickAble" id="deleteSaveFile1Button">delete</p>
-                                    </div>
-                                </div>
-                            </div>
-                            -->
-
+                            <!-- save files will be dynamically added here -->
                         </div>
                     </div>
                 </div>
             </div>
-    </div>
 
-    <div id="fishTank">
-        <div id="swimZone">
-        </div>
-        <div id="bottomMenuButtonContainer">
-            <img src="images/GUI/openBottomMenu.png" alt="open menu button" id="openBottomMenuImg" class="clickAble">
-            <img src="images/GUI/closeBottomMenu.png" alt="close menu button" id="closeBottomMenuImg" class="clickAble">
-        </div>
-    </div>
-    </main>
-    <footer>
-        <div id="bottomMenu">
-            <div id="bottomMenuSlot1" class="bottomMenuSlot">
-                <img src="images/fishFood.png" alt="fish food" id="fishFoodImg" class="clickAble">
-                <p id="fishFoodAmount"></p>
+            <div class="modalContainer" id="modalSettingsContainer">
+                <div class="modal" id="settingsModal">
+                    <img src="images/GUI/modals/closeButton.png" alt="close button" id="closeSettingsModal"
+                        class="clickAble closeModal">
+
+                    <div class="modalContent">
+                        <div class="modalTitle">
+                            <strong>Settings</strong>
+                        </div>
+                        <div id="settingsContentContainer">
+                            <div class="settingsOption">
+                                <img src="images/GUI/modals/volumeOn.png" alt="volume on" class="settingsMenuLeftIcon"
+                                    id="musicOnIcon">
+                                <img src="images/GUI/modals/volumeOff.png" alt="volume off" class="settingsMenuLeftIcon"
+                                    id="musicOffIcon">
+                                <div class="modalButtonBlock greenButton" id="modalMusicButtonHolder">
+                                    <p class="clickAble">music on</p>
+                                </div>
+                            </div>
+
+                            <div class="settingsOption">
+                                <img src=" images/GUI/modals/saveButton.gif" alt="save button"
+                                    class="settingsMenuLeftIcon" id="saveGameIcon">
+                                <div class="modalButtonBlock greenButton" id="saveGameButtonHolder">
+                                    <p class="clickAble">save game</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div id="bottomMenuSlot2" class="bottomMenuSlot">
-                <img src="images/dustpan.png" alt="dustpan" id="dustpanImg" class="clickAble">
-                <p>1 (max)</p>
+
+            <div id="fishTank">
+                <div id="swimZone">
+                </div>
+                <div id="bottomMenuButtonContainer">
+                    <img src="images/GUI/openBottomMenu.png" alt="open menu button" id="openBottomMenuImg"
+                        class="clickAble">
+                    <img src="images/GUI/closeBottomMenu.png" alt="close menu button" id="closeBottomMenuImg"
+                        class="clickAble">
+                </div>
             </div>
-            <div id="bottomMenuSlot3" class="bottomMenuSlot">
-                <img src="images/emptySlot.png" alt="empty slot">
-                <p>empty</p>
+        </main>
+        <footer>
+            <div id="bottomMenu">
+                <div id="bottomMenuSlot1" class="bottomMenuSlot">
+                    <img src="images/fishFood.png" alt="fish food" id="fishFoodImg" class="clickAble">
+                    <p id="fishFoodAmount"></p>
+                </div>
+                <div id="bottomMenuSlot2" class="bottomMenuSlot">
+                    <img src="images/dustpan.png" alt="dustpan" id="dustpanImg" class="clickAble">
+                    <p>1 (max)</p>
+                </div>
+                <div id="bottomMenuSlot3" class="bottomMenuSlot">
+                    <img src="images/emptySlot.png" alt="empty slot">
+                    <p>empty</p>
+                </div>
+                <div id="bottomMenuSlot4" class="bottomMenuSlot">
+                    <img src="images/emptySlot.png" alt="empty slot">
+                    <p>empty</p>
+                </div>
+                <div id="bottomMenuSlot5" class="bottomMenuSlot">
+                    <img src="images/emptySlot.png" alt="empty slot">
+                    <p>empty</p>
+                </div>
+                <div id="bottomMenuSlot6" class="bottomMenuSlot">
+                    <img src="images/emptySlot.png" alt="empty slot">
+                    <p>empty</p>
+                </div>
+                <div id="bottomMenuSlot7" class="bottomMenuSlot">
+                    <img src="images/emptySlot.png" alt="empty slot">
+                    <p>empty</p>
+                </div>
+                <div id="bottomMenuSlot8" class="bottomMenuSlot">
+                    <img src="images/emptySlot.png" alt="empty slot">
+                    <p>empty</p>
+                </div>
+                <div id="bottomMenuSlot9" class="bottomMenuSlot">
+                    <img src="images/emptySlot.png" alt="empty slot">
+                    <p>empty</p>
+                </div>
+                <div id="bottomMenuSlot10" class="bottomMenuSlot">
+                    <img src="images/emptySlot.png" alt="empty slot">
+                    <p>empty</p>
+                </div>
             </div>
-            <div id="bottomMenuSlot4" class="bottomMenuSlot">
-                <img src="images/emptySlot.png" alt="empty slot">
-                <p>empty</p>
-            </div>
-            <div id="bottomMenuSlot5" class="bottomMenuSlot">
-                <img src="images/emptySlot.png" alt="empty slot">
-                <p>empty</p>
-            </div>
-            <div id="bottomMenuSlot6" class="bottomMenuSlot">
-                <img src="images/emptySlot.png" alt="empty slot">
-                <p>empty</p>
-            </div>
-            <div id="bottomMenuSlot7" class="bottomMenuSlot">
-                <img src="images/emptySlot.png" alt="empty slot">
-                <p>empty</p>
-            </div>
-            <div id="bottomMenuSlot8" class="bottomMenuSlot">
-                <img src="images/emptySlot.png" alt="empty slot">
-                <p>empty</p>
-            </div>
-            <div id="bottomMenuSlot9" class="bottomMenuSlot">
-                <img src="images/emptySlot.png" alt="empty slot">
-                <p>empty</p>
-            </div>
-            <div id="bottomMenuSlot10" class="bottomMenuSlot">
-                <img src="images/emptySlot.png" alt="empty slot">
-                <p>empty</p>
-            </div>
-        </div>
-    </footer>
-    <script type="text/javascript" src="assets/js/jquery-3.2.1.min.js"></script>
-    <script type="text/javascript" src="assets/js/enums/fishSvgpaths.js"></script>
-    <script type="text/javascript" src="assets/js/enums/allFishTypes.js"></script>
-    <script type="text/javascript" src="assets/js/enums/fishParts.js"></script>
-    <script type="text/javascript" src="assets/js/classes/AquariumService.js"></script>
-    <script type="text/javascript" src="assets/js/classes/PlayerService.js"></script>
-    <script type="text/javascript" src="assets/js/classes/Fish.js"></script>
-    <script type="text/javascript" src="assets/js/script.js"></script>
+        </footer>
+        <script type="text/javascript" src="assets/js/jquery-3.2.1.min.js"></script>
+        <script type="text/javascript" src="assets/js/enums/fishSvgpaths.js"></script>
+        <script type="text/javascript" src="assets/js/enums/allFishTypes.js"></script>
+        <script type="text/javascript" src="assets/js/enums/fishParts.js"></script>
+        <script type="text/javascript" src="assets/js/classes/AquariumService.js"></script>
+        <script type="text/javascript" src="assets/js/classes/PlayerService.js"></script>
+        <script type="text/javascript" src="assets/js/classes/Fish.js"></script>
+        <script type="text/javascript" src="assets/js/script.js"></script>
 </body>
 
 </html>
