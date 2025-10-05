@@ -5,14 +5,16 @@ class PlayerService {
         _foodAmount = 10,
         _moneyAmount = 100,
         _aquariumList = [],
-        _soundOn = true
+        _backgroundMusicOn = true,
+        _autoSaveOn = true,
     ) {
         this._name = _name;
         this._dateMade = _dateMade;
         this._foodAmount = _foodAmount;
         this._moneyAmount = _moneyAmount;
         this._aquariumList = _aquariumList;
-        this._soundOn = _soundOn;
+        this._backgroundMusicOn = _backgroundMusicOn;
+        this._autoSaveOn = _autoSaveOn;
     }
 
     // --- Getters & Setters ---
@@ -34,8 +36,11 @@ class PlayerService {
     get AquariumList() { return this._aquariumList; }
     set AquariumList(value) { this._aquariumList = value; }
 
-    get SoundOn() { return this._soundOn; }
-    set SoundOn(value) { this._soundOn = value; }
+    get BackgroundMusicOn() { return this._backgroundMusicOn; }
+    set BackgroundMusicOn(value) { this._backgroundMusicOn = value; }
+
+    get AutoSaveOn() { return this._autoSaveOn; }
+    set AutoSaveOn(value) { this._autoSaveOn = value; }
 
     get FishAmount() {
         return this._aquariumList.reduce((total, aquarium) => total + aquarium.FishList.length, 0);
@@ -49,7 +54,8 @@ class PlayerService {
             FoodAmount: this.FoodAmount,
             MoneyAmount: this.MoneyAmount,
             AquariumList: this.AquariumList.map(aq => aq.toJSON()),
-            SoundOn: this.SoundOn
+            BackgroundMusicOn: this.BackgroundMusicOn,
+            AutoSaveOn: this.AutoSaveOn
         };
     }
 
@@ -60,7 +66,8 @@ class PlayerService {
             json.FoodAmount,
             json.MoneyAmount,
             (json.AquariumList || []).map(aq => AquariumService.fromJSON(aq)),
-            json.SoundOn
+            json.BackgroundMusicOn,
+            json.AutoSaveOn
         );
     }
 }

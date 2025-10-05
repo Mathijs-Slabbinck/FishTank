@@ -125,6 +125,7 @@ $(document).ready(function () {
         $('#fishTank').hide();
         $('#coinDisplayBlock').hide();
         $('#openShopImg').hide();
+        $('#settingsImg').hide();
         notRotatedAtStart = true;
     } else {
         startNewGame();
@@ -135,17 +136,29 @@ $(document).ready(function () {
     //updateStats();
 });
 
+function autoSaver() {
+    if (player.AutoSaveOn) {
+        saveToLocalStorage();
+        console.log("Game auto-saved.");
+        spawnGameSavedText();
+    }
+    else return;
+    setTimeout(autoSaver, 60000); // every minute
+}
+
 function checkOrientation() {
     if (window.innerWidth < 600) {
         $('#rotatePhone').show();
         $('#fishTank').hide();
         $('#coinDisplayBlock').hide();
         $('#openShopImg').hide();
+        $('#settingsImg').hide();
     } else {
         $('#rotatePhone').hide();
         $('#fishTank').show();
         $('#coinDisplayBlock').show();
         $('#openShopImg').show();
+        $('#settingsImg').show();
 
         if (notRotatedAtStart) {
             startNewGame();
@@ -193,24 +206,19 @@ function applyFishColors(fish) {
 }
 
 function toggleMusic() {
-    if (player.SoundOn) {
-        $("#modalMusicButtonHolder").removeClass("greenButton").addClass("redButton").find("p").text("music off");
+    if (player.BackgroundMusicOn) {
         backgroundMusic.pause();
-        player.SoundOn = false;
-        $('#musicOnIcon').hide();
-        $('#musicOffIcon').show();
+        player.BackgroundMusicOn = false;
     }
     else {
-        $("#modalMusicButtonHolder").removeClass("redButton").addClass("greenButton").find("p").text("music on");
         backgroundMusic.play();
-        player.SoundOn = true;
-        $('#musicOnIcon').show();
-        $('#musicOffIcon').hide();
+        player.BackgroundMusicOn = true;
     }
+    updateStats();
 }
 
 function startBackGroundMusic() {
-    if (player.SoundOn === false) return;
+    if (player.BackgroundMusicOn === false) return;
     backgroundMusic = new Audio('/assets/media/audio/backgroundMusic1.mp3');
     backgroundMusic.loop = true;
     backgroundMusic.volume = 1;
@@ -611,8 +619,49 @@ function havePooChance(fish) {
 }
 
 function updateStats() {
+    if (player.BackgroundMusicOn) {
+        $("#modalMusicButtonHolder").removeClass("redButton").addClass("greenButton").find("p").text("music: ON");
+        $('#musicOnIcon').show();
+        $('#musicOffIcon').hide();
+    }
+    else {
+        $("#modalMusicButtonHolder").removeClass("greenButton").addClass("redButton").find("p").text("music: OFF");
+        $('#musicOnIcon').hide();
+        $('#musicOffIcon').show();
+    }
+
+    if (player.AutoSaveOn) {
+        $("#modalAutoSaveButtonHolder").removeClass("redButton").addClass("greenButton").find("p").text("auto-save: ON");
+        $('#autoSaveOnIcon').show();
+        $('#autoSaveOffIcon').hide();
+        setTimeout(autoSaver, 30000);
+    }
+    else {
+        $("#modalAutoSaveButtonHolder").removeClass("greenButton").addClass("redButton").find("p").text("auto-save: OFF");
+        $('#autoSaveOnIcon').hide();
+        $('#autoSaveOffIcon').show();
+    }
+
     $('#fishFoodAmount').text(player.FoodAmount);
     $("#moneyAmount").text(player.MoneyAmount);
+}
+
+function spawnGameSavedText(autoSave = true) {
+    let savedText;
+    if (autoSave) {
+        savedText = $('<div id="gameSavedText">💾 game auto-saved ✅</div>');
+    }
+    else {
+        savedText = $('<div id="gameSavedText">💾 game saved ✅</div>');
+    }
+
+    $("#fishTank").append(savedText);
+
+    setTimeout(() => {
+        savedText.fadeOut(500, function () {
+            $(this).remove();
+        });
+    }, 4100);
 }
 
 function spawnBubble(x, y) {
@@ -905,6 +954,7 @@ function changeArrowsToCheckMark(element) {
 function saveGameViaMenu() {
     saveToLocalStorage();
     updateStats();
+    spawnGameSavedText(false);
     $("#saveGameButtonHolder").find("p").css("background-color", "yellowgreen");
     setTimeout(function () {
         $("#saveGameButtonHolder").find("p").css("background-color", "darkgreen");
@@ -1718,6 +1768,19 @@ $("#saveGameIcon").on("pointerdown", function () {
 
 $("#saveGameButtonHolder").on("pointerdown", function () {
     saveGameViaMenu();
+});
+
+$("#modalAutoSaveButtonHolder").on("pointerdown", function () {
+    if (player.AutoSaveOn) {
+        player.AutoSaveOn = false;
+        $("#modalAutoSaveButtonHolder p").css("background-color", "darkred");
+        $("#modalAutoSaveButtonHolder p").text("auto-save: OFF");
+    }
+    else {
+        player.AutoSaveOn = true;
+        $("#modalAutoSaveButtonHolder p").css("background-color", "darkgreen");
+        $("#modalAutoSaveButtonHolder p").text("auto-save: ON");
+    }
 });
 
 //#endregion

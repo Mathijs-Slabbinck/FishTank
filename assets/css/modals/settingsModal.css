@@ -4,6 +4,13 @@
     margin-left: 1vw;
 }
 
+#saveGameIcon {
+    height: 10vh;
+    width: auto;
+    margin-left: 2.5vw;
+    padding: 3vh 0;
+}
+
 #musicOffIcon {
     display: none;
 }
@@ -21,7 +28,7 @@
     /* optional spacing */
 }
 
-.settingsOption p {
+.settingsOption p:not(.sideInfo) {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
@@ -29,4 +36,9 @@
     text-align: center;
     width: max-content;
     /* optional: keeps width tight around text */
+}
+
+.sideInfo {
+    position: absolute;
+    right: 2vw;
 }

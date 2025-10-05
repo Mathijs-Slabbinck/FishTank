@@ -178,6 +178,13 @@ b {
     left: 0;
 }
 
+#gameSavedText {
+    position: absolute;
+    bottom: 2vh;
+    left: 3vw;
+    animation: gameSavedTextRise 4s ease-out forwards;
+}
+
 @keyframes bubbleRise {
     0% {
         opacity: 1;
@@ -207,6 +214,18 @@ b {
 
     100% {
         transform: translateY(-10px);
+    }
+}
+
+@keyframes gameSavedTextRise {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(-30px);
     }
 }
 
