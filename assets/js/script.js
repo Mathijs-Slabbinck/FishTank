@@ -618,7 +618,7 @@ function havePooChance(fish) {
     let random = getRandomNumber(1, 13000 - (((fish.CostPrice * 5) * (fish.Size * 5))));
     if (random === 1) {
         const fishFlipWrapper = fish.SvgElement.parent().parent();
-        const fishY = fishFlipWrapper.position().top + 30;
+        const fishY = fishFlipWrapper.position().top;
 
         let fishX;
         if (getScaleX(fishFlipWrapper) === 1) {
@@ -722,7 +722,7 @@ function spawnFood(x, y) {
             const foodY = y - zoneOffset.top;
 
             // Offset for fish animation if you move them up visually
-            const fishTargetY = foodY - 100;
+            const fishTargetY = foodY - 80;
 
             const food = $('<img class="food" src="images/fishFood.png" alt="fish food">');
             food.css({
