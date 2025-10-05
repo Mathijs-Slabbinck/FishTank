@@ -1125,7 +1125,7 @@ function getScaleX(element) {
 }
 
 function isAnyModalOpen() {
-    return $("#modalStarterFishContainer").is(":visible") || $("#modalShopContainer").is(":visible") || $('#fishInfoModal').is(":visible") || $("#modalFishShopContainer").is(":visible") || $("#modalSettingsContainer").is(":visible") || $("#modalSaveFilesContainer").is(":visible");
+    return $("#modalStarterFishContainer").is(":visible") || $("#modalShopContainer").is(":visible") || $('#fishInfoModal').is(":visible") || $("#modalFishShopContainer").is(":visible") || $("#modalSettingsContainer").is(":visible") || $("#modalSaveFilesContainer").is(":visible") || $("#modalLoadNewGameContainer").is(":visible");
 }
 
 const normalizeAngle = angle => (((angle + 180) % 360 + 360) % 360) - 180;
@@ -1249,17 +1249,24 @@ $(document).on('pointerdown', '#closeBottomMenuImg', function () {
 });
 
 $("#openBottomMenuImg").on("pointerdown", function () {
-    if (!player.AquariumList[selectedAquariumIndex].HasFood && !isAnyModalOpen()) {
-        openBottomMenu();
+    if (!isAnyModalOpen()) {
+        if (!player.AquariumList[selectedAquariumIndex].HasFood) {
+            openBottomMenu();
+        }
     }
 });
 
 $("#openBottomMenuImg").hover(function () {
-    if (player.AquariumList[selectedAquariumIndex].HasFood || isAnyModalOpen()) {
-        $("#openBottomMenuImg").addClass("noClickCursor");
+    if (!isAnyModalOpen()) {
+        if (player.AquariumList[selectedAquariumIndex].HasFood) {
+            $("#openBottomMenuImg").addClass("noClickCursor");
+        }
+        else {
+            $("#openBottomMenuImg").removeClass("noClickCursor");
+        }
     }
     else {
-        $("#openBottomMenuImg").removeClass("noClickCursor");
+        $("#openBottomMenuImg").addClass("noClickCursor");
     }
 });
 
@@ -1790,6 +1797,15 @@ $("#fishShopButtonHolder").on("pointerdown", function () {
 $("#settingsImg").on("pointerdown", function () {
     if (!isAnyModalOpen()) {
         $("#modalSettingsContainer").css("display", "flex");
+    }
+});
+
+$("#settingsImg").hover(function () {
+    if (isAnyModalOpen()) {
+        $("#settingsImg").addClass("noClickCursor");
+    }
+    else {
+        $("#settingsImg").removeClass("noClickCursor");
     }
 });
 
