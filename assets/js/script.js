@@ -198,11 +198,11 @@ function animateWaterFilter() {
         spawnBubble(bubbleSpotX, bubbleSpotY);
     }
     else {
-        bubbleSpotX = $waterFilter.parent().position().left + 90;
+        bubbleSpotX = $waterFilter.parent().position().left + 120;
         bubbleSpotY = $waterFilter.parent().position().top - 100;
         spawnBubble(bubbleSpotX, bubbleSpotY);
     }
-    const randomDelay = getRandomNumber(100, 10000);
+    const randomDelay = getRandomNumber(300, 8000);
     setTimeout(() => {
         animateWaterFilter();
     }, randomDelay);
@@ -538,6 +538,17 @@ function createNewFish(fishType, useRandomColors, isStarterFish = false) {
             resolve(newFish);
         }, 'xml').fail(reject);
     });
+}
+
+function ShowWaterFilter() {
+    if (player.AquariumList[0].HasWaterFilter) {
+        $("#waterFilterContainer").show();
+        $("#waterFilterContainer").css("left", player.AquariumList[0].WaterFilterX + "vw");
+        if (player.AquariumList[0].WaterFilterMirrored) {
+            $("#waterFilterContainer img").addClass("mirrored");
+        }
+        animateWaterFilter();
+    }
 }
 
 function addFishToBlock(fish, blockSelector) {
@@ -1621,11 +1632,7 @@ $(document).on("pointerdown", "#startNewGameButton", function () {
     pushShopFishes();
     $("#modalStarterFishContainer").css("display", "flex");
     updateStats();
-    if (player.AquariumList[0].HasWaterFilter) {
-        $("#waterFilterContainer").show();
-        $("#waterFilterContainer").css("left", player.AquariumList[0].WaterFilterX);
-        animateWaterFilter();
-    }
+    ShowWaterFilter();
 });
 
 $(document).on("pointerdown", ".loadFileButtonHolder", function () {
@@ -1656,14 +1663,7 @@ $(document).on("pointerdown", ".loadFileButtonHolder", function () {
             $btn.data('disabled', false); // re-enable
             $("#modalLoadNewGameContainer").hide();
             startBackGroundMusic();
-            if (player.AquariumList[0].HasWaterFilter) {
-                $("#waterFilterContainer").show();
-                $("#waterFilterContainer").css("left", player.AquariumList[0].WaterFilterX);
-                if (player.AquariumList[0].WaterFilterMirrored) {
-                    $("#waterFilterContainer img").addClass("mirrored");
-                }
-                animateWaterFilter();
-            }
+            ShowWaterFilter();
         }, 300);
     }
 });
@@ -2001,10 +2001,11 @@ $(document).on("pointerdown", function (e) {
         clicksAfterMovingWaterFilter++;
         if (clicksAfterMovingWaterFilter > 1) {
             if (movingWaterFilter) {
-                let newX = parseInt($("#waterFilterContainer").css("left"), 10);
+                const newXPx = parseInt($("#waterFilterContainer").css("left"), 10);
+                const newXVw = (newXPx / window.innerWidth) * 100;
                 movingWaterFilter = false;
                 spawnGameSavedText(false);
-                player.AquariumList[selectedAquariumIndex].WaterFilterX = newX;
+                player.AquariumList[selectedAquariumIndex].WaterFilterX = newXVw; // save in vw
                 if ($("#waterFilter").hasClass("mirrored")) {
                     player.AquariumList[selectedAquariumIndex].WaterFilterMirrored = true;
                 }
