@@ -139,7 +139,20 @@ $(document).ready(function () {
     //updateStats();
 });
 
-// check if this works
+function toggleAutoSave() {
+    if (player.AutoSaveOn) {
+        player.AutoSaveOn = false;
+        $("#modalAutoSaveButtonHolder p").css("background-color", "darkred");
+        $("#modalAutoSaveButtonHolder p").text("auto-save: OFF");
+        stopAutoSaver();
+    }
+    else {
+        player.AutoSaveOn = true;
+        $("#modalAutoSaveButtonHolder p").css("background-color", "darkgreen");
+        $("#modalAutoSaveButtonHolder p").text("auto-save: ON");
+        startAutoSaver();
+    }
+}
 
 function autoSaver() {
     // Stop if auto-save is off
@@ -1874,18 +1887,11 @@ $("#saveGameButtonHolder").on("pointerdown", function () {
 });
 
 $("#modalAutoSaveButtonHolder").on("pointerdown", function () {
-    if (player.AutoSaveOn) {
-        player.AutoSaveOn = false;
-        $("#modalAutoSaveButtonHolder p").css("background-color", "darkred");
-        $("#modalAutoSaveButtonHolder p").text("auto-save: OFF");
-        stopAutoSaver();
-    }
-    else {
-        player.AutoSaveOn = true;
-        $("#modalAutoSaveButtonHolder p").css("background-color", "darkgreen");
-        $("#modalAutoSaveButtonHolder p").text("auto-save: ON");
-        startAutoSaver();
-    }
+    toggleAutoSave();
+});
+
+$("#autoSaveOnIcon").on("pointerdown", function () {
+    toggleAutoSave();
 });
 
 //#endregion
