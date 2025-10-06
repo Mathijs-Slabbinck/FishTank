@@ -897,8 +897,11 @@ function handleRedoClick(element) {
 
 function handleColorInput(element) {
     const inputField = element.find("input");
-    const input = inputField.val().trim().replace(/[\u200B-\u200D\uFEFF]/g, "");
+    let input = inputField.val().trim().replace(/[\u200B-\u200D\uFEFF]/g, "");
     if (isValidHex(input)) {
+        if (!input.startsWith("#")) {
+            input = "#" + input;
+        }
         console.log(clickedFish);
         if (clickedFish) {
             switch (element.parent().attr("id")) {
@@ -1103,8 +1106,8 @@ function swapSign(num) {
 }
 
 function isValidHex(hex) {
-    // Start with #, then either 3 or 6 hex digits only
-    const hexRegex = /^#(?:[A-Fa-f0-9]{3}|[A-Fa-f0-9]{6})$/;
+    // Optional #, then either 3 or 6 hex digits
+    const hexRegex = /^#?(?:[A-Fa-f0-9]{3}|[A-Fa-f0-9]{6})$/;
     return hexRegex.test(hex);
 }
 
