@@ -118,7 +118,7 @@ let selectedSaveFileIndex = 0;
 let autoSaveTimeoutId = null;
 let saveFiles = [];
 var player;
-const backgroundMusic = new Audio('/assets/media/audio/backgroundMusic1.mp3');
+const backgroundMusic = new Audio('assets/media/audio/backgroundMusic1.mp3');
 let musicToggleCounterViaImg = 0;
 let musicToggleCounterViaButton = 0;
 
@@ -244,7 +244,7 @@ function startBackGroundMusic() {
 
 function checkForMusicClicksEasterEgg() {
     if (musicToggleCounterViaImg === 4) {
-        const underTheWater = new Audio('/assets/media/audio/helloIamUnderTheWater.mp3');
+        const underTheWater = new Audio('assets/media/audio/helloIamUnderTheWater.mp3');
         underTheWater.volume = 0.7;
         backgroundMusic.pause();
         underTheWater.loop = false;
@@ -267,7 +267,7 @@ function checkForMusicClicksEasterEgg() {
 
 function checkForMusicClicksEasterEgg2() {
     if (musicToggleCounterViaButton === 9) {
-        const underTheSheets = new Audio('/assets/media/audio/underTheSheets.mp3');
+        const underTheSheets = new Audio('assets/media/audio/underTheSheets.mp3');
         underTheSheets.volume = 0.7;
         backgroundMusic.pause();
         underTheSheets.loop = false;
