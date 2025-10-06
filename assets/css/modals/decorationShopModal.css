@@ -1,0 +1,21 @@
+#decorationShopTopItems {
+    display: flex;
+    flex-direction: column;
+}
+
+#decorationShopTopItems>div {
+    border: 2px solid black;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 80vw;
+    margin: 2vh 0;
+}
+
+#decorationShopTopItems>div p {
+    margin: 2vh 0 2vh 7vw;
+}
+
+#decorationShopTopItems .modalButtonBlock {
+    margin: 0 7vw 0 0;
+}

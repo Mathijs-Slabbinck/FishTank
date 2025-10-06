@@ -9,6 +9,9 @@ class AquariumService {
         this._waterColor = 'blue';
         this._hasFood = false;
         this._fishList = [];
+        this._hasWaterFilter = false; // New property to track water filter presence
+        this._waterFilterX = 0; // X position of the water filter
+        this._waterFilterMirrored = false; // Rotation state of the water filter
     }
 
     // --- Getters and setters ---
@@ -43,6 +46,15 @@ class AquariumService {
     get HasFood() { return this._hasFood; }
     set HasFood(value) { this._hasFood = value; }
 
+    get HasWaterFilter() { return this._hasWaterFilter; }
+    set HasWaterFilter(value) { this._hasWaterFilter = value; }
+
+    get WaterFilterX() { return this._waterFilterX; }
+    set WaterFilterX(value) { this._waterFilterX = value; }
+
+    get WaterFilterMirrored() { return this._waterFilterMirrored; }
+    set WaterFilterMirrored(value) { this._waterFilterMirrored = value; }
+
     // --- Serialization (for localStorage) ---
     toJSON() {
         return {
@@ -54,7 +66,10 @@ class AquariumService {
             WaterQuality: this.WaterQuality,
             WaterColor: this.WaterColor,
             HasFood: false, // reset to false on load
-            FishList: this.FishList.map(f => f.toJSON()) // serialize fish data only
+            FishList: this.FishList.map(f => f.toJSON()), // serialize fish data only
+            HasWaterFilter: this.HasWaterFilter,
+            WaterFilterX: this.WaterFilterX,
+            WaterFilterMirrored: this.WaterFilterMirrored
         };
     }
 
@@ -67,7 +82,10 @@ class AquariumService {
         aquarium.WaterQuality = json.WaterQuality;
         aquarium.WaterColor = json.WaterColor;
         aquarium.HasFood = false; // reset to false on load
-        aquarium.FishList = (json.FishList || []).map(f => Fish.fromJSON(f)); // recreate fish objects
+        aquarium.FishList = (json.FishList || []).map(f => Fish.fromJSON(f));
+        aquarium.HasWaterFilter = json.HasWaterFilter || false;
+        aquarium.WaterFilterX = json.WaterFilterX || 0;
+        aquarium.WaterFilterMirrored = json.WaterFilterMirrored || false;
         return aquarium;
     }
 }

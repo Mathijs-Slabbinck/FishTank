@@ -12,8 +12,11 @@
     <link href="assets/css/modals/settingsModal.css" rel='stylesheet' type='text/css'>
     <link href="assets/css/modals/fishInfoModal.css" rel='stylesheet' type='text/css'>
     <link href="assets/css/modals/starterFishMenuModal.css" rel='stylesheet' type='text/css'>
+    <link href="assets/css/modals/decorationShopModal.css" rel='stylesheet' type="text/css">
+    <link href="assets/css/modals/fishShopModal.css" rel='stylesheet' type='text/css'>
     <link href="assets/css/modals/mainShopModal.css" rel='stylesheet' type='text/css'>
     <link href="assets/css/modals/startMenuModal.css" rel='stylesheet' type='text/css'>
+    <link href="assets/css/modals/waterFilterModal.css" rel='stylesheet' type='text/css'>
 </head>
 
 <body>
@@ -269,7 +272,60 @@
                 </div>
             </div>
 
+            <div class="modalContainer" id="modalDecorationShopContainer">
+                <div class="modal" id="decorationShopModal">
+                    <img src="images/GUI/modals/closeButton.png" alt="close button" id="closeFishShopModal"
+                        class="clickAble closeModal">
 
+                    <div class="modalContent">
+                        <div class="modalTitle">
+                            <strong>Decoration Shop</strong>
+                        </div>
+                        <div id="decorationShopItemsContainer">
+                            <div id="decorationShopTopItems">
+                                <div id="decorationBackgroundBlock">
+                                    <p>Change Background:</p>
+                                    <div class="modalButtonBlock greenButton" id="changeBackgroundButtonHolder">
+                                        <p class="clickAble">choose</p>
+                                    </div>
+                                </div>
+                                <div id="decorationMusicBlock">
+                                    <p>Change Background Music:</p>
+                                    <div class="modalButtonBlock greenButton" id="changeMusicButtonHolder">
+                                        <p class="clickAble">choose</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="decorationShopBottomItems">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="modalContainer" id="modalWaterFilterContainer">
+                <div class="modal" id="waterFilterModal">
+                    <img src="images/GUI/modals/closeButton.png" alt="close button" id="waterFilterModalCloseButton"
+                        class="clickAble closeModal">
+
+                    <div class="modalContent">
+                        <div class="modalTitle">
+                            <strong>Waterfilter</strong>
+                        </div>
+                        <div id="waterFilterContentContainer">
+                            <div class="waterFilterBlock">
+                                <p>Move Water Filter:</p>
+                                <div class="modalButtonBlock greenButton" id="moveWaterFilterButtonHolder">
+                                    <p class="clickAble">move</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <div class="modalContainer" id="modalLoadNewGameContainer">
                 <div class="modal" id="loadNewGameModal">
@@ -327,6 +383,9 @@
 
             <div id="fishTank">
                 <div id="swimZone">
+                </div>
+                <div id="waterFilterContainer">
+                    <img src="images/waterfilter.png" alt="water filter" id="waterFilter">
                 </div>
                 <div id="bottomMenuButtonContainer">
                     <img src="images/GUI/openBottomMenu.png" alt="open menu button" id="openBottomMenuImg"

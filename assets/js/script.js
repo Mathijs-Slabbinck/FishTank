@@ -121,6 +121,8 @@ var player;
 const backgroundMusic = new Audio('assets/media/audio/backgroundMusic1.mp3');
 let musicToggleCounterViaImg = 0;
 let musicToggleCounterViaButton = 0;
+let movingWaterFilter = false;
+let clicksAfterMovingWaterFilter = 0;
 
 $(document).ready(function () {
     if (window.innerWidth < 600) {
@@ -185,6 +187,27 @@ function stopAutoSaver() {
     }
 }
 
+function animateWaterFilter() {
+    const $waterFilter = $("#waterFilter");
+    let bubbleSpotX;
+    let bubbleSpotY;
+
+    if ($waterFilter.hasClass("mirrored")) {
+        bubbleSpotX = $waterFilter.parent().position().left - 5;
+        bubbleSpotY = $waterFilter.parent().position().top - 100;
+        spawnBubble(bubbleSpotX, bubbleSpotY);
+    }
+    else {
+        bubbleSpotX = $waterFilter.parent().position().left + 90;
+        bubbleSpotY = $waterFilter.parent().position().top - 100;
+        spawnBubble(bubbleSpotX, bubbleSpotY);
+    }
+    const randomDelay = getRandomNumber(100, 10000);
+    setTimeout(() => {
+        animateWaterFilter();
+    }, randomDelay);
+}
+
 function checkOrientation() {
     if (window.innerWidth < 600) {
         $('#rotatePhone').show();
@@ -235,6 +258,17 @@ function applyFishColors(fish) {
         '--side-fin-color': fish.SideFinColor,
         '--pattern-color': fish.PatternColor
     });
+}
+
+function checkToMirrorFilter() {
+    if (movingWaterFilter) {
+        if ($("#waterFilter").hasClass("mirrored")) {
+            $("#waterFilter").removeClass("mirrored");
+        }
+        else {
+            $("#waterFilter").addClass("mirrored");
+        }
+    }
 }
 
 function toggleMusic() {
@@ -1587,6 +1621,11 @@ $(document).on("pointerdown", "#startNewGameButton", function () {
     pushShopFishes();
     $("#modalStarterFishContainer").css("display", "flex");
     updateStats();
+    if (player.AquariumList[0].HasWaterFilter) {
+        $("#waterFilterContainer").show();
+        $("#waterFilterContainer").css("left", player.AquariumList[0].WaterFilterX);
+        animateWaterFilter();
+    }
 });
 
 $(document).on("pointerdown", ".loadFileButtonHolder", function () {
@@ -1617,6 +1656,14 @@ $(document).on("pointerdown", ".loadFileButtonHolder", function () {
             $btn.data('disabled', false); // re-enable
             $("#modalLoadNewGameContainer").hide();
             startBackGroundMusic();
+            if (player.AquariumList[0].HasWaterFilter) {
+                $("#waterFilterContainer").show();
+                $("#waterFilterContainer").css("left", player.AquariumList[0].WaterFilterX);
+                if (player.AquariumList[0].WaterFilterMirrored) {
+                    $("#waterFilterContainer img").addClass("mirrored");
+                }
+                animateWaterFilter();
+            }
         }, 300);
     }
 });
@@ -1892,6 +1939,89 @@ $("#modalAutoSaveButtonHolder").on("pointerdown", function () {
 
 $("#autoSaveOnIcon").on("pointerdown", function () {
     toggleAutoSave();
+});
+
+$("#waterFilter").on("pointerdown", function () {
+    $("#modalWaterFilterContainer").css("display", "flex");
+});
+
+$("#waterFilterModalCloseButton").on("pointerdown", function () {
+    $("#modalWaterFilterContainer").css("display", "none");
+});
+
+$("#moveWaterFilterButtonHolder").on("pointerdown", function (e) {
+    clicksAfterMovingWaterFilter = 0;
+    $("#modalWaterFilterContainer").hide();
+    $("#waterFilter").attr({
+        src: "images/waterFilterSelected.png",
+        alt: "water filter selected"
+    });
+
+    movingWaterFilter = true;
+    $("#fishTank").css("cursor", "grabbing");
+
+    const $filterContainer = $("#waterFilterContainer");
+    const offsetX = $filterContainer.width() / 2;
+
+    $filterContainer.css("position", "absolute");
+
+    // Clamp horizontal position
+    const maxX = $(window).width() - $filterContainer.width();
+    let newX = e.pageX - offsetX;
+    newX = Math.max(0, Math.min(newX, maxX));
+
+    // Move immediately to cursor
+    $filterContainer.css({
+        left: newX + "px",
+    });
+
+    // Track movement
+    $(document).on("pointermove.waterFilter", function (moveEvent) {
+        if (!movingWaterFilter) return;
+
+        let moveX = moveEvent.pageX - offsetX;
+
+        // Clamp horizontal movement
+        moveX = Math.max(0, Math.min(moveX, maxX));
+
+        $filterContainer.css({
+            left: moveX + "px",
+        });
+    });
+});
+
+$(document).on("keydown", function (e) {
+    if (e.key === "r" && movingWaterFilter) {
+        checkToMirrorFilter();
+    }
+});
+
+$(document).on("pointerdown", function (e) {
+    if (e.button === 0) { // left mouse button
+        clicksAfterMovingWaterFilter++;
+        if (clicksAfterMovingWaterFilter > 1) {
+            if (movingWaterFilter) {
+                let newX = parseInt($("#waterFilterContainer").css("left"), 10);
+                movingWaterFilter = false;
+                spawnGameSavedText(false);
+                player.AquariumList[selectedAquariumIndex].WaterFilterX = newX;
+                if ($("#waterFilter").hasClass("mirrored")) {
+                    player.AquariumList[selectedAquariumIndex].WaterFilterMirrored = true;
+                }
+                else {
+                    player.AquariumList[selectedAquariumIndex].WaterFilterMirrored = false;
+                }
+                saveToLocalStorage();
+                $("#waterFilter").attr("src", "images/waterFilter.png");
+                $("#waterFilter").attr("alt", "water filter");
+                $("#fishTank").css("cursor", "default");
+            }
+            clicksAfterMovingWaterFilter = 0;
+        }
+    }
+    else if (e.button === 1 || e.button === 2) { // middle mouse button or right mouse button
+        checkToMirrorFilter();
+    }
 });
 
 //#endregion

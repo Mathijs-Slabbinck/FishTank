@@ -194,6 +194,23 @@ b {
     animation: gameSavedTextRise 4s ease-out forwards;
 }
 
+#waterFilterContainer {
+    display: none;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+#waterFilter {
+    width: 8vw;
+    height: auto;
+    cursor: pointer;
+}
+
+.mirrored {
+    transform: scaleX(-1);
+}
+
 @keyframes bubbleRise {
     0% {
         opacity: 1;

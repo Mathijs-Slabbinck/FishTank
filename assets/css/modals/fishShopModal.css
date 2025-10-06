@@ -1,0 +1,27 @@
+.fishShopFishRow {
+    display: flex;
+    justify-content: space-around;
+    margin: 2vh 0;
+    text-align: center;
+}
+
+.fishBlock {
+    border: 2px solid black;
+    width: 100%;
+    height: 100%;
+}
+
+.fishBlock p {
+    margin-top: 1vh;
+    font-weight: bold;
+}
+
+.costPrice {
+    margin: -1vh 0 1vh 0;
+}
+
+@media only screen and (max-width: 1000px) {
+    .fishBlock svg {
+        padding-top: 2vh;
+    }
+}
