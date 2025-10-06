@@ -118,7 +118,9 @@ let selectedSaveFileIndex = 0;
 let autoSaveTimeoutId = null;
 let saveFiles = [];
 var player;
-let backgroundMusic;
+const backgroundMusic = new Audio('/assets/media/audio/backgroundMusic1.mp3');
+let musicToggleCounterViaImg = 0;
+let musicToggleCounterViaButton = 0;
 
 $(document).ready(function () {
     if (window.innerWidth < 600) {
@@ -236,10 +238,54 @@ function toggleMusic() {
 
 function startBackGroundMusic() {
     if (player.BackgroundMusicOn === false) return;
-    backgroundMusic = new Audio('/assets/media/audio/backgroundMusic1.mp3');
     backgroundMusic.loop = true;
-    backgroundMusic.volume = 1;
     backgroundMusic.play();
+}
+
+function checkForMusicClicksEasterEgg() {
+    if (musicToggleCounterViaImg === 4) {
+        const underTheWater = new Audio('/assets/media/audio/helloIamUnderTheWater.mp3');
+        underTheWater.volume = 0.7;
+        backgroundMusic.pause();
+        underTheWater.loop = false;
+        underTheWater.play();
+
+        // Force-stop the meme sound 0.2s before it naturally ends
+        underTheWater.addEventListener('loadedmetadata', () => {
+            const cutoffTime = Math.max(underTheWater.duration - 0.2, 0);
+            setTimeout(() => {
+                if (!underTheWater.paused) {
+                    underTheWater.pause();
+                    underTheWater.currentTime = 0;
+                    backgroundMusic.play();
+                }
+            }, cutoffTime * 1000);
+        });
+    }
+    musicToggleCounterViaImg++;
+}
+
+function checkForMusicClicksEasterEgg2() {
+    if (musicToggleCounterViaButton === 9) {
+        const underTheSheets = new Audio('/assets/media/audio/underTheSheets.mp3');
+        underTheSheets.volume = 0.7;
+        backgroundMusic.pause();
+        underTheSheets.loop = false;
+        underTheSheets.play();
+
+        // Force-stop the meme sound 0.2s before it naturally ends
+        underTheSheets.addEventListener('loadedmetadata', () => {
+            const cutoffTime = Math.max(underTheSheets.duration - 0.2, 0);
+            setTimeout(() => {
+                if (!underTheSheets.paused) {
+                    underTheSheets.pause();
+                    underTheSheets.currentTime = 0;
+                    backgroundMusic.play();
+                }
+            }, cutoffTime * 1000);
+        });
+    }
+    musicToggleCounterViaButton++;
 }
 
 async function loadAquarium() {
@@ -1601,10 +1647,12 @@ $("#musicOnIcon").on("pointerdown", function () {
 
 $("#musicOffIcon").on("pointerdown", function () {
     toggleMusic();
+    checkForMusicClicksEasterEgg();
 });
 
 $("#modalMusicButtonHolder").on("pointerdown", function () {
     toggleMusic();
+    checkForMusicClicksEasterEgg2();
 });
 
 // Helper to create a clean fish instance from a template
