@@ -244,7 +244,7 @@ function startBackGroundMusic() {
 
 function checkForMusicClicksEasterEgg() {
     if (musicToggleCounterViaImg === 4) {
-        const underTheWater = new Audio('assets/media/audio/helloIamUnderTheWater.mp3');
+        const underTheWater = new Audio('assets/media/audio/helloIAmUnderTheWater.mp3');
         underTheWater.volume = 0.7;
         backgroundMusic.pause();
         underTheWater.loop = false;
