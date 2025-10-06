@@ -157,6 +157,12 @@ function autoSaver() {
     autoSaveTimeoutId = setTimeout(autoSaver, 60000);
 }
 
+function startAutoSaver() {
+    if (autoSaveTimeoutId === null) {
+        autoSaver();
+    }
+}
+
 function stopAutoSaver() {
     if (autoSaveTimeoutId !== null) {
         clearTimeout(autoSaveTimeoutId);
@@ -615,7 +621,7 @@ function directFishToFood(fish, foodX, foodY) {
 
 function havePooChance(fish) {
     // increase when buying fish gets possible
-    let random = getRandomNumber(1, 13000 - (((fish.CostPrice * 5) * (fish.Size * 5))));
+    let random = getRandomNumber(1, 15000 - (((fish.CostPrice * 5) * (fish.Size * 5))));
     if (random === 1) {
         const fishFlipWrapper = fish.SvgElement.parent().parent();
         const fishY = fishFlipWrapper.position().top;
@@ -647,7 +653,7 @@ function updateStats() {
         $("#modalAutoSaveButtonHolder").removeClass("redButton").addClass("greenButton").find("p").text("auto-save: ON");
         $('#autoSaveOnIcon').show();
         $('#autoSaveOffIcon').hide();
-        setTimeout(autoSaver, 30000);
+        setTimeout(startAutoSaver(), 30000);
     }
     else {
         $("#modalAutoSaveButtonHolder").removeClass("greenButton").addClass("redButton").find("p").text("auto-save: OFF");
@@ -1827,7 +1833,7 @@ $("#modalAutoSaveButtonHolder").on("pointerdown", function () {
         player.AutoSaveOn = true;
         $("#modalAutoSaveButtonHolder p").css("background-color", "darkgreen");
         $("#modalAutoSaveButtonHolder p").text("auto-save: ON");
-        autoSaver();
+        startAutoSaver();
     }
 });
 
