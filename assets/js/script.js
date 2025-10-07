@@ -558,7 +558,7 @@ function cleanWater() {
     }
 }
 
-function ShowWaterFilter() {
+function showWaterFilter() {
     if (player.AquariumList[0].HasWaterFilter) {
         $("#waterFilterContainer").show();
         $("#waterFilterContainer").css("left", player.AquariumList[0].WaterFilterX + "vw");
@@ -1698,7 +1698,7 @@ $(document).on("pointerdown", "#startNewGameButton", function () {
     pushShopFishes();
     $("#modalStarterFishContainer").css("display", "flex");
     updateStats();
-    ShowWaterFilter();
+    showWaterFilter();
 });
 
 $(document).on("pointerdown", ".loadFileButtonHolder", function () {
@@ -1729,7 +1729,7 @@ $(document).on("pointerdown", ".loadFileButtonHolder", function () {
             $btn.data('disabled', false); // re-enable
             $("#modalLoadNewGameContainer").hide();
             startBackGroundMusic();
-            ShowWaterFilter();
+            showWaterFilter();
         }, 300);
     }
 });
