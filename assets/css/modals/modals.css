@@ -50,6 +50,7 @@
     padding: 1.5vh 0;
     margin-bottom: 2vh;
     background-color: lightgray;
+    border-radius: 10px;
 }
 
 .modalContent {
@@ -82,4 +83,25 @@
 
 .redButton p {
     background-color: darkred;
+}
+
+.subTitleContainer strong {
+    font-size: 1.5rem;
+}
+
+.subTitleContainer {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    background-color: rgb(238, 236, 236);
+    border-radius: 10px;
+}
+
+.subTitleContainer strong {
+    margin: 1vh 0;
+}
+
+.modal div {
+    border-radius: 10px;
 }

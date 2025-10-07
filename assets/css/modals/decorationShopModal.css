@@ -1,21 +1,67 @@
-#decorationShopTopItems {
+.decorationShopBlock {
     display: flex;
     flex-direction: column;
+    border: 3px solid black;
+    align-items: center;
+    background-color: lightblue;
 }
 
-#decorationShopTopItems>div {
-    border: 2px solid black;
+.decorationShopBlock>div {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    width: 80vw;
+    width: 75vw;
     margin: 2vh 0;
 }
 
-#decorationShopTopItems>div p {
+.decorationShopBlock>div:not(.subTitleContainer) {
+    border: 2px solid black;
+    background-color: white;
+}
+
+.subTitleContainer {
+    border: 3px solid black;
+}
+
+.decorationShopBlock>div:not(.subTitleContainer) {
+    justify-content: space-between;
+}
+
+.decorationShopBlock:first-of-type>div p {
     margin: 2vh 0 2vh 7vw;
 }
 
-#decorationShopTopItems .modalButtonBlock {
+.decorationShopBlock:not(:first-of-type)>div p {
+    text-align: center;
+}
+
+.decorationShopBlock:first-of-type .modalButtonBlock {
     margin: 0 7vw 0 0;
+}
+
+.decorationShopBlock:not(:first-of-type) {
+    margin: 5vh 0;
+}
+
+.decorationShopBlock:not(:first-of-type) .modalButtonBlock {
+    margin: 2vh 0;
+}
+
+.decorationShopItem {
+    border: 2px solid black;
+    margin: 2vh 2vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.decorationShopItem figure img {
+    width: 10vw;
+    height: auto;
+    margin: 0 5vw;
+}
+
+.decorationShopItem figure figcaption {
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.2rem;
 }

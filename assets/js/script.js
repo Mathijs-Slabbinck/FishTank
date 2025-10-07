@@ -224,13 +224,29 @@ function checkOrientation() {
 
         if (notRotatedAtStart) {
             startNewGame();
-            /*
-            pushStarterFishes();
-            pushShopFishes();
-            */
             notRotatedAtStart = false;
         }
     }
+}
+
+function initialiseGame() {
+    updateStats();
+    startBackGroundMusic();
+    showWaterFilter();
+    updateDecorationShop();
+}
+
+function updateDecorationShop() {
+    if (player.AquariumList[0].HasWaterFilter) {
+        disableShopWaterFilter();
+    }
+}
+
+function disableShopWaterFilter() {
+    $("#buyWaterFilterButtonHolder").removeClass("greenButton");
+    $("#buyWaterFilterButtonHolder").addClass("redButton");
+    $("#buyWaterFilterButtonHolder").find("p").addClass("noClickCursor");
+    $("#buyWaterFilterButtonHolder").find("p").text("SOLD");
 }
 
 function startNewGame() {
@@ -541,6 +557,7 @@ function createNewFish(fishType, useRandomColors, isStarterFish = false) {
 }
 
 function cleanWater() {
+    console.log("Cleaning water on " + new Date().toLocaleString());
     if (player.AquariumList[0].HasWaterFilter && player.AquariumList[0].IsWaterFilterOn) {
         const $poos = $("#fishTank .poo"); // all divs with class "poo" inside #myContainer
 
@@ -1693,12 +1710,10 @@ $(document).on("pointerdown", "#startNewGameButton", function () {
 
     $("#modalLoadNewGameContainer").hide();
     saveToLocalStorage();
-    startBackGroundMusic();
     pushStarterFishes();
     pushShopFishes();
+    initialiseGame();
     $("#modalStarterFishContainer").css("display", "flex");
-    updateStats();
-    showWaterFilter();
 });
 
 $(document).on("pointerdown", ".loadFileButtonHolder", function () {
@@ -1720,7 +1735,6 @@ $(document).on("pointerdown", ".loadFileButtonHolder", function () {
         setTimeout(async () => {
             $btn.find("p").css("background-color", "darkgreen");
             player = saveFiles[idx];
-            updateStats();
             await loadAquarium();
             if (player.AquariumList.length === 1 && player.AquariumList[0].FishList.length === 0) {
                 pushStarterFishes();
@@ -1728,8 +1742,7 @@ $(document).on("pointerdown", ".loadFileButtonHolder", function () {
             }
             $btn.data('disabled', false); // re-enable
             $("#modalLoadNewGameContainer").hide();
-            startBackGroundMusic();
-            showWaterFilter();
+            initialiseGame();
         }, 300);
     }
 });
@@ -1972,6 +1985,15 @@ $("#fishShopButtonHolder").on("pointerdown", function () {
     $("#modalFishShopContainer").css("display", "flex");
 });
 
+$("#decorationShopButtonHolder").on("pointerdown", function () {
+    closeShopModal();
+    $("#modalDecorationShopContainer").css("display", "flex");
+});
+
+$("#closeDecorationShopModal").on("pointerdown", function () {
+    $("#modalDecorationShopContainer").hide();
+});
+
 $("#settingsImg").on("pointerdown", function () {
     if (!isAnyModalOpen()) {
         $("#modalSettingsContainer").css("display", "flex");
@@ -2054,6 +2076,22 @@ $("#moveWaterFilterButtonHolder").on("pointerdown", function (e) {
             left: moveX + "px",
         });
     });
+});
+
+$("#buyWaterFilterButtonHolder").on("pointerdown", function () {
+    if ($(this).find("p").hasClass("noClickCursor")) return;
+    if (player.MoneyAmount >= 500) {
+        if (!player.AquariumList[selectedAquariumIndex].HasWaterFilter) {
+            disableShopWaterFilter();
+            player.MoneyAmount -= 500;
+            player.AquariumList[selectedAquariumIndex].HasWaterFilter = true;
+            updateStats();
+            showWaterFilter();
+        }
+    }
+    else {
+        alert("You don't have enough money to buy a water filter!");
+    }
 });
 
 $(document).on("keydown", function (e) {
