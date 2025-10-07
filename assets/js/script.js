@@ -123,6 +123,11 @@ let musicToggleCounterViaImg = 0;
 let musicToggleCounterViaButton = 0;
 let movingWaterFilter = false;
 let clicksAfterMovingWaterFilter = 0;
+let isHoldingClick = false;
+let selectedModaloffsetX = 0;
+let selectedModaloffsetY = 0;
+const isOnMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+let $grabbedModal = null;
 
 $(document).ready(function () {
     if (window.innerWidth < 600) {
@@ -384,6 +389,7 @@ async function assignSvgToFish(fish) {
     const svgText = await response.text();
     const $svg = $(svgText);
     $svg.addClass('spawned-fish');
+    $svg.addClass('clickAble');
 
     // --- Generate unique ID for patterns ---
     $svg.find('pattern').each((i, pattern) => {
@@ -620,6 +626,7 @@ function prepareFishForSpawning(fish) {
 function spawnFish(fish) {
     player.AquariumList[selectedAquariumIndex].FishList.push(fish);
     fish.SvgElement.addClass('spawned-fish');
+    fish.SvgElement.addClass('clickAble');
 
     const fishFlipWrapper = fish.SvgElement.parent().parent();
     $('#swimZone').append(fishFlipWrapper);
@@ -1485,8 +1492,26 @@ $("#fishTank").on("pointerdown", ".poo", function () {
     }
 });
 
+$(document).on("mouseenter", ".spawned-fish", function () {
+    console.log("hovered over fish");
+    if (isAnyModalOpen()) {
+        $(this).removeClass("clickAble");
+        $(this).addClass("noClickCursor");
+    }
+});
+
+$(document).on("mouseleave", ".spawned-fish", function () {
+    if (!isAnyModalOpen()) {
+        $(this).removeClass("noClickCursor");
+        $(this).addClass("clickAble");
+    }
+});
+
 $('#fishTank').on("pointerdown", '.spawned-fish', function () {
+    if (isAnyModalOpen()) return;
+
     const fish = $(this).data('fish');
+
     clickedFish = fish;
     console.log("--------------------------------------------------");
     console.log("Clicked on fish:");
@@ -1496,7 +1521,7 @@ $('#fishTank').on("pointerdown", '.spawned-fish', function () {
     $('#fishInfoModal').show();
     $('#modalFishImgContainer').empty();
     $('#modalFishImgContainer').append(fish.SvgElement.clone());
-    $('#modalFishImgContainer svg').toggleClass('spawned-fish');
+    $('#modalFishImgContainer svg').removeClass('spawned-fish');
     $('#modalFishImgContainer svg').css("position", "relative");
     $('#modalFishImgContainer svg').css("top", "0");
     $('#modalFishImgContainer svg').css("left", "0");
@@ -1747,7 +1772,7 @@ $(document).on("pointerdown", "#startNewGameButton", function () {
     player = newPlayer;
     selectedSaveFileIndex = saveFiles.length - 1;
 
-    $("#modalLoadNewGameContainer").hide();
+    $("#modalStartMenuContainer").hide();
     saveToLocalStorage();
     pushStarterFishes();
     pushShopFishes();
@@ -1780,7 +1805,7 @@ $(document).on("pointerdown", ".loadFileButtonHolder", function () {
                 $("#modalStarterFishContainer").css("display", "flex");
             }
             $btn.data('disabled', false); // re-enable
-            $("#modalLoadNewGameContainer").hide();
+            $("#modalStartMenuContainer").hide();
             initialiseGame();
         }, 300);
     }
@@ -2048,6 +2073,17 @@ $("#settingsImg").hover(function () {
     }
 });
 
+$("#waterFilter").hover(function () {
+    if (isAnyModalOpen()) {
+        $("#waterFilter").removeClass("clickAble");
+        $("#waterFilter").addClass("noClickCursor");
+    }
+    else {
+        $("#waterFilter").removeClass("noClickCursor");
+        $("#waterFilter").addClass("clickAble");
+    }
+});
+
 $("#closeSettingsModal").on("pointerdown", function () {
     $("#modalSettingsContainer").css("display", "none");
 });
@@ -2069,7 +2105,9 @@ $("#autoSaveOnIcon").on("pointerdown", function () {
 });
 
 $("#waterFilter").on("pointerdown", function () {
-    $("#modalWaterFilterContainer").css("display", "flex");
+    if (!isAnyModalOpen()) {
+        $("#modalWaterFilterContainer").css("display", "flex");
+    }
 });
 
 $("#waterFilterModalCloseButton").on("pointerdown", function () {
@@ -2146,6 +2184,67 @@ $(document).on("keydown", function (e) {
     if (e.key === "r" && movingWaterFilter) {
         checkToMirrorFilter();
     }
+});
+
+$(document).on("pointerdown", ".grabModal", function (e) {
+    e.preventDefault();
+
+    $grabbedModal = $(this).closest(".modal");
+
+    console.log($grabbedModal.attr("id") + " is being grabbed");
+    $grabbedModal.find(".grabModal").addClass("grabbing");
+    $grabbedModal.find(".grabModal").removeClass("grabbable");
+
+    isHoldingClick = true;
+
+    const modalOffset = $grabbedModal.offset();
+    selectedModaloffsetX = e.pageX - modalOffset.left;
+    selectedModaloffsetY = e.pageY - modalOffset.top;
+
+    const viewportWidth = window.visualViewport ? window.visualViewport.width : window.innerWidth;
+    const viewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+
+    // Attach pointermove only once per drag
+    $(document).on("pointermove.modal", function (e) {
+        if (!isHoldingClick) return;
+
+        const vw = viewportWidth / 100;
+        const vh = viewportHeight / 100;
+
+        const modalWidthVw = $grabbedModal.outerWidth() / vw;
+        const modalHeightVh = $grabbedModal.outerHeight() / vh;
+
+        // Calculate unclamped positions
+        let newLeftVw = (e.pageX - selectedModaloffsetX) / vw;
+        let newTopVh = (e.pageY - selectedModaloffsetY) / vh;
+
+        // Extra offset to prevent touching edges (different offset for mobile devices)
+        let extraOffsetVw = 2;
+        console.log(viewportWidth);
+        if (viewportWidth < 1000) {
+            extraOffsetVw = 5;
+        }
+
+        // Clamp within viewport
+        const maxLeftVw = 100 - modalWidthVw - extraOffsetVw;
+        const maxTopVh = 100 - modalHeightVh - 2;
+
+        newLeftVw = Math.min(Math.max(newLeftVw, 1), maxLeftVw);
+        newTopVh = Math.min(Math.max(newTopVh, 1), maxTopVh);
+
+        $grabbedModal.css({
+            left: newLeftVw + "vw",
+            top: newTopVh + "vh"
+        });
+    });
+});
+
+$(document).on("pointerup", function () {
+    isHoldingClick = false;
+    $grabbedModal.find(".grabModal").addClass("grabbable");
+    $grabbedModal.find(".grabModal").removeClass("grabbing");
+    $(document).off("pointermove.modal");
+    $grabbedModal = null;
 });
 
 $(document).on("pointerdown", function (e) {

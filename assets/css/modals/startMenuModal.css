@@ -1,9 +1,17 @@
-#modalLoadNewGameContainer {
+#modalStartMenuContainer {
     display: flex;
 }
 
-#modalLoadNewGameContainer .modalTitle {
+#modalStartMenuContainer .modalTitle {
     margin-top: 4vh;
+}
+
+#modalStartMenuContainer .grabModal {
+    margin-top: 4vh;
+}
+
+#modalStartMenuContainer .topMenuContainer {
+    height: 2vh;
 }
 
 .saveFileBlock {

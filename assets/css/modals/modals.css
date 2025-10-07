@@ -2,8 +2,6 @@
     width: 100vw;
     height: 95vh;
     position: absolute;
-    justify-content: center;
-    align-items: center;
     display: none;
 }
 
@@ -14,8 +12,37 @@
     width: 85vw;
     height: 85vh;
     position: absolute;
-    z-index: 999;
+    left: 7.5vw;
+    top: 5vh;
+    z-index: 1000;
     overflow-y: auto;
+}
+
+/* Prevent touch actions on modals to allow moving modals on mobile devices */
+.grabModal,
+.modal {
+    touch-action: none;
+    /* for Safari */
+    -webkit-touch-action: none;
+}
+
+.closeModal {
+    width: 4vw;
+    height: auto;
+    margin: 0 0 0 93%;
+}
+
+.topMenuContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.grabModal {
+    width: 2vw;
+    margin-top: 0.5vh;
+    height: auto;
+    position: absolute;
 }
 
 .modal::-webkit-scrollbar {
