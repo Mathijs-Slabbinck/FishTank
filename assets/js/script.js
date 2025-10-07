@@ -540,14 +540,34 @@ function createNewFish(fishType, useRandomColors, isStarterFish = false) {
     });
 }
 
+function cleanWater() {
+    if (player.AquariumList[0].HasWaterFilter) {
+        const $poos = $("#fishTank .poo"); // all divs with class "poo" inside #myContainer
+
+        player.MoneyAmount += $poos.length * 2; // earn 2 coins per poo
+        updateStats();
+
+        // Loop through each div
+        $poos.each(function () {
+            $(this).remove(); // remove the poo
+        });
+
+        setTimeout(() => {
+            cleanWater();
+        }, player.AquariumList[selectedAquariumIndex].WaterFilterTimer); // clean for as long as the timer is set
+    }
+}
+
 function ShowWaterFilter() {
     if (player.AquariumList[0].HasWaterFilter) {
         $("#waterFilterContainer").show();
         $("#waterFilterContainer").css("left", player.AquariumList[0].WaterFilterX + "vw");
+        $("#waterFilterTimerDisplay").text(player.AquariumList[0].WaterFilterTimer / 60000);
         if (player.AquariumList[0].WaterFilterMirrored) {
             $("#waterFilterContainer img").addClass("mirrored");
         }
         animateWaterFilter();
+        cleanWater();
     }
 }
 
@@ -900,7 +920,21 @@ function closeFishShopModal() {
     $("#modalFishShopContainer").hide();
 }
 
+function handleWaterFilterTimerInput(element) {
+    const inputField = element.find("input");
+    const input = inputField.val().trim();
+    const inputNumber = parseInt(input);
+    if (!isNaN(inputNumber) && inputNumber >= 1 && inputNumber <= 60) {
+        player.AquariumList[0].WaterFilterTimer = inputNumber * 60000; // convert minutes to milliseconds
+        element.find("b").text(inputNumber);
+    }
+    else {
+        alert("Please enter a valid number between 1 and 60!");
+    }
+}
+
 function handleRedoClick(element) {
+    element = $(element); // ensure it's a jQuery object
     const arrowImg = $(element).find("img");
     const elementBlock = $(element).parent();
     const inputField = elementBlock.find("input");
@@ -920,12 +954,17 @@ function handleRedoClick(element) {
             elementBlock.find("b").show();
         }
     } else if (arrowImg.hasClass("checkMark")) {
-        if (elementBlock.attr("id") !== "modalFishName") {
+        if (elementBlock.attr("id") !== "modalFishName" && element.attr("id") !== "redoWaterFilterTimerButton") {
             handleColorInput(elementBlock);
             arrowImg.attr("placeholder", "check mark");
         }
         else {
-            handleNameInput(elementBlock);
+            if (elementBlock.attr("id") === "modalFishName") {
+                handleNameInput(elementBlock);
+            }
+            else if (element.attr("id") === "redoWaterFilterTimerButton") {
+                handleWaterFilterTimerInput(elementBlock);
+            }
             arrowImg.attr("placeholder", "check mark");
         }
         arrowImg.removeClass("checkMark");
@@ -1573,6 +1612,11 @@ $("#redoNameButton").on("pointerdown", function () {
     handleRedoClick(element);
 });
 
+$("#redoWaterFilterTimerButton").on("pointerdown", function () {
+    const element = this;
+    handleRedoClick(element);
+});
+
 $("#tailFinColorInput").on("pointerdown", function () {
     const element = this;
     changeArrowsToCheckMark(element);
@@ -1604,6 +1648,11 @@ $("#patternColorInput").on("input", function () {
 });
 
 $("#fishNameInput").on("input", function () {
+    const element = this;
+    changeArrowsToCheckMark(element);
+});
+
+$("#waterFilterTimerInput").on("input", function () {
     const element = this;
     changeArrowsToCheckMark(element);
 });

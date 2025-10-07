@@ -6,7 +6,7 @@ class PlayerService {
         _moneyAmount = 100,
         _aquariumList = [],
         _backgroundMusicOn = true,
-        _autoSaveOn = true,
+        _autoSaveOn = true
     ) {
         this._name = _name;
         this._dateMade = _dateMade;

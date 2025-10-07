@@ -12,6 +12,7 @@ class AquariumService {
         this._hasWaterFilter = false; // New property to track water filter presence
         this._waterFilterX = 0; // X position of the water filter
         this._waterFilterMirrored = false; // Rotation state of the water filter
+        this._waterFilterTimer = 60000; // Timer that will keep track of how long until next clean
     }
 
     // --- Getters and setters ---
@@ -55,6 +56,9 @@ class AquariumService {
     get WaterFilterMirrored() { return this._waterFilterMirrored; }
     set WaterFilterMirrored(value) { this._waterFilterMirrored = value; }
 
+    get WaterFilterTimer() { return this._waterFilterTimer; }
+    set WaterFilterTimer(value) { this._waterFilterTimer = value; }
+
     // --- Serialization (for localStorage) ---
     toJSON() {
         return {
@@ -69,7 +73,8 @@ class AquariumService {
             FishList: this.FishList.map(f => f.toJSON()), // serialize fish data only
             HasWaterFilter: this.HasWaterFilter,
             WaterFilterX: this.WaterFilterX,
-            WaterFilterMirrored: this.WaterFilterMirrored
+            WaterFilterMirrored: this.WaterFilterMirrored,
+            WaterFilterTimer: this.WaterFilterTimer
         };
     }
 
@@ -86,6 +91,7 @@ class AquariumService {
         aquarium.HasWaterFilter = json.HasWaterFilter || false;
         aquarium.WaterFilterX = json.WaterFilterX || 0;
         aquarium.WaterFilterMirrored = json.WaterFilterMirrored || false;
+        aquarium.WaterFilterTimer = json.WaterFilterTimer || 1000;
         return aquarium;
     }
 }
