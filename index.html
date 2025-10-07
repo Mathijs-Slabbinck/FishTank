@@ -18,6 +18,7 @@
     <link href="assets/css/modals/mainShopModal.css" rel='stylesheet' type='text/css'>
     <link href="assets/css/modals/startMenuModal.css" rel='stylesheet' type='text/css'>
     <link href="assets/css/modals/waterFilterModal.css" rel='stylesheet' type='text/css'>
+    <link href="assets/css/modals/alertModal.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
@@ -202,7 +203,7 @@
                         </div>
                         <div id="starterFishButtonsContainer">
                             <div class="modalButtonBlock greenButton" id="starterFish1ButtonHolder">
-                                <p>choose</p>
+                                <p class="clickAble">choose</p>
                             </div>
                             <div class="modalButtonBlock greenButton" id="starterFish2ButtonHolder">
                                 <p class="clickAble">choose</p>
@@ -300,16 +301,18 @@
                                 <div class="subTitleContainer">
                                     <strong>Decorations Settings:</strong>
                                 </div>
-                                <div id="decorationBackgroundBlock">
-                                    <p>Change Background:</p>
-                                    <div class="modalButtonBlock greenButton" id="changeBackgroundButtonHolder">
-                                        <p class="clickAble">choose</p>
+                                <div id="decorationSettingsBlocks">
+                                    <div id="decorationBackgroundBlock">
+                                        <b>Change Background:</b>
+                                        <div class="modalButtonBlock greenButton" id="changeBackgroundButtonHolder">
+                                            <p class="clickAble">choose</p>
+                                        </div>
                                     </div>
-                                </div>
-                                <div id="decorationMusicBlock">
-                                    <p>Change Background Music:</p>
-                                    <div class="modalButtonBlock greenButton" id="changeMusicButtonHolder">
-                                        <p class="clickAble">choose</p>
+                                    <div id="decorationMusicBlock">
+                                        <b>Change Background Music:</b>
+                                        <div class="modalButtonBlock greenButton" id="changeMusicButtonHolder">
+                                            <p class="clickAble">choose</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -318,8 +321,11 @@
                                     <strong>Decorations:</strong>
                                 </div>
                                 <div class="shopRows">
+
                                     <div class="shopRowForItems">
                                         <div class="rowItem">
+                                            <img src="images/GUI/modals/info.png" alt="info icon"
+                                                class="shopItemInfo clickAble" id="waterFilterInfo">
                                             <figure>
                                                 <figcaption>Water Filter</figcaption>
                                                 <img src="images/GUI/modals/decorationShopItems/waterfilter.png"
@@ -330,7 +336,10 @@
                                                 <p class="clickAble">buy</p>
                                             </div>
                                         </div>
+
                                         <div class="rowItem">
+                                            <img src="images/GUI/modals/info.png" alt="info icon"
+                                                class="shopItemInfo clickAble">
                                             <figure>
                                                 <figcaption>Empty</figcaption>
                                                 <img src="images/GUI/modals/empty.png" alt="empty">
@@ -340,7 +349,10 @@
                                                 <p class="clickAble">buy</p>
                                             </div>
                                         </div>
+
                                         <div class="rowItem">
+                                            <img src="images/GUI/modals/info.png" alt="info icon"
+                                                class="shopItemInfo clickAble">
                                             <figure>
                                                 <figcaption>Empty</figcaption>
                                                 <img src="images/GUI/modals/empty.png" alt="empty">
@@ -351,8 +363,11 @@
                                             </div>
                                         </div>
                                     </div>
+
                                     <div class="shopRowForItems">
                                         <div class="rowItem">
+                                            <img src="images/GUI/modals/info.png" alt="info icon"
+                                                class="shopItemInfo clickAble">
                                             <figure>
                                                 <figcaption>Empty</figcaption>
                                                 <img src="images/GUI/modals/empty.png" alt="empty">
@@ -362,7 +377,10 @@
                                                 <p class="clickAble">buy</p>
                                             </div>
                                         </div>
+
                                         <div class="rowItem">
+                                            <img src="images/GUI/modals/info.png" alt="info icon"
+                                                class="shopItemInfo clickAble">
                                             <figure>
                                                 <figcaption>Empty</figcaption>
 
@@ -373,7 +391,10 @@
                                                 <p class="clickAble">buy</p>
                                             </div>
                                         </div>
+
                                         <div class="rowItem">
+                                            <img src="images/GUI/modals/info.png" alt="info icon"
+                                                class="shopItemInfo clickAble">
                                             <figure>
                                                 <figcaption>Empty</figcaption>
 
@@ -411,38 +432,54 @@
                             <div class="shopRows">
                                 <div class="shopRowForItems">
                                     <div class="rowItem">
+                                        <img src="images/GUI/modals/info.png" alt="info icon"
+                                            class="shopItemInfo clickAble" id="fishFoodInfo">
                                         <figure>
                                             <figcaption>Fish Food</figcaption>
                                             <img src="images/GUI/modals/itemsShopItems/fishFood.png" alt="Fish Food" />
                                         </figure>
                                         <p>2 coins</p>
-                                        <div class="modalButtonBlock greenButton" id="buyFishFoodButtonHolder">
-                                            <p class="clickAble">buy</p>
+                                        <div class="buttonGroupRow">
+                                            <div class="modalButtonBlock greenButton" id="buyFishFoodButtonHolder">
+                                                <p class="clickAble">buy</p>
+                                            </div>
+                                            <div class="modalButtonBlock yellowButton" id="buy10FishFoodButtonHolder">
+                                                <p class="clickAble">buy 10</p>
+                                            </div>
                                         </div>
                                     </div>
+
                                     <div class="rowItem">
+                                        <img src="images/GUI/modals/info.png" alt="info icon"
+                                            class="shopItemInfo clickAble">
                                         <figure>
                                             <figcaption>Empty</figcaption>
                                             <img src="images/GUI/modals/empty.png" alt="empty" />
                                         </figure>
-                                        <p>2 coins</p>
+                                        <p>0 coins</p>
                                         <div class="modalButtonBlock greenButton">
                                             <p class="clickAble">buy</p>
                                         </div>
                                     </div>
+
                                     <div class="rowItem">
+                                        <img src="images/GUI/modals/info.png" alt="info icon"
+                                            class="shopItemInfo clickAble">
                                         <figure>
                                             <figcaption>Empty</figcaption>
                                             <img src="images/GUI/modals/empty.png" alt="empty" />
                                         </figure>
-                                        <p>2 coins</p>
+                                        <p>0 coins</p>
                                         <div class="modalButtonBlock greenButton">
                                             <p class="clickAble">buy</p>
                                         </div>
                                     </div>
                                 </div>
+
                                 <div class="shopRowForItems">
                                     <div class="rowItem">
+                                        <img src="images/GUI/modals/info.png" alt="info icon"
+                                            class="shopItemInfo clickAble">
                                         <figure>
                                             <figcaption>Empty</figcaption>
                                             <img src="images/GUI/modals/empty.png" alt="empty" />
@@ -453,6 +490,8 @@
                                         </div>
                                     </div>
                                     <div class="rowItem">
+                                        <img src="images/GUI/modals/info.png" alt="info icon"
+                                            class="shopItemInfo clickAble">
                                         <figure>
                                             <figcaption>Empty</figcaption>
                                             <img src="images/GUI/modals/empty.png" alt="empty" />
@@ -463,6 +502,8 @@
                                         </div>
                                     </div>
                                     <div class="rowItem">
+                                        <img src="images/GUI/modals/info.png" alt="info icon"
+                                            class="shopItemInfo clickAble">
                                         <figure>
                                             <figcaption>Empty</figcaption>
                                             <img src="images/GUI/modals/empty.png" alt="empty" />
@@ -572,6 +613,25 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="alertModalBackground"></div>
+            <div class="modalContainer" id="alertModalContainer">
+                <div class="modal" id="alertModal">
+                    <div class="topMenuContainer">
+                        <img src="images/GUI/modals/grabModal.png" alt="grab modal" class="grabbable grabModal">
+                        <img src="images/GUI/modals/closeButton.png" alt="close button" id="closeAlertModal"
+                            class="clickAble closeModal">
+                    </div>
+
+                    <div class="modalContent">
+                        <div class="modalTitle">
+                            <strong>Alert</strong>
+                        </div>
+                    </div>
+                    <div id="alertMessageContainer">
                     </div>
                 </div>
             </div>

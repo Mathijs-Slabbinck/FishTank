@@ -3,37 +3,42 @@
     flex-direction: column;
     border: 3px solid black;
     align-items: center;
+}
+
+#decorationSettingsBlocks {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 97%;
+    border: 3px solid black;
+    margin: 3vh 0;
+}
+
+.decorationShopBlock {
+    margin: 3vh 0;
+    background-color: rgb(240, 240, 240);
+}
+
+#decorationSettingsBlocks:not(:first-of-type) {
     background-color: lightblue;
 }
 
-.decorationShopBlock>div:not(.subTitleContainer) {
+#decorationSettingsBlocks>div {
     display: flex;
     align-items: center;
     width: 97%;
     margin: 2vh 0;
-}
-
-.decorationShopBlock:first-of-type>div:not(.subTitleContainer) {
     border: 2px solid black;
     background-color: white;
-}
-
-.decorationShopBlock>div:not(.subTitleContainer) {
     justify-content: space-between;
 }
 
-.decorationShopBlock:first-of-type>div p {
-    margin: 2vh 0 2vh 7vw;
-}
-
-.decorationShopBlock:not(:first-of-type)>div p {
+#decorationSettingsBlocks b,
+#decorationSettingsBlocks p {
+    margin: 1vh 0 1vh 7vw;
     text-align: center;
 }
 
-.decorationShopBlock:first-of-type .modalButtonBlock {
+#decorationSettingsBlocks .modalButtonBlock {
     margin: 0 7vw 0 0;
-}
-
-.decorationShopBlock:not(:first-of-type) {
-    margin: 3vh 0;
 }

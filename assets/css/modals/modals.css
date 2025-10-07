@@ -95,13 +95,7 @@
     justify-content: center;
     align-items: center;
     z-index: 2;
-}
-
-.modalButtonBlock p {
-    padding: 1vh 3vw;
-    color: white;
-    border: 2px solid black;
-    border-radius: 25px;
+    min-width: 0;
 }
 
 .greenButton p {
@@ -110,6 +104,10 @@
 
 .redButton p {
     background-color: darkred;
+}
+
+.yellowButton p {
+    background-color: goldenrod;
 }
 
 .subTitleContainer strong {
@@ -148,13 +146,19 @@
     justify-content: center;
     flex-direction: column;
     align-items: center;
-    background-color: white;
+    background-color: lightblue;
     margin-bottom: 2vh;
 }
 
-.shopRows .shopRowForItems {
-    background-color: white;
-    border: none;
+.rowItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgb(245, 245, 245);
+    border: 2px solid black;
+    border-radius: 10px;
+    width: 30%;
+    position: relative;
 }
 
 .shopRows .shopRowForItems:first-of-type {
@@ -165,37 +169,49 @@
     margin-bottom: 2vh;
 }
 
-.shopRows .shopRowForItems .rowItem {
-    margin: 1vh 0;
-    background-color: rgb(245, 245, 245);
-    border: 2px solid black;
-    width: 30%;
-    height: 100%;
-}
-
-.shopRowForItems img {
+.shopRowForItems img:not(.shopItemInfo) {
     width: 10vw;
     height: auto;
     margin: 0 5vw;
-}
-
-.rowItem {
-    border: 2px solid black;
-    margin: 2vh 2vw;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: white;
-    background-color: rgb(245, 245, 245);
 }
 
 .rowItem figure figcaption {
     text-align: center;
     font-weight: bold;
     font-size: 1.2rem;
-    margin: 1vh 0;
+    margin: 2vh 0;
 }
 
-.rowItem .modalButtonBlock {
-    margin: 2vh 0;
+.buttonGroupRow {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 5px;
+}
+
+.buttonGroupRow .modalButtonBlock {
+    flex: 1;
+}
+
+.modalButtonBlock p {
+    white-space: nowrap;
+    margin: 0;
+    flex: 0.5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    overflow: hidden;
+    padding: 1vh 3vw;
+    color: white;
+    border: 2px solid black;
+    border-radius: 25px;
+}
+
+.shopItemInfo {
+    width: 2.5vw;
+    height: auto;
+    position: absolute;
+    top: 0.3vh;
+    right: 0.4vw;
 }
