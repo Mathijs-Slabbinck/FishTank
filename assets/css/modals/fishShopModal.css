@@ -1,17 +1,13 @@
-.fishShopFishRow {
+#fishShopItemsContainer {
+    background-color: lightblue;
+    border: 3px solid black;
     display: flex;
-    justify-content: space-around;
-    margin: 2vh 0;
-    text-align: center;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 3vh;
 }
 
-.fishBlock {
-    border: 2px solid black;
-    width: 100%;
-    height: 100%;
-}
-
-.fishBlock p {
+#fishShopItemsContainer .rowItem p {
     margin-top: 1vh;
     font-weight: bold;
 }
@@ -21,7 +17,7 @@
 }
 
 @media only screen and (max-width: 1000px) {
-    .fishBlock svg {
+    #fishShopItemsContainer .rowItem svg {
         padding-top: 2vh;
     }
 }

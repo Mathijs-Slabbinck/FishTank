@@ -176,7 +176,10 @@ function autoSaver() {
 
 function startAutoSaver() {
     if (autoSaveTimeoutId === null) {
-        autoSaver();
+        // Initial delay of 5 seconds before first auto-save to prevent it from starting at same time as water filter cleaning
+        setTimeout(() => {
+            autoSaver();
+        }, 5000);
     }
 }
 
@@ -433,6 +436,7 @@ async function pushStarterFishes() {
 
 async function pushShopFishes() {
     const allFishTypeValues = Object.values(AllFishTypes);
+    const newBlockWrapper = $('<div class="shopRows"></div>');
 
     for (let i = 0; i < allFishTypeValues.length; i += 3) {
 
@@ -440,13 +444,18 @@ async function pushShopFishes() {
         const fishType2 = allFishTypeValues[i + 1];
         const fishType3 = allFishTypeValues[i + 2];
 
-        const newBlock = $('<div class="fishShopFishRow"><div class="fishBlock" id="fishBlock' + i + '"><p id="fishTypeName' + i + '">' + fishType1 + '</p></div><div class="fishBlock" id="fishBlock' + (i + 1) + '"><p id="fishTypeName' + (i + 1) + '">' + fishType2 + '</p></div><div class="fishBlock" id="fishBlock' + (i + 2) + '"><p id="fishTypeName' + (i + 2) + '">' + fishType3 + '</p></div></div>');
+        const newBlock = $('<div class="shopRowForItems"><div class="rowItem" id="fishBlock' + i + '"><p id="fishTypeName' + i + '">' + fishType1 + '</p></div><div class="rowItem" id="fishBlock' + (i + 1) + '"><p id="fishTypeName' + (i + 1) + '">' + fishType2 + '</p></div><div class="rowItem" id="fishBlock' + (i + 2) + '"><p id="fishTypeName' + (i + 2) + '">' + fishType3 + '</p></div></div>');
 
         const buyButton1 = $('<div class="modalButtonBlock greenButton buyFishButton" id="modalBuyFish' + i + '"><p class="clickAble">buy</p></div>');
         const buyButton2 = $('<div class="modalButtonBlock greenButton buyFishButton" id="modalBuyFish' + (i + 1) + '"><p class="clickAble">buy</p></div>');
         const buyButton3 = $('<div class="modalButtonBlock greenButton buyFishButton" id="modalBuyFish' + (i + 2) + '"><p class="clickAble">buy</p></div>');
 
-        $('#fishShopItemsContainer').append(newBlock);
+        if (i === 0) {
+            const subTitleBlock = $('<div class="subTitleContainer"><strong>Fish for sale:</strong></div>');
+            $('#fishShopItemsContainer').append(subTitleBlock);
+        }
+
+        newBlockWrapper.append(newBlock);
 
         const fishTypeNameBlock1 = newBlock.find('#fishTypeName' + i);
         const fishTypeNameBlock2 = newBlock.find('#fishTypeName' + (i + 1));
@@ -485,6 +494,8 @@ async function pushShopFishes() {
         innerFishBlock2.append(CostPriceBlock2);
         innerFishBlock3.append(CostPriceBlock3);
     }
+
+    $('#fishShopItemsContainer').append(newBlockWrapper);
 }
 
 function createNewFish(fishType, useRandomColors, isStarterFish = false) {
@@ -559,19 +570,16 @@ function createNewFish(fishType, useRandomColors, isStarterFish = false) {
 function cleanWater() {
     console.log("Cleaning water on " + new Date().toLocaleString());
     if (player.AquariumList[0].HasWaterFilter && player.AquariumList[0].IsWaterFilterOn) {
-        const $poos = $("#fishTank .poo"); // all divs with class "poo" inside #myContainer
+        spawnWaterFilteredText();
 
-        player.MoneyAmount += $poos.length * 2; // earn 2 coins per poo
+        const $poos = $("#fishTank .poo"); // all divs with class "poo" inside #myContainer
+        player.MoneyAmount += $poos.length; // earn 1 coin per poo
         updateStats();
 
-        // Loop through each div
-        $poos.each(function () {
-            $(this).remove(); // remove the poo
-        });
+        $poos.remove(); // remove them from the DOM
 
-        setTimeout(() => {
-            cleanWater();
-        }, player.AquariumList[selectedAquariumIndex].WaterFilterTimer); // clean for as long as the timer is set
+
+        setTimeout(() => cleanWater(), player.AquariumList[selectedAquariumIndex].WaterFilterTimer); // schedule next cleaning
     }
 }
 
@@ -810,16 +818,27 @@ function updateStats() {
 function spawnGameSavedText(autoSave = true) {
     let savedText;
     if (autoSave) {
-        savedText = $('<div id="gameSavedText">💾 game auto-saved ✅</div>');
+        savedText = $('<div class="bottomLeftRiseText">💾 game auto-saved ✅</div>');
     }
     else {
-        savedText = $('<div id="gameSavedText">💾 game saved ✅</div>');
+        savedText = $('<div class="bottomLeftRiseText">💾 game saved ✅</div>');
     }
 
     $("#fishTank").append(savedText);
 
     setTimeout(() => {
         savedText.fadeOut(500, function () {
+            $(this).remove();
+        });
+    }, 4100);
+}
+
+function spawnWaterFilteredText() {
+    const waterFilteredText = $('<div class="bottomLeftRiseText">💧 water filtered ✅</div>');
+    $("#fishTank").append(waterFilteredText);
+
+    setTimeout(() => {
+        waterFilteredText.fadeOut(500, function () {
             $(this).remove();
         });
     }, 4100);
@@ -962,7 +981,7 @@ function handleRedoClick(element) {
         arrowImg.attr("placeholder", "redo button arrows");
         $(element).css("background-color", "darkgreen");
         inputField.val("");
-        inputField.attr("type", "hidden");
+        inputField.addClass("hidden");
 
         if (elementBlock.attr("id") === "modalFishName") {
             elementBlock.find("strong").show();
@@ -988,7 +1007,7 @@ function handleRedoClick(element) {
         arrowImg.attr("src", "images/GUI/modals/redoButtonArrows.png");
         arrowImg.addClass("rotateArrowsBack");
         $(element).css("background-color", "darkgreen");
-        inputField.attr("type", "hidden");
+        inputField.addClass("hidden");
         if (elementBlock.attr("id") === "modalFishName") {
             elementBlock.find("strong").show();
         }
@@ -999,7 +1018,7 @@ function handleRedoClick(element) {
         arrowImg.removeClass("rotateArrowsBack");
         arrowImg.addClass("rotateArrows");
         $(element).css("background-color", "yellowgreen");
-        elementBlock.find("input").attr("type", "text");
+        inputField.removeClass("hidden").focus();
         if (elementBlock.attr("id") === "modalFishName") {
             elementBlock.find("strong").hide();
         }
@@ -1011,7 +1030,7 @@ function handleRedoClick(element) {
 
 function handleColorInput(element) {
     const inputField = element.find("input");
-    let input = inputField.val().trim().replace(/[\u200B-\u200D\uFEFF]/g, "");
+    let input = inputField.val().trim().replace(/[\u200B-\u200D\uFEFF]/g, "").toUpperCase();
     if (isValidHex(input)) {
         if (!input.startsWith("#")) {
             input = "#" + input;
@@ -1296,7 +1315,14 @@ function getScaleX(element) {
 }
 
 function isAnyModalOpen() {
-    return $("#modalStarterFishContainer").is(":visible") || $("#modalShopContainer").is(":visible") || $('#fishInfoModal').is(":visible") || $("#modalFishShopContainer").is(":visible") || $("#modalSettingsContainer").is(":visible") || $("#modalSaveFilesContainer").is(":visible") || $("#modalLoadNewGameContainer").is(":visible");
+    let open = false;
+    $(".modalContainer").each(function () {
+        if ($(this).is(":visible")) {
+            open = true;
+            return false; // stop looping here || return false != function return false; this is to step out of each loop (Jquery break)
+        }
+    });
+    return open;
 }
 
 const normalizeAngle = angle => (((angle + 180) % 360 + 360) % 360) - 180;
@@ -1481,6 +1507,7 @@ $('#fishTank').on("pointerdown", '.spawned-fish', function () {
     $('#modalFishName strong').text(fish.Name);
     $('#modalStatFishType p').text(camelCaseToCapitalizedText(fish.FishTypeName));
     $('#modalTailFinColor b').text(`${fish.TailFinColor}`);
+
     if (isDarkColor(fish.TailFinColor)) {
         $("#modalTailFinColor strong").css("color", "white");
         $('#modalTailFinColor b').css('color', 'white');
@@ -1489,8 +1516,11 @@ $('#fishTank').on("pointerdown", '.spawned-fish', function () {
         $("#modalTailFinColor strong").css("color", "black");
         $('#modalTailFinColor b').css('color', 'black');
     }
+
     $('#modalTailFinColor').css("background-color", fish.TailFinColor);
+
     $('#modalBodyColor b').text(`${fish.BodyColor}`);
+
     if (isDarkColor(fish.BodyColor)) {
         $("#modalBodyColor strong").css("color", "white");
         $('#modalBodyColor b').css('color', 'white');
@@ -1499,11 +1529,13 @@ $('#fishTank').on("pointerdown", '.spawned-fish', function () {
         $("#modalBodyColor strong").css("color", "black");
         $('#modalBodyColor b').css('color', 'black');
     }
+
     $('#modalBodyColor').css("background-color", fish.BodyColor);
 
     if (fish.HasTopFin) {
         $('#modalTopFinColor b').text(`${fish.TopFinColor}`);
-        $('#redoTopFinColorButton').show();
+        $("#modalTopFinColor b").css("margin-left", "");
+        $('#redoTopFinColorButton').css("visibility", "visible");
         if (isDarkColor(fish.TopFinColor)) {
             $("#modalTopFinColor strong").css("color", "white");
             $('#modalTopFinColor b').css('color', 'white');
@@ -1516,15 +1548,17 @@ $('#fishTank').on("pointerdown", '.spawned-fish', function () {
     }
     else {
         $('#modalTopFinColor b').text(`No Top Fin`);
+        $("#modalTopFinColor b").css("margin-left", "2.5vw");
         $('#redoTopFinColorButton').css("visibility", "hidden");
-        $('#modalTopFinColor>span').css("justify-content", "left");
         $('#modalTopFinColor b').css("color", "black");
+        $('#modalTopFinColor strong').css("color", "black");
         $('#modalTopFinColor').css("background-color", "transparent");
     }
 
     if (fish.HasBottomFin) {
         $('#modalBottomFinColor b').text(`${fish.BottomFinColor}`);
-        $('#redoBottomFinColorButton').show();
+        $("#modalBottomFinColor b").css("margin-left", "");
+        $('#redoBottomFinColorButton').css("visibility", "visible");
         if (isDarkColor(fish.BottomFinColor)) {
             $("#modalBottomFinColor strong").css("color", "white");
             $('#modalBottomFinColor b').css('color', 'white');
@@ -1537,9 +1571,10 @@ $('#fishTank').on("pointerdown", '.spawned-fish', function () {
     }
     else {
         $('#modalBottomFinColor b').text(`No Bottom Fin`);
+        $("#modalBottomFinColor b").css("margin-left", "2.5vw");
         $('#redoBottomFinColorButton').css("visibility", "hidden");
-        $('#modalBottomFinColor>span').css("justify-content", "left");
         $('#modalBottomFinColor b').css("color", "black");
+        $('#modalBottomFinColor strong').css("color", "black");
         $('#modalBottomFinColor b').css("margin", "1vh 0 1vh 0");
         $('#modalBottomFinColor').css("background-color", "transparent");
     }
@@ -1553,7 +1588,8 @@ $('#fishTank').on("pointerdown", '.spawned-fish', function () {
 
     if (fish.HasSideFin) {
         $('#modalSideFinColor b').text(`${fish.SideFinColor}`);
-        $('#redoSideFinColorButton').show();
+        $("#modalSideFinColor b").css("margin-left", "");
+        $('#redoSideFinColorButton').css("visibility", "visible");
         if (isDarkColor(fish.SideFinColor)) {
             $("#modalSideFinColor strong").css("color", "white");
             $('#modalSideFinColor b').css('color', 'white');
@@ -1566,15 +1602,17 @@ $('#fishTank').on("pointerdown", '.spawned-fish', function () {
     }
     else {
         $('#modalSideFinColor b').text(`No Side Fin`);
+        $("#modalSideFinColor b").css("margin-left", "2.5vw");
         $('#redoSideFinColorButton').css("visibility", "hidden");
-        $('#modalSideFinColor>span').css("justify-content", "left");
         $('#modalSideFinColor b').css("color", "black");
+        $('#modalSideFinColor strong').css("color", "black");
         $('#modalSideFinColor').css("background-color", "transparent");
     }
 
     if (fish.HasPattern) {
         $('#modalPatternColor b').text(`${fish.PatternColor}`);
-        $('#redoPatternColorButton').show();
+        $("#modalPatternColor b").css("margin-left", "");
+        $('#redoPatternColorButton').css("visibility", "visible");
         if (isDarkColor(fish.PatternColor)) {
             $("#modalPatternColor strong").css("color", "white");
             $('#modalPatternColor b').css('color', 'white');
@@ -1587,9 +1625,10 @@ $('#fishTank').on("pointerdown", '.spawned-fish', function () {
     }
     else {
         $('#modalPatternColor b').text(`No Pattern`);
+        $("#modalPatternColor b").css("margin-left", "2.5vw");
         $('#redoPatternColorButton').css("visibility", "hidden");
-        $('#modalPatternColor>span').css("justify-content", "left");
         $('#modalPatternColor b').css("color", "black");
+        $('#modalPatternColor strong').css("color", "black");
         $('#modalPatternColor').css("background-color", "transparent");
     }
 });
@@ -2092,6 +2131,15 @@ $("#buyWaterFilterButtonHolder").on("pointerdown", function () {
     else {
         alert("You don't have enough money to buy a water filter!");
     }
+});
+
+$("#itemShopButtonHolder").on("pointerdown", function () {
+    closeShopModal();
+    $("#modalItemsShopContainer").css("display", "flex");
+});
+
+$("#closeItemsShopModal").on("pointerdown", function () {
+    $("#modalItemsShopContainer").hide();
 });
 
 $(document).on("keydown", function (e) {

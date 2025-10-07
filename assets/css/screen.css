@@ -187,11 +187,11 @@ b {
     left: 0;
 }
 
-#gameSavedText {
+.bottomLeftRiseText {
     position: absolute;
     bottom: 2vh;
     left: 3vw;
-    animation: gameSavedTextRise 4s ease-out forwards;
+    animation: bottomLeftTextRise 4s ease-out forwards;
 }
 
 #waterFilterContainer {
@@ -209,6 +209,10 @@ b {
 
 .mirrored {
     transform: scaleX(-1);
+}
+
+.hidden {
+    display: none;
 }
 
 @keyframes bubbleRise {
@@ -243,7 +247,7 @@ b {
     }
 }
 
-@keyframes gameSavedTextRise {
+@keyframes bottomLeftTextRise {
     0% {
         opacity: 1;
         transform: translateY(0);

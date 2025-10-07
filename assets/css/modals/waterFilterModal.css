@@ -15,16 +15,8 @@
     margin: 5vh;
 }
 
-.waterFilterBlock:nth-of-type(2) p {
-    margin-left: 4vw;
-}
-
-.waterFilterBlock:nth-of-type(2) p {
-    margin-right: 4.5vw;
-}
-
-.waterFilterBlock:nth-of-type(2) p #redoWaterFilterTimerButton {
-    margin-right: 6vw;
+.waterFilterBlock:nth-of-type(3) #redoWaterFilterTimerButton {
+    margin-right: 5vw;
 }
 
 #waterFilterTimerInput {

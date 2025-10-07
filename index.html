@@ -13,6 +13,7 @@
     <link href="assets/css/modals/fishInfoModal.css" rel='stylesheet' type='text/css'>
     <link href="assets/css/modals/starterFishMenuModal.css" rel='stylesheet' type='text/css'>
     <link href="assets/css/modals/decorationShopModal.css" rel='stylesheet' type="text/css">
+    <link href="assets/css/modals/itemsShop.css" rel='stylesheet' type='text/css'>
     <link href="assets/css/modals/fishShopModal.css" rel='stylesheet' type='text/css'>
     <link href="assets/css/modals/mainShopModal.css" rel='stylesheet' type='text/css'>
     <link href="assets/css/modals/startMenuModal.css" rel='stylesheet' type='text/css'>
@@ -44,7 +45,8 @@
 
                     <div class="modalContent">
                         <div id="modalFishName" class="modalTitle">
-                            <strong></strong><input type="hidden" id="fishNameInput" placeholder="name your fish...">
+                            <strong></strong><input class="hidden" type="text" id="fishNameInput"
+                                placeholder="name your fish...">
                             <span class="redoButton clickAble" id="redoNameButton">
                                 <img src="images/GUI/modals/redoButtonArrows.png" alt="redo button arrows">
                             </span>
@@ -55,7 +57,7 @@
                                 <div id="modalTailFinColor">
                                     <span class="colorInfoBlock">
                                         <strong>Tail Fin Color:</strong><b></b>
-                                        <input type="hidden" id="tailFinColorInput" placeholder="#FFFFFF"
+                                        <input class="hidden" type="text" id="tailFinColorInput" placeholder="#FFFFFF"
                                             class="colorInput">
                                         <span class="redoButton clickAble" id="redoTailFinColorButton">
                                             <img src="images/GUI/modals/redoButtonArrows.png" alt="redo button arrows">
@@ -66,7 +68,7 @@
                                 <div id="modalTopFinColor">
                                     <span class="colorInfoBlock">
                                         <strong>Top Fin Color:</strong><b></b>
-                                        <input type="hidden" id="topFinColorInput" placeholder="#FFFFFF"
+                                        <input class="hidden" type="text" id="topFinColorInput" placeholder="#FFFFFF"
                                             class="colorInput">
                                         <span class="redoButton clickAble" id="redoTopFinColorButton">
                                             <img src="images/GUI/modals/redoButtonArrows.png" alt="redo button arrows">
@@ -77,7 +79,7 @@
                                 <div id="modalBottomFinColor">
                                     <span class="colorInfoBlock">
                                         <strong>Bottom Fin Color:</strong><b></b>
-                                        <input type="hidden" id="bottomFinColorInput" placeholder="#FFFFFF"
+                                        <input class="hidden" type="text" id="bottomFinColorInput" placeholder="#FFFFFF"
                                             class="colorInput">
                                         <span class="redoButton clickAble" id="redoBottomFinColorButton">
                                             <img src="images/GUI/modals/redoButtonArrows.png" alt="redo button arrows">
@@ -92,7 +94,7 @@
                                 <div id="modalBodyColor">
                                     <span class="colorInfoBlock">
                                         <strong>Body Color:</strong><b></b>
-                                        <input type="hidden" id="bodyColorInput" placeholder="#FFFFFF"
+                                        <input class="hidden" type="text" id="bodyColorInput" placeholder="#FFFFFF"
                                             class="colorInput">
                                         <span class="redoButton clickAble" id="redoBodyColorButton">
                                             <img src="images/GUI/modals/redoButtonArrows.png" alt="redo button arrows">
@@ -103,7 +105,7 @@
                                 <div id="modalSideFinColor">
                                     <span class="colorInfoBlock">
                                         <strong>Side Fin Color:</strong><b></b>
-                                        <input type="hidden" id="sideFinColorInput" placeholder="#FFFFFF"
+                                        <input class="hidden" type="text" id="sideFinColorInput" placeholder="#FFFFFF"
                                             class="colorInput">
                                         <span class="redoButton clickAble" id="redoSideFinColorButton">
                                             <img src="images/GUI/modals/redoButtonArrows.png" alt="redo button arrows">
@@ -114,7 +116,7 @@
                                 <div id="modalPatternColor">
                                     <span class="colorInfoBlock">
                                         <strong>Pattern Color:</strong><b></b>
-                                        <input type="hidden" id="patternColorInput" placeholder="#FFFFFF"
+                                        <input class="hidden" type="text" id="patternColorInput" placeholder="#FFFFFF"
                                             class="colorInput">
                                         <span class="redoButton clickAble" id="redoPatternColorButton">
                                             <img src="images/GUI/modals/redoButtonArrows.png" alt="redo button arrows">
@@ -284,7 +286,7 @@
                         <div id="decorationShopItemsContainer">
                             <div class="decorationShopBlock">
                                 <div class="subTitleContainer">
-                                    <strong>Decoration Settings:</strong>
+                                    <strong>Decorations Settings:</strong>
                                 </div>
                                 <div id="decorationBackgroundBlock">
                                     <p>Change Background:</p>
@@ -303,32 +305,152 @@
                                 <div class="subTitleContainer">
                                     <strong>Decorations:</strong>
                                 </div>
-                                <div class="decorationRow">
-                                    <div class="decorationShopItem">
+                                <div class="shopRows">
+                                    <div class="shopRowForItems">
+                                        <div class="rowItem">
+                                            <figure>
+                                                <figcaption>Water Filter</figcaption>
+                                                <img src="images/GUI/modals/decorationShopItems/waterfilter.png"
+                                                    alt="water filter">
+                                            </figure>
+                                            <p>500 coins</p>
+                                            <div class="modalButtonBlock greenButton" id="buyWaterFilterButtonHolder">
+                                                <p class="clickAble">buy</p>
+                                            </div>
+                                        </div>
+                                        <div class="rowItem">
+                                            <figure>
+                                                <figcaption>Empty</figcaption>
+                                                <img src="images/GUI/modals/empty.png" alt="empty">
+                                            </figure>
+                                            <p>0 coins</p>
+                                            <div class="modalButtonBlock greenButton">
+                                                <p class="clickAble">buy</p>
+                                            </div>
+                                        </div>
+                                        <div class="rowItem">
+                                            <figure>
+                                                <figcaption>Empty</figcaption>
+                                                <img src="images/GUI/modals/empty.png" alt="empty">
+                                            </figure>
+                                            <p>0 coins</p>
+                                            <div class="modalButtonBlock greenButton">
+                                                <p class="clickAble">buy</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="shopRowForItems">
+                                        <div class="rowItem">
+                                            <figure>
+                                                <figcaption>Empty</figcaption>
+                                                <img src="images/GUI/modals/empty.png" alt="empty">
+                                            </figure>
+                                            <p>0 coins</p>
+                                            <div class="modalButtonBlock greenButton">
+                                                <p class="clickAble">buy</p>
+                                            </div>
+                                        </div>
+                                        <div class="rowItem">
+                                            <figure>
+                                                <figcaption>Empty</figcaption>
+
+                                                <img src="images/GUI/modals/empty.png" alt="empty">
+                                            </figure>
+                                            <p>0 coins</p>
+                                            <div class="modalButtonBlock greenButton">
+                                                <p class="clickAble">buy</p>
+                                            </div>
+                                        </div>
+                                        <div class="rowItem">
+                                            <figure>
+                                                <figcaption>Empty</figcaption>
+
+                                                <img src="images/GUI/modals/empty.png" alt="empty">
+                                            </figure>
+                                            <p>0 coins</p>
+                                            <div class="modalButtonBlock greenButton">
+                                                <p class="clickAble">buy</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modalContainer" id="modalItemsShopContainer">
+                <div class="modal" id="itemsShopModal">
+                    <img src="images/GUI/modals/closeButton.png" alt="close button" id="closeItemsShopModal"
+                        class="clickAble closeModal">
+
+                    <div class="modalContent">
+                        <div class="modalTitle">
+                            <strong>Item Shop</strong>
+                        </div>
+                        <div id="itemsShopItemsContainer">
+                            <div class="subTitleContainer">
+                                <strong>Items:</strong>
+                            </div>
+                            <div class="shopRows">
+                                <div class="shopRowForItems">
+                                    <div class="rowItem">
                                         <figure>
-                                            <img src="images/GUI/modals/decorationShopItems/waterfilter.png"
-                                                alt="water filter">
-                                            <figcaption>Water Filter</figcaption>
+                                            <figcaption>Fish Food</figcaption>
+                                            <img src="images/GUI/modals/itemsShopItems/fishFood.png" alt="Fish Food" />
                                         </figure>
-                                        <p>500 coins</p>
-                                        <div class="modalButtonBlock greenButton" id="buyWaterFilterButtonHolder">
+                                        <p>2 coins</p>
+                                        <div class="modalButtonBlock greenButton" id="buyFishFoodButtonHolder">
                                             <p class="clickAble">buy</p>
                                         </div>
                                     </div>
-                                    <div class="decorationShopItem">
+                                    <div class="rowItem">
                                         <figure>
-                                            <img src="images/GUI/modals/decorationShopItems/empty.png" alt="empty">
                                             <figcaption>Empty</figcaption>
+                                            <img src="images/GUI/modals/empty.png" alt="empty" />
+                                        </figure>
+                                        <p>2 coins</p>
+                                        <div class="modalButtonBlock greenButton">
+                                            <p class="clickAble">buy</p>
+                                        </div>
+                                    </div>
+                                    <div class="rowItem">
+                                        <figure>
+                                            <figcaption>Empty</figcaption>
+                                            <img src="images/GUI/modals/empty.png" alt="empty" />
+                                        </figure>
+                                        <p>2 coins</p>
+                                        <div class="modalButtonBlock greenButton">
+                                            <p class="clickAble">buy</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="shopRowForItems">
+                                    <div class="rowItem">
+                                        <figure>
+                                            <figcaption>Empty</figcaption>
+                                            <img src="images/GUI/modals/empty.png" alt="empty" />
+                                        </figure>
+                                        <p>0 coins</p>
+                                        <div class="modalButtonBlock greenButton" id="buyFishFoodButtonHolder">
+                                            <p class="clickAble">buy</p>
+                                        </div>
+                                    </div>
+                                    <div class="rowItem">
+                                        <figure>
+                                            <figcaption>Empty</figcaption>
+                                            <img src="images/GUI/modals/empty.png" alt="empty" />
                                         </figure>
                                         <p>0 coins</p>
                                         <div class="modalButtonBlock greenButton">
                                             <p class="clickAble">buy</p>
                                         </div>
                                     </div>
-                                    <div class="decorationShopItem">
+                                    <div class="rowItem">
                                         <figure>
-                                            <img src="images/GUI/modals/decorationShopItems/empty.png" alt="empty">
                                             <figcaption>Empty</figcaption>
+                                            <img src="images/GUI/modals/empty.png" alt="empty" />
                                         </figure>
                                         <p>0 coins</p>
                                         <div class="modalButtonBlock greenButton">
@@ -341,162 +463,161 @@
                     </div>
                 </div>
             </div>
-    </div>
 
+            <div class="modalContainer" id="modalWaterFilterContainer">
+                <div class="modal" id="waterFilterModal">
+                    <img src="images/GUI/modals/closeButton.png" alt="close button" id="waterFilterModalCloseButton"
+                        class="clickAble closeModal">
 
-
-    <div class="modalContainer" id="modalWaterFilterContainer">
-        <div class="modal" id="waterFilterModal">
-            <img src="images/GUI/modals/closeButton.png" alt="close button" id="waterFilterModalCloseButton"
-                class="clickAble closeModal">
-
-            <div class="modalContent">
-                <div class="modalTitle">
-                    <strong>Waterfilter</strong>
-                </div>
-                <div id="waterFilterContentContainer">
-                    <div class="waterFilterBlock">
-                        <p>Move Water Filter:</p>
-                        <div class="modalButtonBlock greenButton" id="moveWaterFilterButtonHolder">
-                            <p class="clickAble">move</p>
+                    <div class="modalContent">
+                        <div class="modalTitle">
+                            <strong>Waterfilter</strong>
                         </div>
-                    </div>
-                    <div class="waterFilterBlock">
-                        <p>Toggle Water Filter:</p>
-                        <div class="modalButtonBlock greenButton" id="waterFilterToggleButtonHolder">
-                            <p class="clickAble">ON</p>
-                        </div>
-                    </div>
-                    <div class="waterFilterBlock">
-                        <p>Will clean the water every <b id="waterFilterTimerDisplay"></b><input type="hidden"
-                                placeholder="1" id="waterFilterTimerInput"> minute(s)</p>
-                        <span class="redoButton clickAble" id="redoWaterFilterTimerButton">
-                            <img src="images/GUI/modals/redoButtonArrows.png" alt="redo button arrows">
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modalContainer" id="modalLoadNewGameContainer">
-        <div class="modal" id="loadNewGameModal">
-            <div class="modalContent">
-                <div class="modalTitle">
-                    <strong>Load or start a new game:</strong>
-                </div>
-                <div id="modalSaveFilesContainer">
-                    <!-- save files will be dynamically added here -->
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modalContainer" id="modalSettingsContainer">
-        <div class="modal" id="settingsModal">
-            <img src="images/GUI/modals/closeButton.png" alt="close button" id="closeSettingsModal"
-                class="clickAble closeModal">
-
-            <div class="modalContent">
-                <div class="modalTitle">
-                    <strong>Settings</strong>
-                </div>
-                <div id="settingsContentContainer">
-                    <div class="settingsOption">
-                        <img src="images/GUI/modals/volumeOn.png" alt="volume on" class="settingsMenuLeftIcon"
-                            id="musicOnIcon">
-                        <img src="images/GUI/modals/volumeOff.png" alt="volume off" class="settingsMenuLeftIcon"
-                            id="musicOffIcon">
-                        <div class="modalButtonBlock greenButton" id="modalMusicButtonHolder">
-                            <p class="clickAble">music: ON</p>
-                        </div>
-                    </div>
-
-                    <div class="settingsOption">
-                        <img src="images/GUI/modals/autoSave.png" alt="auto save" class="settingsMenuLeftIcon"
-                            id="autoSaveOnIcon">
-                        <div class="modalButtonBlock greenButton" id="modalAutoSaveButtonHolder">
-                            <p class="clickAble">auto-save: ON</p>
-                        </div>
-                        <p class="sideInfo">(every minute)</p>
-                    </div>
-
-                    <div class="settingsOption">
-                        <img src=" images/GUI/modals/saveButton.gif" alt="save button" class="settingsMenuLeftIcon"
-                            id="saveGameIcon">
-                        <div class="modalButtonBlock greenButton" id="saveGameButtonHolder">
-                            <p class="clickAble">save game</p>
+                        <div id="waterFilterContentContainer">
+                            <div class="waterFilterBlock">
+                                <p>Move Water Filter:</p>
+                                <div class="modalButtonBlock greenButton" id="moveWaterFilterButtonHolder">
+                                    <p class="clickAble">move</p>
+                                </div>
+                            </div>
+                            <div class="waterFilterBlock">
+                                <p>Toggle Water Filter:</p>
+                                <div class="modalButtonBlock greenButton" id="waterFilterToggleButtonHolder">
+                                    <p class="clickAble">ON</p>
+                                </div>
+                            </div>
+                            <div class="waterFilterBlock">
+                                <p>Will clean the water every <b id="waterFilterTimerDisplay"></b><input class="hidden"
+                                        type="text" placeholder="1" id="waterFilterTimerInput"> minute(s)</p>
+                                <span class="redoButton clickAble" id="redoWaterFilterTimerButton">
+                                    <img src="images/GUI/modals/redoButtonArrows.png" alt="redo button arrows">
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <div id="fishTank">
-        <div id="swimZone">
-        </div>
-        <div id="waterFilterContainer">
-            <img src="images/waterfilter.png" alt="water filter" id="waterFilter">
-        </div>
-        <div id="bottomMenuButtonContainer">
-            <img src="images/GUI/openBottomMenu.png" alt="open menu button" id="openBottomMenuImg" class="clickAble">
-            <img src="images/GUI/closeBottomMenu.png" alt="close menu button" id="closeBottomMenuImg" class="clickAble">
-        </div>
-    </div>
-    </main>
-    <footer>
-        <div id="bottomMenu">
-            <div id="bottomMenuSlot1" class="bottomMenuSlot">
-                <img src="images/fishFood.png" alt="fish food" id="fishFoodImg" class="clickAble">
-                <p id="fishFoodAmount"></p>
+            <div class="modalContainer" id="modalLoadNewGameContainer">
+                <div class="modal" id="loadNewGameModal">
+                    <div class="modalContent">
+                        <div class="modalTitle">
+                            <strong>Load or start a new game:</strong>
+                        </div>
+                        <div id="modalSaveFilesContainer">
+                            <!-- save files will be dynamically added here -->
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div id="bottomMenuSlot2" class="bottomMenuSlot">
-                <img src="images/dustpan.png" alt="dustpan" id="dustpanImg" class="clickAble">
-                <p>1 (max)</p>
+
+            <div class="modalContainer" id="modalSettingsContainer">
+                <div class="modal" id="settingsModal">
+                    <img src="images/GUI/modals/closeButton.png" alt="close button" id="closeSettingsModal"
+                        class="clickAble closeModal">
+
+                    <div class="modalContent">
+                        <div class="modalTitle">
+                            <strong>Settings</strong>
+                        </div>
+                        <div id="settingsContentContainer">
+                            <div class="settingsOption">
+                                <img src="images/GUI/modals/volumeOn.png" alt="volume on" class="settingsMenuLeftIcon"
+                                    id="musicOnIcon">
+                                <img src="images/GUI/modals/volumeOff.png" alt="volume off" class="settingsMenuLeftIcon"
+                                    id="musicOffIcon">
+                                <div class="modalButtonBlock greenButton" id="modalMusicButtonHolder">
+                                    <p class="clickAble">music: ON</p>
+                                </div>
+                            </div>
+
+                            <div class="settingsOption">
+                                <img src="images/GUI/modals/autoSave.png" alt="auto save" class="settingsMenuLeftIcon"
+                                    id="autoSaveOnIcon">
+                                <div class="modalButtonBlock greenButton" id="modalAutoSaveButtonHolder">
+                                    <p class="clickAble">auto-save: ON</p>
+                                </div>
+                                <p class="sideInfo">(every minute)</p>
+                            </div>
+
+                            <div class="settingsOption">
+                                <img src=" images/GUI/modals/saveButton.gif" alt="save button"
+                                    class="settingsMenuLeftIcon" id="saveGameIcon">
+                                <div class="modalButtonBlock greenButton" id="saveGameButtonHolder">
+                                    <p class="clickAble">save game</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div id="bottomMenuSlot3" class="bottomMenuSlot">
-                <img src="images/emptySlot.png" alt="empty slot">
-                <p>empty</p>
+
+            <div id="fishTank">
+                <div id="swimZone">
+                </div>
+                <div id="waterFilterContainer">
+                    <img src="images/waterfilter.png" alt="water filter" id="waterFilter">
+                </div>
+                <div id="bottomMenuButtonContainer">
+                    <img src="images/GUI/openBottomMenu.png" alt="open menu button" id="openBottomMenuImg"
+                        class="clickAble">
+                    <img src="images/GUI/closeBottomMenu.png" alt="close menu button" id="closeBottomMenuImg"
+                        class="clickAble">
+                </div>
             </div>
-            <div id="bottomMenuSlot4" class="bottomMenuSlot">
-                <img src="images/emptySlot.png" alt="empty slot">
-                <p>empty</p>
+        </main>
+        <footer>
+            <div id="bottomMenu">
+                <div id="bottomMenuSlot1" class="bottomMenuSlot">
+                    <img src="images/fishFood.png" alt="fish food" id="fishFoodImg" class="clickAble">
+                    <p id="fishFoodAmount"></p>
+                </div>
+                <div id="bottomMenuSlot2" class="bottomMenuSlot">
+                    <img src="images/dustpan.png" alt="dustpan" id="dustpanImg" class="clickAble">
+                    <p>1 (max)</p>
+                </div>
+                <div id="bottomMenuSlot3" class="bottomMenuSlot">
+                    <img src="images/emptySlot.png" alt="empty slot">
+                    <p>empty</p>
+                </div>
+                <div id="bottomMenuSlot4" class="bottomMenuSlot">
+                    <img src="images/emptySlot.png" alt="empty slot">
+                    <p>empty</p>
+                </div>
+                <div id="bottomMenuSlot5" class="bottomMenuSlot">
+                    <img src="images/emptySlot.png" alt="empty slot">
+                    <p>empty</p>
+                </div>
+                <div id="bottomMenuSlot6" class="bottomMenuSlot">
+                    <img src="images/emptySlot.png" alt="empty slot">
+                    <p>empty</p>
+                </div>
+                <div id="bottomMenuSlot7" class="bottomMenuSlot">
+                    <img src="images/emptySlot.png" alt="empty slot">
+                    <p>empty</p>
+                </div>
+                <div id="bottomMenuSlot8" class="bottomMenuSlot">
+                    <img src="images/emptySlot.png" alt="empty slot">
+                    <p>empty</p>
+                </div>
+                <div id="bottomMenuSlot9" class="bottomMenuSlot">
+                    <img src="images/emptySlot.png" alt="empty slot">
+                    <p>empty</p>
+                </div>
+                <div id="bottomMenuSlot10" class="bottomMenuSlot">
+                    <img src="images/emptySlot.png" alt="empty slot">
+                    <p>empty</p>
+                </div>
             </div>
-            <div id="bottomMenuSlot5" class="bottomMenuSlot">
-                <img src="images/emptySlot.png" alt="empty slot">
-                <p>empty</p>
-            </div>
-            <div id="bottomMenuSlot6" class="bottomMenuSlot">
-                <img src="images/emptySlot.png" alt="empty slot">
-                <p>empty</p>
-            </div>
-            <div id="bottomMenuSlot7" class="bottomMenuSlot">
-                <img src="images/emptySlot.png" alt="empty slot">
-                <p>empty</p>
-            </div>
-            <div id="bottomMenuSlot8" class="bottomMenuSlot">
-                <img src="images/emptySlot.png" alt="empty slot">
-                <p>empty</p>
-            </div>
-            <div id="bottomMenuSlot9" class="bottomMenuSlot">
-                <img src="images/emptySlot.png" alt="empty slot">
-                <p>empty</p>
-            </div>
-            <div id="bottomMenuSlot10" class="bottomMenuSlot">
-                <img src="images/emptySlot.png" alt="empty slot">
-                <p>empty</p>
-            </div>
-        </div>
-    </footer>
-    <script type="text/javascript" src="assets/js/jquery-3.2.1.min.js"></script>
-    <script type="text/javascript" src="assets/js/enums/fishSvgpaths.js"></script>
-    <script type="text/javascript" src="assets/js/enums/allFishTypes.js"></script>
-    <script type="text/javascript" src="assets/js/enums/fishParts.js"></script>
-    <script type="text/javascript" src="assets/js/classes/Fish.js"></script>
-    <script type="text/javascript" src="assets/js/classes/AquariumService.js"></script>
-    <script type="text/javascript" src="assets/js/classes/PlayerService.js"></script>
-    <script type="text/javascript" src="assets/js/script.js"></script>
+        </footer>
+        <script type="text/javascript" src="assets/js/jquery-3.2.1.min.js"></script>
+        <script type="text/javascript" src="assets/js/enums/fishSvgpaths.js"></script>
+        <script type="text/javascript" src="assets/js/enums/allFishTypes.js"></script>
+        <script type="text/javascript" src="assets/js/enums/fishParts.js"></script>
+        <script type="text/javascript" src="assets/js/classes/Fish.js"></script>
+        <script type="text/javascript" src="assets/js/classes/AquariumService.js"></script>
+        <script type="text/javascript" src="assets/js/classes/PlayerService.js"></script>
+        <script type="text/javascript" src="assets/js/script.js"></script>
 </body>
 
 </html>
