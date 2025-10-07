@@ -541,7 +541,7 @@ function createNewFish(fishType, useRandomColors, isStarterFish = false) {
 }
 
 function cleanWater() {
-    if (player.AquariumList[0].HasWaterFilter) {
+    if (player.AquariumList[0].HasWaterFilter && player.AquariumList[0].IsWaterFilterOn) {
         const $poos = $("#fishTank .poo"); // all divs with class "poo" inside #myContainer
 
         player.MoneyAmount += $poos.length * 2; // earn 2 coins per poo
@@ -1664,6 +1664,23 @@ $("#modalFishInfoSaveBlock").on("pointerdown", function () {
 
 $("#closeFishShopModal").on("pointerdown", function () {
     closeFishShopModal();
+});
+
+$("#waterFilterToggleButtonHolder").on("pointerdown", function () {
+    const $element = $(this);
+    if (player.AquariumList[selectedAquariumIndex].IsWaterFilterOn) {
+        $element.removeClass("greenButton");
+        $element.addClass("redButton");
+        $element.find("p").text("OFF");
+        player.AquariumList[selectedAquariumIndex].IsWaterFilterOn = false;
+    }
+    else {
+        $element.removeClass("redButton");
+        $element.addClass("greenButton");
+        $element.find("p").text("ON");
+        player.AquariumList[selectedAquariumIndex].IsWaterFilterOn = true;
+        cleanWater();
+    }
 });
 
 $(document).on("pointerdown", "#startNewGameButton", function () {

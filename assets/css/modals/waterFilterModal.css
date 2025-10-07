@@ -11,7 +11,7 @@
     font-size: 1.2em;
 }
 
-.waterFilterBlock:not(:first-of-type) p {
+.waterFilterBlock:not(:first-of-type):not(:nth-of-type(2)) p {
     margin: 5vh;
 }
 
@@ -19,7 +19,11 @@
     margin-left: 4vw;
 }
 
-#redoWaterFilterTimerButton {
+.waterFilterBlock:nth-of-type(2) p {
+    margin-right: 4.5vw;
+}
+
+.waterFilterBlock:nth-of-type(2) p #redoWaterFilterTimerButton {
     margin-right: 6vw;
 }
 
