@@ -13,7 +13,6 @@
     <link href="assets/css/modals/fishInfoModal.css" rel='stylesheet' type='text/css'>
     <link href="assets/css/modals/starterFishMenuModal.css" rel='stylesheet' type='text/css'>
     <link href="assets/css/modals/decorationShopModal.css" rel='stylesheet' type="text/css">
-    <link href="assets/css/modals/itemsShop.css" rel='stylesheet' type='text/css'>
     <link href="assets/css/modals/fishShopModal.css" rel='stylesheet' type='text/css'>
     <link href="assets/css/modals/mainShopModal.css" rel='stylesheet' type='text/css'>
     <link href="assets/css/modals/startMenuModal.css" rel='stylesheet' type='text/css'>
@@ -49,8 +48,8 @@
 
                     <div class="modalContent">
                         <div id="modalFishName" class="modalTitle">
-                            <strong></strong><input class="hidden" type="text" id="fishNameInput"
-                                placeholder="name your fish...">
+                            <strong></strong>
+                            <input class="hidden" type="text" id="fishNameInput" placeholder="name your fish...">
                             <span class="redoButton clickAble" id="redoNameButton">
                                 <img src="images/GUI/modals/redoButtonArrows.png" alt="redo button arrows">
                             </span>
@@ -61,8 +60,8 @@
                                 <div id="modalTailFinColor">
                                     <span class="colorInfoBlock">
                                         <strong>Tail Fin Color:</strong><b></b>
-                                        <input class="hidden" type="text" id="tailFinColorInput" placeholder="#FFFFFF"
-                                            class="colorInput">
+                                        <input class="hidden colorInput fishInfoColorInput" type="color"
+                                            id="tailFinColorInput">
                                         <span class="redoButton clickAble" id="redoTailFinColorButton">
                                             <img src="images/GUI/modals/redoButtonArrows.png" alt="redo button arrows">
                                         </span>
@@ -72,8 +71,8 @@
                                 <div id="modalTopFinColor">
                                     <span class="colorInfoBlock">
                                         <strong>Top Fin Color:</strong><b></b>
-                                        <input class="hidden" type="text" id="topFinColorInput" placeholder="#FFFFFF"
-                                            class="colorInput">
+                                        <input class="hidden colorInput fishInfoColorInput" type="color"
+                                            id="topFinColorInput">
                                         <span class="redoButton clickAble" id="redoTopFinColorButton">
                                             <img src="images/GUI/modals/redoButtonArrows.png" alt="redo button arrows">
                                         </span>
@@ -83,8 +82,8 @@
                                 <div id="modalBottomFinColor">
                                     <span class="colorInfoBlock">
                                         <strong>Bottom Fin Color:</strong><b></b>
-                                        <input class="hidden" type="text" id="bottomFinColorInput" placeholder="#FFFFFF"
-                                            class="colorInput">
+                                        <input class="hidden colorInput fishInfoColorInput" type="color"
+                                            id="bottomFinColorInput">
                                         <span class="redoButton clickAble" id="redoBottomFinColorButton">
                                             <img src="images/GUI/modals/redoButtonArrows.png" alt="redo button arrows">
                                         </span>
@@ -98,8 +97,8 @@
                                 <div id="modalBodyColor">
                                     <span class="colorInfoBlock">
                                         <strong>Body Color:</strong><b></b>
-                                        <input class="hidden" type="text" id="bodyColorInput" placeholder="#FFFFFF"
-                                            class="colorInput">
+                                        <input class="hidden colorInput fishInfoColorInput" type="color"
+                                            id="bodyColorInput">
                                         <span class="redoButton clickAble" id="redoBodyColorButton">
                                             <img src="images/GUI/modals/redoButtonArrows.png" alt="redo button arrows">
                                         </span>
@@ -109,8 +108,8 @@
                                 <div id="modalSideFinColor">
                                     <span class="colorInfoBlock">
                                         <strong>Side Fin Color:</strong><b></b>
-                                        <input class="hidden" type="text" id="sideFinColorInput" placeholder="#FFFFFF"
-                                            class="colorInput">
+                                        <input class="hidden colorInput fishInfoColorInput" type="color"
+                                            id="sideFinColorInput">
                                         <span class="redoButton clickAble" id="redoSideFinColorButton">
                                             <img src="images/GUI/modals/redoButtonArrows.png" alt="redo button arrows">
                                         </span>
@@ -120,8 +119,8 @@
                                 <div id="modalPatternColor">
                                     <span class="colorInfoBlock">
                                         <strong>Pattern Color:</strong><b></b>
-                                        <input class="hidden" type="text" id="patternColorInput" placeholder="#FFFFFF"
-                                            class="colorInput">
+                                        <input class="hidden colorInput fishInfoColorInput" type="color"
+                                            id="patternColorInput">
                                         <span class="redoButton clickAble" id="redoPatternColorButton">
                                             <img src="images/GUI/modals/redoButtonArrows.png" alt="redo button arrows">
                                         </span>
@@ -301,14 +300,14 @@
                                 <div class="subTitleContainer">
                                     <strong>Decorations Settings:</strong>
                                 </div>
-                                <div id="decorationSettingsBlocks">
-                                    <div id="decorationBackgroundBlock">
+                                <div class="rowType2">
+                                    <div>
                                         <b>Change Background:</b>
                                         <div class="modalButtonBlock greenButton" id="changeBackgroundButtonHolder">
                                             <p class="clickAble">choose</p>
                                         </div>
                                     </div>
-                                    <div id="decorationMusicBlock">
+                                    <div>
                                         <b>Change Background Music:</b>
                                         <div class="modalButtonBlock greenButton" id="changeMusicButtonHolder">
                                             <p class="clickAble">choose</p>
@@ -617,6 +616,98 @@
                 </div>
             </div>
 
+            <div class="modalContainer" id="modalChangeBackgroundContainer">
+                <div class="modal" id="changeBackgroundModal">
+                    <div class="topMenuContainer">
+                        <img src="images/GUI/modals/grabModal.png" alt="grab modal" class="grabbable grabModal">
+                        <img src="images/GUI/modals/closeButton.png" alt="close button" id="closeChangeBackgroundModal"
+                            class="clickAble closeModal">
+                    </div>
+
+                    <div class="modalContent">
+                        <div class="modalTitle">
+                            <strong>Change Background</strong>
+                        </div>
+                        <div class="rowType2">
+                            <div id="previewBackgroundLightblue">
+                                <b>Light Blue (#ADD8E6) [default]</b>
+                                <p class="rowItempriceInfo">FREE</p>
+                                <div class="modalButtonBlock greenButton" id="backgroundLightblueButtonHolder">
+                                    <p class="clickAble">choose</p>
+                                </div>
+                            </div>
+                            <div id="previewBackgroundBlack">
+                                <b>Black (#000000)</b>
+                                <p class="rowItempriceInfo">5 coins</p>
+                                <div class="modalButtonBlock greenButton" id="backgroundBlackButtonHolder">
+                                    <p class="clickAble">choose</p>
+                                </div>
+                            </div>
+                            <div id="previewBackgroundWhite">
+                                <b>White (#FFFFFF)</b>
+                                <p class="rowItempriceInfo">5 coins</p>
+                                <div class="modalButtonBlock greenButton" id="backgroundWhiteButtonHolder">
+                                    <p class="clickAble">choose</p>
+                                </div>
+                            </div>
+                            <div id="previewBackgroundDarkblue">
+                                <b>Dark Blue (#00008B)</b>
+                                <p class="rowItempriceInfo">10 coins</p>
+                                <div class="modalButtonBlock greenButton" id="backgroundDarkblueButtonHolder">
+                                    <p class="clickAble">choose</p>
+                                </div>
+                            </div>
+                            <div id="previewBackgroundAquamarine">
+                                <b>Aquamarine (#7FFFD4)</b>
+                                <p class="rowItempriceInfo">10 coins</p>
+                                <div class="modalButtonBlock greenButton" id="backgroundAquamarineButtonHolder">
+                                    <p class="clickAble">choose</p>
+                                </div>
+                            </div>
+                            <div id="previewBackgroundSeagreen">
+                                <b>Sea Green (#2E8B57)</b>
+                                <p class="rowItempriceInfo">10 coins</p>
+                                <div class="modalButtonBlock greenButton" id="backgroundSeagreenButtonHolder">
+                                    <p class="clickAble">choose</p>
+                                </div>
+                            </div>
+                            <div id="previewBackgroundCoral">
+                                <b>Coral (#FF7F50)</b>
+                                <p class="rowItempriceInfo">10 coins</p>
+                                <div class="modalButtonBlock greenButton" id="backgroundCoralButtonHolder">
+                                    <p class="clickAble">choose</p>
+                                </div>
+                            </div>
+                            <div id="previewBackgroundDarkred">
+                                <b>Dark Red (#8B0000)</b>
+                                <p class="rowItempriceInfo">10 coins</p>
+                                <div class="modalButtonBlock greenButton" id="backgroundDarkredButtonHolder">
+                                    <p class="clickAble">choose</p>
+                                </div>
+                            </div>
+                            <div id="previewBackgroundGoldenrod">
+                                <b>Goldenrod (#DAA520)</b>
+                                <p class="rowItempriceInfo">10 coins</p>
+                                <div class="modalButtonBlock greenButton" id="backgroundGoldenrodButtonHolder">
+                                    <p class="clickAble">choose</p>
+                                </div>
+                            </div>
+                            <div id="previewCurrentBackground">
+                                <b>Custom Color:</b>
+                                <div class="colorInputBlock">
+                                    <input type="color" id="customBackgroundColorInput" value="#ffffff"
+                                        class="colorInput">
+                                </div>
+                                <p class="rowItempriceInfo">25 coins</p>
+                                <div class="modalButtonBlock greenButton" id="backgroundCustomColorButtonHolder">
+                                    <p class="clickAble">choose</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div id="alertModalBackground"></div>
             <div class="modalContainer" id="alertModalContainer">
                 <div class="modal" id="alertModal">
@@ -695,9 +786,7 @@
             </div>
         </footer>
         <script type="text/javascript" src="assets/js/jquery-3.2.1.min.js"></script>
-        <script type="text/javascript" src="assets/js/enums/fishSvgpaths.js"></script>
-        <script type="text/javascript" src="assets/js/enums/allFishTypes.js"></script>
-        <script type="text/javascript" src="assets/js/enums/fishParts.js"></script>
+        <script type="text/javascript" src="assets/js/enums.js"></script>
         <script type="text/javascript" src="assets/js/classes/Fish.js"></script>
         <script type="text/javascript" src="assets/js/classes/AquariumService.js"></script>
         <script type="text/javascript" src="assets/js/classes/PlayerService.js"></script>

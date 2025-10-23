@@ -9,6 +9,7 @@ class AquariumService {
         this._waterColor = 'blue';
         this._hasFood = false;
         this._fishList = [];
+        this._ownedBackgrounds = [];
         this._hasWaterFilter = false; // New property to track water filter presence
         this._waterFilterX = 0; // X position of the water filter
         this._waterFilterMirrored = false; // Rotation state of the water filter

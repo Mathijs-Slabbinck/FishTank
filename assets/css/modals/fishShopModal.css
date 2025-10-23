@@ -7,9 +7,8 @@
     margin-bottom: 3vh;
 }
 
-#fishShopItemsContainer .rowItem p {
+#fishShopItemsContainer .rowItem b {
     margin-top: 1vh;
-    font-weight: bold;
 }
 
 .costPrice {

@@ -29,6 +29,7 @@
 #modalFishImgContainer {
     width: 13%;
     justify-content: center;
+    background-color: var(--background-color);
 }
 
 .colorInfo div {
@@ -130,13 +131,6 @@ p {
     right: 3vw;
     top: 50%;
     transform: translateY(-50%);
-}
-
-.colorInfoBlock input,
-#fishNameInput {
-    height: 3vh;
-    max-width: 35%;
-    text-align: center;
 }
 
 @media only screen and (max-width: 768px) {

@@ -118,7 +118,6 @@ let selectedSaveFileIndex = 0;
 let autoSaveTimeoutId = null;
 let saveFiles = [];
 var player;
-const backgroundMusic = new Audio('assets/media/audio/backgroundMusic1.mp3');
 let musicToggleCounterViaImg = 0;
 let musicToggleCounterViaButton = 0;
 let movingWaterFilter = false;
@@ -126,8 +125,13 @@ let clicksAfterMovingWaterFilter = 0;
 let isHoldingClick = false;
 let selectedModaloffsetX = 0;
 let selectedModaloffsetY = 0;
-const isOnMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 let $grabbedModal = null;
+let backgroundMusic = new Audio('assets/media/audio/backgroundMusic1.mp3');
+let backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--background-color').trim();
+
+const root = document.documentElement;
+let backgroundColor2 = getComputedStyle(document.documentElement).getPropertyValue('--background-color').trim();
+const isOnMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
 $(document).ready(function () {
     if (window.innerWidth < 600) {
@@ -537,7 +541,7 @@ async function pushShopFishes() {
         const fishType2 = allFishTypeValues[i + 1];
         const fishType3 = allFishTypeValues[i + 2];
 
-        const newBlock = $('<div class="shopRowForItems"><div class="rowItem" id="fishBlock' + i + '"><p id="fishTypeName' + i + '">' + fishType1 + '</p></div><div class="rowItem" id="fishBlock' + (i + 1) + '"><p id="fishTypeName' + (i + 1) + '">' + fishType2 + '</p></div><div class="rowItem" id="fishBlock' + (i + 2) + '"><p id="fishTypeName' + (i + 2) + '">' + fishType3 + '</p></div></div>');
+        const newBlock = $('<div class="shopRowForItems"><div class="rowItem" id="fishBlock' + i + '"><b id="fishTypeName' + i + '">' + fishType1 + '</b></div><div class="rowItem" id="fishBlock' + (i + 1) + '"><b id="fishTypeName' + (i + 1) + '">' + fishType2 + '</b></div><div class="rowItem" id="fishBlock' + (i + 2) + '"><b id="fishTypeName' + (i + 2) + '">' + fishType3 + '</b></div></div>');
 
         const buyButton1 = $('<div class="modalButtonBlock greenButton buyFishButton" id="modalBuyFish' + i + '"><p class="clickAble">buy</p></div>');
         const buyButton2 = $('<div class="modalButtonBlock greenButton buyFishButton" id="modalBuyFish' + (i + 1) + '"><p class="clickAble">buy</p></div>');
@@ -1124,58 +1128,50 @@ function handleRedoClick(element) {
 
 function handleColorInput(element) {
     const inputField = element.find("input");
-    let input = inputField.val().trim().replace(/[\u200B-\u200D\uFEFF]/g, "").toUpperCase();
-    if (isValidHex(input)) {
-        if (!input.startsWith("#")) {
-            input = "#" + input;
+    let input = inputField.val().toUpperCase();
+    if (clickedFish) {
+        switch (element.parent().attr("id")) {
+            case "modalBodyColor":
+                $("#modalFishImgContainer svg").css('--body-color', input);
+                break;
+            case "modalTailFinColor":
+                $("#modalFishImgContainer svg").css('--tail-color', input);
+                break;
+            case "modalTopFinColor":
+                if (clickedFish.HasTopFin) $("#modalFishImgContainer svg").css('--top-fin-color', input);
+                break;
+            case "modalBottomFinColor":
+                if (clickedFish.HasBottomFin) $("#modalFishImgContainer svg").css('--bottom-fin-color', input);
+                break;
+            case "modalSideFinColor":
+                if (clickedFish.HasSideFin) $("#modalFishImgContainer svg").css('--side-fin-color', input);
+                break;
+            case "modalPatternColor":
+                if (clickedFish.HasPattern) $("#modalFishImgContainer svg").css('--pattern-color', input);
+                break;
+            default:
+                throw new Error("Unknown color part for fish!");
         }
-        console.log(clickedFish);
-        if (clickedFish) {
-            switch (element.parent().attr("id")) {
-                case "modalBodyColor":
-                    $("#modalFishImgContainer svg").css('--body-color', input);
-                    break;
-                case "modalTailFinColor":
-                    $("#modalFishImgContainer svg").css('--tail-color', input);
-                    break;
-                case "modalTopFinColor":
-                    if (clickedFish.HasTopFin) $("#modalFishImgContainer svg").css('--top-fin-color', input);
-                    break;
-                case "modalBottomFinColor":
-                    if (clickedFish.HasBottomFin) $("#modalFishImgContainer svg").css('--bottom-fin-color', input);
-                    break;
-                case "modalSideFinColor":
-                    if (clickedFish.HasSideFin) $("#modalFishImgContainer svg").css('--side-fin-color', input);
-                    break;
-                case "modalPatternColor":
-                    if (clickedFish.HasPattern) $("#modalFishImgContainer svg").css('--pattern-color', input);
-                    break;
-                default:
-                    throw new Error("Unknown color part for fish!");
-            }
-            element.parent().css("background-color", input);
-            element.parent().find("b").text(input);
-            if (isDarkColor(input)) {
-                element.parent().find("b").css("color", "white");
-                element.parent().find("strong").css("color", "white");
-            } else {
-                element.parent().find("b").css("color", "black");
-                element.parent().find("strong").css("color", "black");
-            }
-        }
-        else {
-            // this should never happen, it's an extra failsafe
-            throw new Error("No fish selected for color change!");
+        element.parent().css("background-color", input);
+        element.parent().find("b").text(input);
+        if (isDarkColor(input)) {
+            element.parent().find("b").css("color", "white");
+            element.parent().find("strong").css("color", "white");
+        } else {
+            element.parent().find("b").css("color", "black");
+            element.parent().find("strong").css("color", "black");
         }
     }
     else {
-        alert("Please enter a valid hex color code (e.g., #ff8800).");
+        // this should never happen, it's an extra failsafe
+        throw new Error("No fish selected for color change!");
     }
 }
 
 function handleNameInput(element) {
     const inputField = element.find("input");
     const input = inputField.val().trim();
+    checkIfStringIsValid(input, "fish name");
     if (input !== "") {
         if (input.length > 35) {
             alert("Name cannot be longer than 35 characters!");
@@ -1303,94 +1299,157 @@ function renumberSaveFileBlocks() {
 
 //#region BASIC HELPER FUNCTIONS
 
+// converts 'camelCase' to 'Capitalized Words'
+function checkIfStringIsValid(str, name = 'string') {
+    if (str === null || str === undefined) throw new Error(`Passed param '${name}' cannot be null or undefined`);
+    if (typeof str !== 'string') throw new Error(`Passed param '${name}' must be a string`);
+    if (str.trim() === '') console.warn(`Passed param '${name}' is an empty string`);
+}
+
+// converts 'camelCase' to 'Capitalized Words'
 function camelCaseToCapitalizedText(str) {
-    if (!str) return "";
-    return str
-        .replace(/([a-z])([A-Z])/g, "$1 $2") // insert space before capital letters
-        .replace(/^./, match => match.toUpperCase()); // capitalize first letter
+    checkIfStringIsValid(str, 'str');
+    return str.replace(/([a-z])([A-Z])/g, "$1 $2").replace(/^./, match => match.toUpperCase());
 }
 
-function getRandomColor() {
-    return '#' + Math.floor(Math.random() * 0xFFFFFF)
-        .toString(16)
-        .padStart(6, '0');
+/*
+// returns a random color in the specified format (HEX, RGB, or RGBA)
+// type = 'HEX' (default), 'RGB', or 'RGBA' */
+function getRandomColor(type = 'HEX') {
+    const r = getRandomNumber(0, 255);
+    const g = getRandomNumber(0, 255);
+    const b = getRandomNumber(0, 255);
+    switch (type.toUpperCase()) {
+        case 'HEX':
+            return
+        case 'RGB':
+            return `rgb(${r}, ${g}, ${b})`;
+        case 'RGBA':
+            const a = Math.random().toFixed(2);
+            return `rgba(${r}, ${g}, ${b}, ${a})`;
+        default:
+            throw new Error(`Unknown color type: ${type}. Use 'HEX', 'RGB', or 'RGBA'.`);
+    }
 }
 
-function getRandomNumber(min, max) {
-    // Returns a random integer between min and max, inclusive
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+/*
+// Helper function to parse and validate number parameters
+// Throws an error if the parameter is not a valid number
+// If the parameter is a numeric string, it converts it to a number and logs a warning
+// 'name' is used in the error/warning messages to identify the parameter */
+function parseNumber(number, integerOnly = false, name = 'input') {
+    if (typeof number === 'string') number = number.trim();
+    const num = Number(number);
+    if (typeof number === 'string' && !isNaN(num)) console.warn(`${name} is a numeric string. Converting to number.`);
+    if (isNaN(num)) throw new Error(`${name} must be a valid number.`);
+    if (integerOnly) return Math.round(num);
+    return num;
 }
 
+// returns a random integer between (and including) 2 passed numbers with a certain amount of decimals (default 0)
+function getRandomNumber(min, max, decimals = 0) {
+    min = parseNumber(min, 'Min');
+    max = parseNumber(max, 'Max');
+    if (min > max) throw new Error("Min cannot be greater than max in getRandomNumber function!");
+    if (!Number.isInteger(decimals) || decimals < 0) throw new Error("Decimals param must be a positive integer in getRandomNumber function!");
+    const factor = 10 ** decimals;
+    return Math.round((Math.random() * (max - min) + min) * factor) / factor;
+}
+
+// checks if a value is between (and including) min and max
 function isBetween(value, min, max) {
+    value = parseNumber(value, 'Value');
+    min = parseNumber(min, 'Min');
+    max = parseNumber(max, 'Max');
     if (min > max) throw new Error("Min cannot be greater than max in isBetween function!");
     return value >= min && value <= max;
 }
 
+// clamps a value to be between min and max
 function clamp(value, min, max) {
+    value = parseNumber(value, 'Value');
+    min = parseNumber(min, 'Min');
+    max = parseNumber(max, 'Max');
     if (min > max) throw new Error("Min cannot be greater than max in clamp function!");
     return Math.min(Math.max(value, min), max);
 }
 
+// returns the number with the opposite sign
 function swapSign(num) {
     return -num;
 }
 
-function isValidHex(hex) {
-    // Optional #, then either 3 or 6 hex digits
-    const hexRegex = /^#?(?:[A-Fa-f0-9]{3}|[A-Fa-f0-9]{6})$/;
-    return hexRegex.test(hex);
+// Checks if the passed string is a valid color in HEX or RGB(A) format
+function isValidColor(color) {
+    checkIfStringIsValid(color, 'color');
+    return CSS.supports('color', color);
 }
 
-function isDarkColor(color) {
-    if (!color || color.toLowerCase() === "transparent") {
-        return false; // treat transparent as light
+/*
+// Determines if a color is "dark" based on its brightness
+// Accepts colors in HEX (#RRGGBB or #RGB) or RGB/RGBA (rgb(r,g,b) or rgba(r,g,b,a)) formats
+// brightnessThreshold (optional): number between 0 and 255 to define the cutoff for "dark" (default is 100) */
+function isDarkColor(color, brightnessThreshold = 100) {
+    brightnessThreshold = parseNumber(brightnessThreshold, 'brightnessThreshold');
+    if (brightnessThreshold < 0 || brightnessThreshold > 255) {
+        throw new Error("Brightness threshold must be between 0 and 255.");
+    }
+    if (!color) {
+        throw new Error("Color cannot be null or empty in isDarkColor function!");
+    }
+    color = color.trim();
+    if (color.toLowerCase() === "transparent") {
+        console.warn("Color is transparent or empty, treating as light color.");
+        return false;
+    }
+    if (!isValidColor(color)) {
+        throw new Error("Invalid color. Please use valid, css supported color format.");
     }
 
-    // We'll normalize the color into an RGB array: [red, green, blue]
-    let rgb = color;
+    let rgb, alpha = 1;
 
-    // Case 1: The color is in HEX format like "#ff8800"
-    if (rgb.startsWith("#")) {
-        // Remove the "#" and parse the hex string into a number
-        let bigint = parseInt(rgb.slice(1), 16);
-
-        // Extract red, green, and blue using bitwise operations
-        // Example: for #ff8800 (hex ff8800 = decimal 16744192)
-        // r = ff (255), g = 88 (136), b = 00 (0)
-        let r = (bigint >> 16) & 255; // shift 16 bits to the right → red
-        let g = (bigint >> 8) & 255;  // shift 8 bits → green
-        let b = bigint & 255;         // lowest 8 bits → blue
-
-        // Replace rgb variable with array of values
+    // HEX format
+    if (color.startsWith("#")) {
+        const bigint = parseInt(color.slice(1), 16);
+        const r = (bigint >> 16) & 255;
+        const g = (bigint >> 8) & 255;
+        const b = bigint & 255;
         rgb = [r, g, b];
-
-        // Case 2: The color is already in "rgb(...)" or "rgba(...)" format
-    } else if (rgb.startsWith("rgb")) {
-        // Grab all the numbers inside the string (ignores "rgb", commas, parentheses)
-        // Example: "rgb(255, 136, 0)" → [255, 136, 0]
-        rgb = rgb.match(/\d+/g).map(Number).slice(0, 3);
-        // slice(0, 3) ensures we drop alpha if it's "rgba(...)"
-    } else {
-        throw new Error("Unrecognized color format: " + color);
+    }
+    // RGB or RGBA format
+    else if (color.toLowerCase().startsWith("rgb")) {
+        // Extract numbers and percentages, including alpha if present
+        const parts = color.match(/(\d+\.?\d*%?)/g);
+        rgb = parts.slice(0, 3).map(v => {
+            if (v.endsWith("%")) {
+                return Math.round(parseFloat(v) * 2.55); // Convert % to 0-255
+            }
+            return Math.min(255, Math.max(0, Number(v)));
+        });
+        if (parts.length === 4) {
+            let a = parts[3];
+            if (a.endsWith("%")) {
+                alpha = parseFloat(a) / 100;
+            } else {
+                alpha = Number(a);
+            }
+            alpha = Math.min(1, Math.max(0, alpha)); // Clamp between 0 and 1
+        }
     }
 
-    // Destructure red, green, blue into their own variables
-    const [r, g, b] = rgb;
+    // Treat fully transparent as light
+    if (alpha === 0) {
+        console.warn("Alpha channel is 0 (fully transparent), treating as light color.");
+        return false;
+    }
 
-    // Now we compute "perceived brightness" of the color.
-    // This isn't a simple average, because human eyes are more sensitive
-    // to green, less to blue. The formula weights the channels accordingly.
-    //
-    // Formula explanation (YIQ color space approximation):
-    // brightness = 0.299*R + 0.587*G + 0.114*B
-    //
-    // Multiplying by 1000 and using integers avoids floating-point mess.
+    const [r, g, b] = rgb;
     const brightness = (r * 299 + g * 587 + b * 114) / 1000;
 
-    // Pick a threshold to decide what's "dark."
+    // check if brightness is over or under the threshold to decide what's "dark."
     // Brightness scale goes 0 (black) to 255 (white).
     // 128 is a middle-ish cutoff. Below = "dark", above = "light."
-    return brightness < 100;
+    return brightness < brightnessThreshold;
 }
 
 //#endregion
@@ -1622,6 +1681,13 @@ $('#fishTank').on("pointerdown", '.spawned-fish', function () {
     $('#modalStatFishType p').text(camelCaseToCapitalizedText(fish.FishTypeName));
     $('#modalTailFinColor b').text(`${fish.TailFinColor}`);
 
+    $("#tailFinColorInput").val(fish.TailFinColor);
+    $("#topFinColorInput").val(fish.TopFinColor);
+    $("#bottomFinColorInput").val(fish.BottomFinColor);
+    $("#bodyColorInput").val(fish.BodyColor);
+    $("#sideFinColorInput").val(fish.SideFinColor);
+    $("#patternColorInput").val(fish.PatternColor);
+
     if (isDarkColor(fish.TailFinColor)) {
         $("#modalTailFinColor strong").css("color", "white");
         $('#modalTailFinColor b').css('color', 'white');
@@ -1787,37 +1853,7 @@ $("#redoWaterFilterTimerButton").on("pointerdown", function () {
     handleRedoClick(element);
 });
 
-$("#tailFinColorInput").on("pointerdown", function () {
-    const element = this;
-    changeArrowsToCheckMark(element);
-});
-
-$("#bodyColorInput").on("input", function () {
-    const element = this;
-    changeArrowsToCheckMark(element);
-});
-
-$("#topFinColorInput").on("input", function () {
-    const element = this;
-    changeArrowsToCheckMark(element);
-});
-
-$("#bottomFinColorInput").on("input", function () {
-    const element = this;
-    changeArrowsToCheckMark(element);
-});
-
-$("#sideFinColorInput").on("input", function () {
-    const element = this;
-    changeArrowsToCheckMark(element);
-});
-
-$("#patternColorInput").on("input", function () {
-    const element = this;
-    changeArrowsToCheckMark(element);
-});
-
-$("#fishNameInput").on("input", function () {
+$("#modalFishInfoContainer input").on("input", function () {
     const element = this;
     changeArrowsToCheckMark(element);
 });
@@ -2012,6 +2048,7 @@ function prepareAndAppendFishToSwimZone(fish) {
         zIndex: 5
     });
 
+    // add stroke outline
     fish.SvgElement.add(fish.SvgElement.find('*')).css({
         "stroke": "black",
         "stroke-width": "0.6px",
@@ -2019,12 +2056,13 @@ function prepareAndAppendFishToSwimZone(fish) {
     });
 
     // Then reapply proper pattern stroke for paths using CSS vars
+    // this is for the wavyFin pattern (and other patterns but these don't seem to take effect)
     fish.SvgElement.find('path').each(function () {
         const strokeAttr = this.getAttribute('stroke');
         if (strokeAttr && strokeAttr.includes('var(--pattern-color')) {
             // Restore the color + make pattern thicker again
             this.style.stroke = `var(--pattern-color)`;
-            this.style.strokeWidth = "6px"; // or any value you want
+            this.style.strokeWidth = "6px";
         }
     });
 
@@ -2308,6 +2346,22 @@ $("#closeAlertModal").on("pointerdown", function () {
     $("#alertModalContainer").find(".alertMessageContainer").empty();
 });
 
+$("#changeBackgroundButtonHolder").on("pointerdown", function () {
+    $("#modalDecorationShopContainer").hide();
+    $("#modalChangeBackgroundContainer").show();
+    $("#customBackgroundColorInput").val(backgroundColor);
+    if (isDarkColor(backgroundColor)) {
+        $("#previewCurrentBackground").css("color", "white");
+    }
+    else {
+        $("#previewCurrentBackground").css("color", "black");
+    }
+});
+
+$("#closeChangeBackgroundModal").on("pointerdown", function () {
+    $("#modalChangeBackgroundContainer").hide();
+});
+
 $(document).on("keydown", function (e) {
     if (e.key === "r" && movingWaterFilter) {
         checkToMirrorFilter();
@@ -2402,6 +2456,25 @@ $(document).on("pointerdown", function (e) {
     }
     else if (e.button === 1 || e.button === 2) { // middle mouse button or right mouse button
         checkToMirrorFilter();
+    }
+});
+
+$(".colorInput").on("input", function () {
+    const color = $(this).val();
+
+    const mainInputContainer = $(this).parent().parent();
+    mainInputContainer.css("background-color", color);
+
+    let changeTextColorElement = mainInputContainer;
+
+    if ($(this).hasClass("fishInfoColorInput")) {
+        changeTextColorElement = $(this).parent().parent().find("strong");
+    }
+
+    if (isDarkColor(color)) {
+        changeTextColorElement.css("color", "white");
+    } else {
+        changeTextColorElement.css("color", "black");
     }
 });
 

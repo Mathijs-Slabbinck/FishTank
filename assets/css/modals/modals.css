@@ -1,3 +1,5 @@
+/* ALL MODALS */
+
 .modalContainer {
     width: 100vw;
     height: 95vh;
@@ -16,6 +18,12 @@
     top: 5vh;
     z-index: 1000;
     overflow-y: auto;
+}
+
+.modal input[type="text"] {
+    height: 3vh;
+    max-width: 35%;
+    text-align: center;
 }
 
 /* Prevent touch actions on modals to allow moving modals on mobile devices */
@@ -214,4 +222,70 @@
     position: absolute;
     top: 0.3vh;
     right: 0.4vw;
+}
+
+
+
+
+/* ITEMS SHOP MODAL */
+
+#itemsShopItemsContainer {
+    border: 3px solid black;
+    background-color: rgb(240, 240, 240);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 3vh;
+}
+
+/* CHANGE BACKGROUND MODAL */
+
+#modalChangeBackgroundContainer .rowType2 {
+    background-color: rgb(240, 240, 240);
+}
+
+#previewBackgroundLightblue {
+    background-color: lightblue;
+}
+
+#previewBackgroundDarkblue {
+    background-color: darkblue;
+    color: white;
+}
+
+#previewBackgroundAquamarine {
+    background-color: aquamarine;
+    color: black;
+}
+
+#previewBackgroundCoral {
+    background-color: coral;
+}
+
+#previewBackgroundSeagreen {
+    background-color: seagreen;
+    color: white;
+}
+
+#previewBackgroundDarkred {
+    background-color: darkred;
+    color: white;
+}
+
+#previewBackgroundGoldenrod {
+    background-color: goldenrod;
+}
+
+#previewBackgroundWhite {
+    background-color: white;
+}
+
+#previewBackgroundBlack {
+    background-color: black;
+    color: white;
+}
+
+#previewCurrentBackground {
+    background-color: var(--background-color);
 }
