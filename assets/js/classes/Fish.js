@@ -1,48 +1,48 @@
 class Fish {
     constructor(
-        _name,
-        _fishTypeName,
-        _bodyColor,
-        _tailFinColor,
-        _fishId,
-        _isStarterFish = false,
-        _speed = 1,
-        _size = 1,
-        _sideFinColor = null,
-        _patternColor = null,
-        _topFinColor = null,
-        _bottomFinColor = null,
-        _eyeWhiteColor = "white",
-        _pupilColor = "black",
-        _hungerAmount = 0,
-        _svgElement = null,
-        _foodEaten = 0,
-        _isAlive = true,
-        _age = 0,
-        _currentValue = 0,
+        name,
+        fishTypeName,
+        bodyColor,
+        tailFinColor,
+        fishId,
+        isStarterFish = false,
+        speed = 1,
+        size = 1,
+        sideFinColor = null,
+        patternColor = null,
+        topFinColor = null,
+        bottomFinColor = null,
+        eyeWhiteColor = "white",
+        pupilColor = "black",
+        hungerAmount = 0,
+        svgElement = null,
+        foodEaten = 0,
+        isAlive = true,
+        currentValue = 0,
     ) {
         // Basic properties
-        this._name = _name;
-        this.FishTypeName = _fishTypeName;
-        this._bodyColor = _bodyColor;
-        this._tailFinColor = _tailFinColor;
-        this._fishId = _fishId;
+        this._name = name;
+        this.FishTypeName = fishTypeName;
+        this._bodyColor = bodyColor;
+        this._tailFinColor = tailFinColor;
+        this._fishId = fishId;
         // Optional with defaults
-        this._isStarterFish = _isStarterFish; // Indicates if the fish is a starter fish
-        this.Speed = _speed;
-        this.Size = _size;
-        this._sideFinColor = _sideFinColor;
-        this._patternColor = _patternColor;
-        this._topFinColor = _topFinColor;
-        this._bottomFinColor = _bottomFinColor;
-        this._eyeWhiteColor = _eyeWhiteColor;
-        this._pupilColor = _pupilColor;
-        this._hungerAmount = _hungerAmount;
-        this._svgElement = _svgElement; // SVG representation of the fish
-        this._foodEaten = _foodEaten; // Amount of food eaten by the fish
-        this._isAlive = _isAlive;
-        this._age = _age;
-        this._currentValue = _currentValue; // Current value of the fish based on age and size
+        this._isStarterFish = isStarterFish;
+        this.Speed = speed;
+        this.Size = size;
+        this._sideFinColor = sideFinColor;
+        this._patternColor = patternColor;
+        this._topFinColor = topFinColor;
+        this._bottomFinColor = bottomFinColor;
+        this._eyeWhiteColor = eyeWhiteColor;
+        this._pupilColor = pupilColor;
+        this._hungerAmount = hungerAmount;
+        this._svgElement = svgElement;
+        this._foodEaten = foodEaten;
+        this._isAlive = isAlive;
+        this._currentValue = currentValue;
+        // unsettable param
+        this._momentCreated = ReturnCurrentTime();
     }
 
     // Getters and setters
@@ -320,6 +320,9 @@ class Fish {
     get IsStarterFish() { return this._isStarterFish; }
     set IsStarterFish(value) { this._isStarterFish = value; }
 
+    get MomentCreated() { return this._momentCreated; }
+    set MomentCreated(value) { this._momentCreated = value; }
+
     getSpeedInPixelsPerSecond() {
         return this.Speed * 10;
     }
@@ -347,8 +350,8 @@ class Fish {
             _hungerAmount: this.HungerAmount,
             _foodEaten: this.FoodEaten,
             _isAlive: this.IsAlive,
-            _age: this.Age,
-            _currentValue: this.CurrentValue
+            _currentValue: this.CurrentValue,
+            _momentCreated: this.MomentCreated
             // note: no SvgElement here
         };
     }
@@ -373,12 +376,17 @@ class Fish {
             null, // SvgElement will be assigned later
             json._foodEaten,
             json._isAlive,
-            json._age,
-            json._currentValue
+            json._currentValue,
+            json._momentCreated
         );
     }
 }
 
 function isInEnum(value, enumObj) {
     return Object.values(enumObj).includes(value);
+}
+
+function ReturnCurrentTime() {
+    const now = new Date();
+    return `${now.toDateString()} | ${now.getHours()}:${now.getMinutes()}`
 }

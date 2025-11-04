@@ -110,6 +110,10 @@
     background-color: darkgreen;
 }
 
+.yellowGreen p {
+    background-color: yellowgreen;
+}
+
 .redButton p {
     background-color: darkred;
 }
@@ -288,4 +292,8 @@
 
 #previewCurrentBackground {
     background-color: var(--background-color);
+}
+
+.hidden {
+    display: none;
 }

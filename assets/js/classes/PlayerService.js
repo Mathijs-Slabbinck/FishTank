@@ -1,20 +1,24 @@
 class PlayerService {
     constructor(
-        _name,
-        _dateMade = new Date(),
-        _foodAmount = 10,
-        _moneyAmount = 100,
-        _aquariumList = [],
-        _backgroundMusicOn = true,
-        _autoSaveOn = true
+        name,
+        dateMade = new Date(),
+        foodAmount = 10,
+        moneyAmount = 100,
+        aquariumList = [],
+        backgroundMusicOn = true,
+        autoSaveOn = true,
+        selectedAquariumIndex = 0,
+        speedCandyAmount = 0
     ) {
-        this._name = _name;
-        this._dateMade = _dateMade;
-        this._foodAmount = _foodAmount;
-        this._moneyAmount = _moneyAmount;
-        this._aquariumList = _aquariumList;
-        this._backgroundMusicOn = _backgroundMusicOn;
-        this._autoSaveOn = _autoSaveOn;
+        this._name = name;
+        this._dateMade = dateMade;
+        this._foodAmount = foodAmount;
+        this._moneyAmount = moneyAmount;
+        this._aquariumList = aquariumList;
+        this._backgroundMusicOn = backgroundMusicOn;
+        this._autoSaveOn = autoSaveOn;
+        this._selectedAquariumIndex = selectedAquariumIndex;
+        this._speedCandyAmount = speedCandyAmount;
     }
 
     // --- Getters & Setters ---
@@ -42,6 +46,15 @@ class PlayerService {
     get AutoSaveOn() { return this._autoSaveOn; }
     set AutoSaveOn(value) { this._autoSaveOn = value; }
 
+    get SelectedAquariumIndex() { return this._selectedAquariumIndex; }
+    set SelectedAquariumIndex(value) { this._selectedAquariumIndex = value; }
+
+    get SpeedCandyAmount() { return this._speedCandyAmount; }
+    set SpeedCandyAmount(value) {
+        if (value < 0) throw new Error("You can't use more speed candy than you have!");
+        this._speedCandyAmount = value;
+    }
+
     get FishAmount() {
         return this._aquariumList.reduce((total, aquarium) => total + aquarium.FishList.length, 0);
     }
@@ -55,7 +68,9 @@ class PlayerService {
             MoneyAmount: this.MoneyAmount,
             AquariumList: this.AquariumList.map(aq => aq.toJSON()),
             BackgroundMusicOn: this.BackgroundMusicOn,
-            AutoSaveOn: this.AutoSaveOn
+            AutoSaveOn: this.AutoSaveOn,
+            SelectedAquariumIndex: this.SelectedAquariumIndex,
+            SpeedCandyAmount: this.SpeedCandyAmount
         };
     }
 
@@ -67,7 +82,9 @@ class PlayerService {
             json.MoneyAmount,
             (json.AquariumList || []).map(aq => AquariumService.fromJSON(aq)),
             json.BackgroundMusicOn,
-            json.AutoSaveOn
+            json.AutoSaveOn,
+            json.SelectedAquariumIndex,
+            json.SpeedCandyAmount
         );
     }
 }

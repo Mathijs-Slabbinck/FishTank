@@ -78,18 +78,9 @@
 #modalStatsBlock span {
     justify-content: space-between;
     display: flex;
-    max-width: 27vh;
+    max-width: 45vh;
     text-align: center;
     margin: 0 auto 0 auto;
-}
-
-#modalStatFishType span:first-of-type {
-    display: flex;
-    flex-direction: column;
-}
-
-#modalStatFishType span p:first-of-type {
-    margin-top: 1vh;
 }
 
 b,

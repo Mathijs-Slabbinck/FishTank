@@ -121,16 +121,16 @@ var player;
 let musicToggleCounterViaImg = 0;
 let musicToggleCounterViaButton = 0;
 let movingWaterFilter = false;
+let movingNavalMine = false;
 let clicksAfterMovingWaterFilter = 0;
 let isHoldingClick = false;
 let selectedModaloffsetX = 0;
 let selectedModaloffsetY = 0;
 let $grabbedModal = null;
 let backgroundMusic = new Audio('assets/media/audio/backgroundMusic1.mp3');
-let backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--background-color').trim();
-
-const root = document.documentElement;
-let backgroundColor2 = getComputedStyle(document.documentElement).getPropertyValue('--background-color').trim();
+let backgroundType;
+let background;
+let customColorActive = false;
 const isOnMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
 $(document).ready(function () {
@@ -200,6 +200,9 @@ function stopAutoSaver() {
 }
 
 function animateWaterFilter() {
+    if (!player.AquariumList[selectedAquariumIndex].HasWaterFilter) return;
+    if (!player.AquariumList[selectedAquariumIndex].IsWaterFilterVisible) return;
+    if (!player.AquariumList[selectedAquariumIndex].IsWaterFilterOn) return;
     const $waterFilter = $("#waterFilter");
     let bubbleSpotX;
     let bubbleSpotY;
@@ -242,15 +245,76 @@ function checkOrientation() {
 }
 
 function initialiseGame() {
+    backgroundType = player.AquariumList[selectedAquariumIndex].SelectedBackgroundType;
+    background = player.AquariumList[selectedAquariumIndex].SelectedBackground;
+    switch (backgroundType) {
+        case "color":
+            const selectedColor = player.AquariumList[selectedAquariumIndex].SelectedBackground.toLowerCase();
+            document.documentElement.style.setProperty('--background-color', selectedColor);
+            for (let i = 0; i < player.AquariumList[selectedAquariumIndex].OwnedBackgroundColors.length; i++) {
+                if (selectedColor == player.AquariumList[selectedAquariumIndex].OwnedBackgroundColors[i] &&
+                    selectedColor != "#Add8e6" && selectedColor != "#000000" && selectedColor != "#ffffff" &&
+                    selectedColor != "#00008B" && selectedColor != "#7fffd4" && selectedColor != "#2e8b57" &&
+                    selectedColor != "#ff7F50" && selectedColor != "#8B0000" && selectedColor != "#DAA520"
+                ) {
+                    customColorActive = true;
+                }
+            }
+            break;
+        case "image":
+        case "gif":
+            document.documentElement.style.setProperty('--background-image', player.AquariumList[selectedAquariumIndex].SelectedBackground);
+            break;
+        default:
+            document.documentElement.style.setProperty('--background-color', "#ADD8E6");
+            console.Error("Critical Error! Background type is not recognized! Reverting back to default background!");
+            throw new Error("Critical Error! Background type is not recognized! Reverting back to default background!");
+    }
+
+    if (player.AquariumList[selectedAquariumIndex].SelectedBackgroundType === "color") {
+        $("#customBackgroundColorInput").attr("value", getComputedStyle(document.documentElement).getPropertyValue("--background-color"));
+    }
+
     updateStats();
     startBackGroundMusic();
     showWaterFilter();
+    showNavalBomb();
     updateDecorationShop();
+    hideHiddenDecoration()
+}
+
+function hideHiddenDecoration() {
+    if (player.AquariumList[selectedAquariumIndex].HasWaterFilter && player.AquariumList[selectedAquariumIndex].IsWaterFilterVisible) {
+        $("#waterFilterContainer").show();
+        $("#toggleWaterFilterButtonHolder").find("p").text("hide");
+        $("#toggleWaterFilterButtonHolder").removeClass("yellowGreen");
+        $("#toggleWaterFilterButtonHolder").addClass("yellowButton");
+    }
+    else {
+        $("#waterFilterContainer").hide();
+        $("#toggleWaterFilterButtonHolder").find("p").text("show");
+        $("#toggleWaterFilterButtonHolder").removeClass("yellowButton");
+        $("#toggleWaterFilterButtonHolder").addClass("yellowGreen");
+    }
+
+    if (player.AquariumList[selectedAquariumIndex].HasNavalMine && player.AquariumList[selectedAquariumIndex].IsNavalMineVisible) {
+        $("#landMineContainer").css("display", "flex");
+        $("#toggleNavalMineButtonHolder").find("p").text("hide");
+        $("#toggleNavalMineButtonHolder").removeClass("yellowGreen");
+        $("#toggleNavalMineButtonHolder").addClass("yellowButton");
+    }
+    else {
+        $("#landMineContainer").hide();
+        $("#toggleNavalMineButtonHolder").find("p").text("show");
+        $("#toggleNavalMineButtonHolder").removeClass("yellowButton");
+        $("#toggleNavalMineButtonHolder").addClass("yellowGreen");
+    }
 }
 
 function showAlert(title, messageBlock) {
     $("#alertModal").find(".modalTitle").find("strong").text(title);
     $("#alertMessageContainer").empty().append(messageBlock);
+    closeBottomMenu();
     $("#alertModalBackground").show();
     $("#alertModalContainer").show();
 }
@@ -271,6 +335,12 @@ function handleInfo(clickedInfoIcon) {
             alertMessageBlock.append("<b>It will only grant 1 coin per poo cleaned.</b>");
             alertMessageBlock.append("<p>(by default, this can be increased)</p>");
             break;
+        case "navalMineInfo":
+            title = "Naval Mine Info:";
+
+            alertMessageBlock.append("<b>The naval mine is purely decorative.</b>");
+            alertMessageBlock.append("<p>It looks hella cool tho.</p>");
+            break;
         case "fishFoodInfo":
             title = "Fish Food Info:";
 
@@ -285,6 +355,13 @@ function handleInfo(clickedInfoIcon) {
             alertMessageBlock.append("<p>(100-149 food - size 8)</p>");
             alertMessageBlock.append("<p>(150-199 food - size 9)</p>");
             alertMessageBlock.append("<p>(200+ food - size 10)</p>");
+            break;
+        case "speedCandyInfo":
+            title = "Speed Candy Info:"
+
+            alertMessageBlock.append("<b>When a fish eats speed candy it will become faster.</b>");
+            alertMessageBlock.append("<b>But a fish's speed cannot exceed 5.</b>");
+            alertMessageBlock.append("<b>So if a fish with speed 5 eats the candy,  the candy will be lost!</b>");
             break;
         default:
             title = "No info available";
@@ -301,13 +378,27 @@ function handleInfo(clickedInfoIcon) {
     }, 400);
 }
 
-function buyFishFood($button, amount = 1) {
-    const costPrice = 2 * amount;
+function buyItem($button, whichItem, amount = 1) {
+    let costPrice;
+
+    switch (whichItem) {
+        case "fish food":
+            costPrice = 2 * amount;
+            break;
+        case "speed candy":
+            costPrice = 15 * amount;
+            break;
+    }
     if ($button.data('disabled')) return; // prevent spam clicking
     $button.data('disabled', true);
     if (player.MoneyAmount >= costPrice) {
         player.MoneyAmount -= costPrice;
-        player.FoodAmount += amount;
+        if (whichItem === "fish food") {
+            player.FoodAmount += amount;
+        }
+        else if (whichItem === "speed candy") {
+            player.SpeedCandyAmount += amount;
+        }
         $button.find("p").css("background-color", "yellowgreen");
         setTimeout(() => {
             if ($button.attr("class").includes("yellowButton")) {
@@ -321,7 +412,7 @@ function buyFishFood($button, amount = 1) {
         updateStats();
     }
     else {
-        alert("You don't have enough money to buy fish food!");
+        alert(`You don't have enough money to buy ${whichItem}!`);
         $button.find("p").css("background-color", "darkred");
         setTimeout(() => {
             if ($button.attr("class").includes("yellowButton")) {
@@ -336,16 +427,21 @@ function buyFishFood($button, amount = 1) {
 }
 
 function updateDecorationShop() {
-    if (player.AquariumList[0].HasWaterFilter) {
-        disableShopWaterFilter();
+    if (player.AquariumList[selectedAquariumIndex].HasWaterFilter) {
+        $("#buyWaterFilterButtonHolder").hide();
+        $("#toggleWaterFilterButtonHolder").css("display", "flex");
+    }
+    if (player.AquariumList[selectedAquariumIndex].HasNavalMine) {
+        $("#buyNavalMineButtonHolder").hide();
+        $("#toggleNavalMineButtonHolder").css("display", "flex");
     }
 }
 
-function disableShopWaterFilter() {
-    $("#buyWaterFilterButtonHolder").removeClass("greenButton");
-    $("#buyWaterFilterButtonHolder").addClass("redButton");
-    $("#buyWaterFilterButtonHolder").find("p").addClass("noClickCursor");
-    $("#buyWaterFilterButtonHolder").find("p").text("SOLD");
+function disableShopButButton(id) {
+    $(id).removeClass("greenButton");
+    $(id).addClass("redButton");
+    $(id).find("p").addClass("noClickCursor");
+    $(id).find("p").text("SOLD");
 }
 
 function startNewGame() {
@@ -470,6 +566,47 @@ async function loadAquarium() {
     pushShopFishes();
 }
 
+function updateModalColorsOwnedVisually() {
+    const ownedBackgroundColors = player.AquariumList[selectedAquariumIndex].OwnedBackgroundColors;
+
+    if (ownedBackgroundColors.includes("#000000")) {
+        $("#previewBackgroundBlack .rowItempriceInfo").text("OWNED");
+        $("#backgroundBlackButtonHolder p").text("choose");
+    }
+    if (ownedBackgroundColors.includes("#FFFFFF")) {
+        $("#previewBackgroundWhite .rowItempriceInfo").text("OWNED");
+        $("#backgroundWhiteButtonHolder p").text("choose");
+    }
+    if (ownedBackgroundColors.includes("#00008B")) {
+        $("#previewBackgroundDarkblue .rowItempriceInfo").text("OWNED");
+        $("#backgroundDarkblueButtonHolder p").text("choose");
+    }
+    if (ownedBackgroundColors.includes("#7FFFD4")) {
+        $("#previewBackgroundAquamarine .rowItempriceInfo").text("OWNED");
+        $("#backgroundAquamarineButtonHolder p").text("choose");
+    }
+    if (ownedBackgroundColors.includes("#2E8B57")) {
+        $("#previewBackgroundSeagreen .rowItempriceInfo").text("OWNED");
+        $("#backgroundSeagreenButtonHolder p").text("choose");
+    }
+    if (ownedBackgroundColors.includes("#FF7F50")) {
+        $("#previewBackgroundCoral .rowItempriceInfo").text("OWNED");
+        $("#backgroundCoralButtonHolder p").text("choose");
+    }
+    if (ownedBackgroundColors.includes("#8B0000")) {
+        $("#previewBackgroundDarkred .rowItempriceInfo").text("OWNED");
+        $("#backgroundDarkredButtonHolder p").text("owned");
+    }
+    if (ownedBackgroundColors.includes("#DAA520")) {
+        $("#previewBackgroundGoldenrod .rowItempriceInfo").text("OWNED");
+        $("#backgroundGoldenrodButtonHolder p").text("choose");
+    }
+
+    if (player.AquariumList[selectedAquariumIndex].SelectedBackgroundType === "color") {
+        $("#customBackgroundColorInput").attr("value", getComputedStyle(document.documentElement).getPropertyValue("--background-color"));
+    }
+}
+
 async function assignSvgToFish(fish) {
     const path = FishSvgPaths[fish.FishTypeName];
     if (!path) throw new Error(`No SVG path defined for fish type ${fish.FishTypeName}`);
@@ -519,14 +656,17 @@ async function pushStarterFishes() {
     }
 
     const fish1 = await createNewFish(starterFishTypes[0], true, true);
+    addStrokeToFish(fish1);
     addFishToBlock(fish1, "#starterFish1Block");
     starterFishes.push(fish1);
 
     const fish2 = await createNewFish(starterFishTypes[1], true, true);
+    addStrokeToFish(fish2);
     addFishToBlock(fish2, "#starterFish2Block");
     starterFishes.push(fish2);
 
     const fish3 = await createNewFish(starterFishTypes[2], true, true);
+    addStrokeToFish(fish3);
     addFishToBlock(fish3, "#starterFish3Block");
     starterFishes.push(fish3);
 }
@@ -578,7 +718,6 @@ async function pushShopFishes() {
         const CostPriceBlock2 = $('<p class="costPrice">Price: ' + fish2.CostPrice + '</p>')
         const CostPriceBlock3 = $('<p class="costPrice">Price: ' + fish3.CostPrice + '</p>')
 
-
         addFishToBlock(fish1, innerFishBlock1);
         addFishToBlock(fish2, innerFishBlock2);
         addFishToBlock(fish3, innerFishBlock3);
@@ -593,6 +732,14 @@ async function pushShopFishes() {
     }
 
     $('#fishShopItemsContainer').append(newBlockWrapper);
+}
+
+function addStrokeToFish(fish) {
+    fish.SvgElement.add(fish.SvgElement.find('*')).css({
+        "stroke": "black",
+        "stroke-width": "0.6px",
+        "stroke-linejoin": "round"
+    });
 }
 
 function createNewFish(fishType, useRandomColors, isStarterFish = false) {
@@ -666,7 +813,7 @@ function createNewFish(fishType, useRandomColors, isStarterFish = false) {
 
 function cleanWater() {
     console.log("Cleaning water on " + new Date().toLocaleString());
-    if (player.AquariumList[0].HasWaterFilter && player.AquariumList[0].IsWaterFilterOn) {
+    if (player.AquariumList[selectedAquariumIndex].HasWaterFilter && player.AquariumList[selectedAquariumIndex].IsWaterFilterOn) {
         spawnWaterFilteredText();
 
         const $poos = $("#fishTank .poo"); // all divs with class "poo" inside #myContainer
@@ -681,11 +828,11 @@ function cleanWater() {
 }
 
 function showWaterFilter() {
-    if (player.AquariumList[0].HasWaterFilter) {
+    if (player.AquariumList[selectedAquariumIndex].HasWaterFilter) {
         $("#waterFilterContainer").show();
-        $("#waterFilterContainer").css("left", player.AquariumList[0].WaterFilterX + "vw");
-        $("#waterFilterTimerDisplay").text(player.AquariumList[0].WaterFilterTimer / 60000);
-        if (player.AquariumList[0].WaterFilterMirrored) {
+        $("#waterFilterContainer").css("left", player.AquariumList[selectedAquariumIndex].WaterFilterX + "vw");
+        $("#waterFilterTimerDisplay").text(player.AquariumList[selectedAquariumIndex].WaterFilterTimer / 60000);
+        if (player.AquariumList[selectedAquariumIndex].WaterFilterMirrored) {
             $("#waterFilterContainer img").addClass("mirrored");
         }
         animateWaterFilter();
@@ -712,6 +859,18 @@ function prepareFishForSpawning(fish) {
         top: 100,
         zIndex: 5
     });
+}
+
+function showNavalBomb() {
+    if (player.AquariumList[selectedAquariumIndex].HasNavalMine) {
+        $("#landMineContainer").css("display", "flex");
+        $("#landMineContainer").css("left", player.AquariumList[0].NavalMineX + "vw");
+        for (let i = 0; i < player.AquariumList[selectedAquariumIndex].NavalMineHeight; i++) {
+            $("#navalMineChains").append('<img src="images/chain.png" alt="landmine chain" class="landMineChain">');
+        }
+        animateWaterFilter();
+        cleanWater();
+    }
 }
 
 function spawnFish(fish) {
@@ -805,7 +964,7 @@ function restartMovingAllFish() {
     });
 }
 
-function directFishToFood(fish, foodX, foodY) {
+function directFishToFood(fish, foodX, foodY, foodType) {
     const fishFlipWrapper = fish.SvgElement.parent().parent();
     const fishRotateWrapper = fish.SvgElement.parent();
 
@@ -818,10 +977,20 @@ function directFishToFood(fish, foodX, foodY) {
     const distance = Math.hypot(dx, dy);
 
     // --- Check if fish reached the food ---
-    if (distance < 8) {
+    if (distance < 10) {
         player.AquariumList[selectedAquariumIndex].HasFood = false;
-        console.log(`${fish.Name} has reached the food!`);
-        fish.FoodEaten += 1;
+        switch (foodType) {
+            case "food":
+                console.log(`${fish.Name} has reached the food!`);
+                fish.FoodEaten += 1;
+                break;
+            case "speedCandy":
+                console.log(`${fish.Name} has reached the speed candy!`);
+                if (fish.Speed < 5) {
+                    fish.Speed += 1;
+                }
+                break;
+        }
 
         $('#CBMI').attr('id', 'closeBottomMenuImg');
 
@@ -861,7 +1030,7 @@ function directFishToFood(fish, foodX, foodY) {
             duration: 100,
             easing: 'linear',
             step: () => havePooChance(fish),
-            complete: () => directFishToFood(fish, foodX, foodY)
+            complete: () => directFishToFood(fish, foodX, foodY, foodType)
         }
     );
 }
@@ -909,8 +1078,22 @@ function updateStats() {
         stopAutoSaver();
     }
 
+    if (isDarkColor(getComputedStyle(document.documentElement).getPropertyValue("--background-color"))) {
+        $("#moneyAmount").css("color", "white");
+        $("#fishFoodAmount").css("color", "white");
+        $("#bottomMenuSlot2 p").css("color", "white");
+        $(".bottomMenuSlot>img").css("filter", "drop-shadow(2px 2px white)");
+    }
+    else {
+        $("#moneyAmount").css("color", "black");
+        $("#fishFoodAmount").css("color", "black");
+        $("#bottomMenuSlot2 p").css("color", "black");
+        $(".bottomMenuSlot>img").css("filter", "drop-shadow(2px 2px black)");
+    }
+
     $('#fishFoodAmount').text(player.FoodAmount);
     $("#moneyAmount").text(player.MoneyAmount);
+    $("#speedCandyAmount").text(player.SpeedCandyAmount);
 }
 
 function spawnGameSavedText(autoSave = true) {
@@ -975,7 +1158,7 @@ function spawnPoo(x, y) {
     $("#fishTank").append(poo);
 }
 
-function spawnFood(x, y) {
+function spawnFood(x, y, foodType) {
     setTimeout(function () {
         if (!player.AquariumList[selectedAquariumIndex].HasFood) {
             const swimZone = $('#swimZone');
@@ -988,7 +1171,15 @@ function spawnFood(x, y) {
             // Offset for fish animation if you move them up visually
             const fishTargetY = foodY - 80;
 
-            const food = $('<img class="food" src="images/fishFood.png" alt="fish food">');
+            let food;
+            switch (foodType) {
+                case "food":
+                    food = $('<img class="food" src="images/fishFood.png" alt="fish food">');
+                    break;
+                case "speedCandy":
+                    food = $('<img class="food" src="images/speedCandy.png" alt="speed candy">');
+                    break;
+            }
             food.css({
                 position: 'absolute',
                 left: `${foodX}px`,
@@ -1010,7 +1201,7 @@ function spawnFood(x, y) {
                 if (fish.SvgElement) {
                     const fishFlipWrapper = fish.SvgElement.parent().parent();
                     fishFlipWrapper.stop();
-                    directFishToFood(fish, foodX, fishTargetY);
+                    directFishToFood(fish, foodX, fishTargetY, foodType);
                 } else {
                     throw new Error(`Fish ${fish.Name} has no SVG element!`);
                 }
@@ -1072,13 +1263,13 @@ function handleRedoClick(element) {
     const arrowImg = $(element).find("img");
     const elementBlock = $(element).parent();
     const inputField = elementBlock.find("input");
+    inputField.value = getComputedStyle(document.documentElement).getPropertyValue("--background-color");
 
     if (arrowImg.hasClass("rotateArrows")) {
         arrowImg.removeClass("rotateArrows");
         arrowImg.addClass("rotateArrowsBack");
         arrowImg.attr("placeholder", "redo button arrows");
         $(element).css("background-color", "darkgreen");
-        inputField.val("");
         inputField.addClass("hidden");
 
         if (elementBlock.attr("id") === "modalFishName") {
@@ -1262,6 +1453,42 @@ function saveGameViaMenu() {
     }, 400);
 }
 
+function stopMovingNavalMine() {
+    const newXPx = parseInt($("#landMineContainer").css("left"), 10);
+    const newXVw = (newXPx / window.innerWidth) * 100;
+    movingNavalMine = false;
+    spawnGameSavedText(false);
+    player.AquariumList[selectedAquariumIndex].NavalMineX = newXVw; // save in vw
+    player.AquariumList[selectedAquariumIndex].NavalMineHeight = $(".landMineChain").length;
+    saveToLocalStorage();
+    $("#navalMine").attr("src", "images/naval-mine.png");
+    $("#navalMine").attr("alt", "naval mine");
+    $(".landMineChain").attr("src", "images/chain.png");
+    $(".landMineChain").attr("alt", "chain");
+    $("#landMineChainBottom").attr("src", "images/chainBottom.png");
+    $("#landMineChainBottom").attr("alt", "landmine chain bottom");
+    $("#fishTank").css("cursor", "default");
+    $("#navalMine").css("cursor", "pointer");
+}
+
+function stopMovingWaterFilter() {
+    const newXPx = parseInt($("#waterFilterContainer").css("left"), 10);
+    const newXVw = (newXPx / window.innerWidth) * 100;
+    movingWaterFilter = false;
+    spawnGameSavedText(false);
+    player.AquariumList[selectedAquariumIndex].WaterFilterX = newXVw; // save in vw
+    if ($("#waterFilter").hasClass("mirrored")) {
+        player.AquariumList[selectedAquariumIndex].WaterFilterMirrored = true;
+    }
+    else {
+        player.AquariumList[selectedAquariumIndex].WaterFilterMirrored = false;
+    }
+    saveToLocalStorage();
+    $("#waterFilter").attr("src", "images/waterFilter.png");
+    $("#waterFilter").attr("alt", "water filter");
+    $("#fishTank").css("cursor", "default");
+}
+
 function updateFishInAquarium() {
     console.log("updating colors of fish in aquarium");
     $(".colorInfoBlock").each(function () {
@@ -1296,6 +1523,18 @@ function renumberSaveFileBlocks() {
     });
 }
 
+function removePreviousCursor(ignore) {
+    if ($("#swimZone").hasClass("foodCursor") && ignore !== "foodCursor") {
+        $("#swimZone").removeClass("foodCursor");
+    }
+    if ($("#swimZone").hasClass("dustpanCursor") && ignore !== "dustpanCursor") {
+        $("#swimZone").removeClass("dustpanCursor");
+    }
+    if ($("#swimZone").hasClass("speedCandyCursor") && ignore !== "speedCandyCursor") {
+        $("#swimZone").removeClass("speedCandyCursor");
+    }
+}
+
 
 //#region BASIC HELPER FUNCTIONS
 
@@ -1321,7 +1560,7 @@ function getRandomColor(type = 'HEX') {
     const b = getRandomNumber(0, 255);
     switch (type.toUpperCase()) {
         case 'HEX':
-            return
+            return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase()}`
         case 'RGB':
             return `rgb(${r}, ${g}, ${b})`;
         case 'RGBA':
@@ -1520,8 +1759,20 @@ $("#fishTank").on("pointerdown", function (event) {
         if (!player.AquariumList[selectedAquariumIndex].HasFood) {
             closeBottomMenu();
             try {
-                player.FoodAmount -= 1; // Decrease food amount
-                spawnFood(x, y);
+                player.FoodAmount -= 1;
+                spawnFood(x, y, "food");
+            }
+            catch (errorMsg) {
+                alert(errorMsg.message);
+            }
+        }
+    }
+    else if (swimZone.hasClass("speedCandyCursor")) {
+        if (!player.AquariumList[selectedAquariumIndex].HasFood) {
+            closeBottomMenu();
+            try {
+                player.SpeedCandyAmount -= 1;
+                spawnFood(x, y, "speedCandy");
             }
             catch (errorMsg) {
                 alert(errorMsg.message);
@@ -1535,17 +1786,19 @@ $("#fishTank").on("pointerdown", function (event) {
 
 $("#fishFoodImg").on("pointerdown", function () {
     closeBottomMenu();
-    if ($("#swimZone").hasClass("dustpanCursor")) {
-        $("#swimZone").removeClass("dustpanCursor");
-    }
+    removePreviousCursor("foodCursor");
     $("#swimZone").toggleClass("foodCursor");
+});
+
+$("#speedCandyImg").on("pointerdown", function () {
+    closeBottomMenu();
+    removePreviousCursor("speedCandyCursor");
+    $("#swimZone").toggleClass("speedCandyCursor");
 });
 
 $("#dustpanImg").on("pointerdown", function () {
     closeBottomMenu();
-    if ($("#swimZone").hasClass("foodCursor")) {
-        $("#swimZone").removeClass("foodCursor");
-    }
+    removePreviousCursor("dustpanCursor");
     $("#swimZone").toggleClass("dustpanCursor");
 })
 
@@ -1554,21 +1807,21 @@ $('#closeFishInfoModal').on("pointerdown", function () {
 });
 
 $("#starterFish1ButtonHolder").on("pointerdown", function () {
-    var fish = starterFishes[0];
+    const fish = starterFishes[0];
     prepareFishForSpawning(fish);
     closeStarterFishModal();
     spawnFish(fish);
 });
 
 $("#starterFish2ButtonHolder").on("pointerdown", function () {
-    var fish = starterFishes[1];
+    const fish = starterFishes[1];
     prepareFishForSpawning(fish);
     closeStarterFishModal();
     spawnFish(fish);
 });
 
 $("#starterFish3ButtonHolder").on("pointerdown", function () {
-    var fish = starterFishes[2];
+    const fish = starterFishes[2];
     prepareFishForSpawning(fish);
     closeStarterFishModal();
     spawnFish(fish);
@@ -1576,6 +1829,7 @@ $("#starterFish3ButtonHolder").on("pointerdown", function () {
 
 $("#openShopImg").on("pointerdown", function () {
     if (!isAnyModalOpen()) {
+        closeBottomMenu();
         $("#modalShopContainer").show();
     }
 });
@@ -1665,6 +1919,7 @@ $('#fishTank').on("pointerdown", '.spawned-fish', function () {
     console.log("Clicked on fish:");
     console.log(fish);
     console.log("--------------------------------------------------");
+    closeBottomMenu();
     $("#modalFishInfoContainer").show();
     $('#fishInfoModal').show();
     $('#modalFishImgContainer').empty();
@@ -1760,7 +2015,7 @@ $('#fishTank').on("pointerdown", '.spawned-fish', function () {
     }
 
     $('#modalSpeed p').text(`${fish.Speed}`);
-    $('#modalStatAge p').text(`${fish.Age}`);
+    $('#modalStatAge p').text(`${fish.MomentCreated}`);
     $('#modalStatSize p').text(`${fish.Size}`);
     $('#modalStatFoodEaten p').text(`${fish.FoodEaten}`);
     $("#modalStatCostPrice p").text(`${fish.CostPrice}`);
@@ -1890,8 +2145,8 @@ $("#waterFilterToggleButtonHolder").on("pointerdown", function () {
 });
 
 $(document).on("pointerdown", "#startNewGameButton", function () {
-    var aquarium = new AquariumService("My Aquarium");
-    var newPlayer = new PlayerService("Player" + saveFiles.length + 1);
+    var aquarium = new AquariumService("My Aquarium", "color", "#ADD8E6");
+    var newPlayer = new PlayerService(`Player${saveFiles.length}1`);
     newPlayer.AquariumList.push(aquarium);
     saveFiles.push(newPlayer);
     player = newPlayer;
@@ -2007,8 +2262,8 @@ function createFishFromTemplate(template) {
         null, // SvgElement will be assigned later
         template.FoodEaten || 0,
         true, // IsAlive
-        template.Age || 0,
-        template.CurrentValue || 0
+        template.CurrentValue || 0,
+        template.MomentCreated || 0,
     );
 
     // Assign fresh SVG separately (don’t save it!)
@@ -2048,12 +2303,7 @@ function prepareAndAppendFishToSwimZone(fish) {
         zIndex: 5
     });
 
-    // add stroke outline
-    fish.SvgElement.add(fish.SvgElement.find('*')).css({
-        "stroke": "black",
-        "stroke-width": "0.6px",
-        "stroke-linejoin": "round"
-    });
+    addStrokeToFish(fish);
 
     // Then reapply proper pattern stroke for paths using CSS vars
     // this is for the wavyFin pattern (and other patterns but these don't seem to take effect)
@@ -2135,6 +2385,59 @@ function finalSpawn(fish, isLoadedIn = false) {
     moveFishRandomly(fish);
 }
 
+function handleBoughtBackgroundColorInput($button, color, costPrice) {
+    const ownedBackgroundColors = player.AquariumList[selectedAquariumIndex].OwnedBackgroundColors;
+    if ($button.data('disabled')) return; // prevent spam clicking
+    $button.data('disabled', true);
+    if (customColorActive) {
+        if (!(color == player.AquariumList[selectedAquariumIndex].SelectedBackground.toLowerCase()) &&
+            (color == "#Add8e6" || color == "#000000" || color == "#ffffff" ||
+                color == "#00008B" || color == "#7fffd4" || color == "#2e8b57" ||
+                color == "#ff7F50" || color == "#8B0000" || color == "#DAA520"
+            )) {
+            player.AquariumList[selectedAquariumIndex].OwnedBackgroundColors.pop();
+            customColorActive = false;
+        }
+    }
+    if (player.MoneyAmount >= costPrice) {
+        player.MoneyAmount -= costPrice;
+        document.documentElement.style.setProperty('--background-color', color);
+        if (!ownedBackgroundColors.includes(color)) {
+            ownedBackgroundColors.push(color);
+        }
+        updateModalColorsOwnedVisually();
+        backgroundType = "color";
+        player.AquariumList[selectedAquariumIndex].SelectedBackgroundType = backgroundType;
+        player.AquariumList[selectedAquariumIndex].SelectedBackground = color;
+        $button.find("p").css("background-color", "yellowgreen");
+        setTimeout(() => {
+            if ($button.attr("class").includes("yellowButton")) {
+                $button.find("p").css("background-color", "goldenrod");
+            }
+            else {
+                $button.find("p").css("background-color", "darkgreen");
+            }
+            $button.data('disabled', false);
+        }, 400);
+        updateStats();
+    }
+    else {
+        alert("You don't have enough money to buy this background color!");
+        $button.find("p").css("background-color", "darkred");
+        setTimeout(() => {
+            if ($button.attr("class").includes("yellowButton")) {
+                $button.find("p").css("background-color", "goldenrod");
+            }
+            else {
+                $button.find("p").css("background-color", "darkgreen");
+            }
+            $button.data('disabled', false);
+        }, 400);
+    }
+
+    updateStats();
+}
+
 $(document).on("pointerdown", ".buyFishButton", function () {
     const $btn = $(this);
 
@@ -2181,11 +2484,15 @@ $(document).on("pointerdown", ".buyFishButton", function () {
 
 $("#fishShopButtonHolder").on("pointerdown", function () {
     closeShopModal();
+    closeBottomMenu();
     $("#modalFishShopContainer").show();
 });
 
 $("#decorationShopButtonHolder").on("pointerdown", function () {
     closeShopModal();
+    closeBottomMenu();
+    updateDecorationShop();
+    hideHiddenDecoration()
     $("#modalDecorationShopContainer").show();
 });
 
@@ -2195,6 +2502,9 @@ $("#closeDecorationShopModal").on("pointerdown", function () {
 
 $("#settingsImg").on("pointerdown", function () {
     if (!isAnyModalOpen()) {
+        closeBottomMenu();
+        $(this).removeClass("rotateSettingsBack");
+        $(this).addClass("rotateSettings");
         $("#modalSettingsContainer").show();
     }
 });
@@ -2221,6 +2531,8 @@ $("#waterFilter").hover(function () {
 
 $("#closeSettingsModal").on("pointerdown", function () {
     $("#modalSettingsContainer").hide();
+    $("#settingsImg").removeClass("rotateSettings");
+    $("#settingsImg").addClass("rotateSettingsBack");
 });
 
 $("#saveGameIcon").on("pointerdown", function () {
@@ -2241,6 +2553,7 @@ $("#autoSaveOnIcon").on("pointerdown", function () {
 
 $("#waterFilter").on("pointerdown", function () {
     if (!isAnyModalOpen()) {
+        closeBottomMenu();
         $("#modalWaterFilterContainer").show();
     }
 });
@@ -2254,7 +2567,7 @@ $("#moveWaterFilterButtonHolder").on("pointerdown", function (e) {
     $("#modalWaterFilterContainer").hide();
     $("#waterFilter").attr({
         src: "images/waterFilterSelected.png",
-        alt: "water filter selected"
+        alt: "selected water filter"
     });
 
     movingWaterFilter = true;
@@ -2290,13 +2603,94 @@ $("#moveWaterFilterButtonHolder").on("pointerdown", function (e) {
     });
 });
 
+// whether we're currently placing
+let lastMoveY = 0;
+
+$("#navalMine").on("pointerdown", function (e) {
+    e.preventDefault();
+
+    $("#navalMine").attr({
+        src: "images/naval-mineSelected.png",
+        alt: "selected naval mine"
+    });
+
+    $(".landMineChain").attr({
+        src: "images/chainSelected.png",
+        alt: "selected chain"
+    });
+
+    $("#landMineChainBottom").attr({
+        src: "images/chainBottomSelected.png",
+        alt: "selected chain bottom"
+    });
+
+    // --- SECOND CLICK: CONFIRM PLACEMENT ---
+    if (movingNavalMine) {
+        stopMovingNavalMine();
+        return;
+    }
+
+    // --- FIRST CLICK: ACTIVATE PLACEMENT MODE ---
+    clicksAfterMovingWaterFilter = 0;
+    movingNavalMine = true;
+    $("#fishTank").css("cursor", "grabbing");
+    $("#navalMine").css("cursor", "grabbing");
+
+    const $MineContainer = $("#landMineContainer");
+    $MineContainer.css("position", "absolute");
+
+    const startOffsetX = e.pageX - $MineContainer.offset().left;
+
+    const maxX = $(window).width() - $MineContainer.width();
+
+
+    let newX = e.pageX - startOffsetX;
+    newX = Math.max(0, Math.min(newX, maxX));
+    $MineContainer.css({ left: newX + "px" });
+
+    lastMoveY = e.pageY;
+
+    // --- TRACK MOVEMENT UNTIL SECOND CLICK ---
+    $(document).on("pointermove.navalMine", function (moveEvent) {
+        if (!movingNavalMine) return;
+
+        let moveX = moveEvent.pageX - startOffsetX;
+        moveX = Math.max(0, Math.min(moveX, maxX));
+
+        // Move mine horizontally with cursor
+        $MineContainer.css({ left: moveX + "px" });
+
+        if (moveEvent.pageY > $(window).height() - $MineContainer.height() - 20 && moveEvent.pageY < lastMoveY - 25) {
+            return;
+        }
+
+        // Handle chain logic
+        if (moveEvent.pageY < lastMoveY - 25) {
+            // Moving upward → add chain
+            $("#navalMineChains").append('<img src="images/chain.png" alt="landmine chain" class="landMineChain">');
+
+            $(".landMineChain").last().attr({
+                src: "images/chainSelected.png",
+                alt: "selected chain"
+            });
+
+            lastMoveY = moveEvent.pageY;
+        } else if (moveEvent.pageY > lastMoveY + 25) {
+            // Moving downward → remove chain
+            $(".landMineChain").last().remove();
+            lastMoveY = moveEvent.pageY;
+        }
+    });
+});
+
+
 $("#buyWaterFilterButtonHolder").on("pointerdown", function () {
     if ($(this).find("p").hasClass("noClickCursor")) return;
     if ($(this).data('disabled')) return; // prevent spam clicking
     $(this).data('disabled', true);
     if (player.MoneyAmount >= 500) {
         if (!player.AquariumList[selectedAquariumIndex].HasWaterFilter) {
-            disableShopWaterFilter();
+            disableShopButButton(this);
             player.MoneyAmount -= 500;
             player.AquariumList[selectedAquariumIndex].HasWaterFilter = true;
             updateStats();
@@ -2318,8 +2712,67 @@ $("#buyWaterFilterButtonHolder").on("pointerdown", function () {
     }
 });
 
+$("#toggleWaterFilterButtonHolder").on("pointerdown", function () {
+    if ($(this).data('disabled')) return; // prevent spam clicking
+    $(this).data('disabled', true);
+    if (player.AquariumList[selectedAquariumIndex].IsWaterFilterVisible) {
+        player.AquariumList[selectedAquariumIndex].IsWaterFilterVisible = false;
+    }
+    else {
+        player.AquariumList[selectedAquariumIndex].IsWaterFilterVisible = true;
+    }
+    hideHiddenDecoration();
+    setTimeout(() => {
+        $(this).data('disabled', false);
+    }, 400);
+});
+
+$("#buyNavalMineButtonHolder").on("pointerdown", function () {
+    if ($(this).find("p").hasClass("noClickCursor")) return;
+    if ($(this).data('disabled')) return; // prevent spam clicking
+    $(this).data('disabled', true);
+    if (player.MoneyAmount >= 100) {
+        if (!player.AquariumList[selectedAquariumIndex].HasNavalMine) {
+            disableShopButButton(this);
+            player.MoneyAmount -= 100;
+            player.AquariumList[selectedAquariumIndex].HasNavalMine = true;
+            updateStats();
+            showNavalBomb();
+            $(this).find("p").css("background-color", "yellowgreen");
+            setTimeout(() => {
+                $(this).find("p").css("background-color", "darkred");
+                $(this).data('disabled', false);
+            }, 400);
+        }
+    }
+    else {
+        alert("You don't have enough money to buy a naval mine!");
+        $(this).find("p").css("background-color", "darkred");
+        setTimeout(() => {
+            $(this).find("p").css("background-color", "darkgreen");
+            $(this).data('disabled', false);
+        }, 400);
+    }
+});
+
+$("#toggleNavalMineButtonHolder").on("pointerdown", function () {
+    if ($(this).data('disabled')) return; // prevent spam clicking
+    $(this).data('disabled', true);
+    if (player.AquariumList[selectedAquariumIndex].IsNavalMineVisible) {
+        player.AquariumList[selectedAquariumIndex].IsNavalMineVisible = false;
+    }
+    else {
+        player.AquariumList[selectedAquariumIndex].IsNavalMineVisible = true;
+    }
+    hideHiddenDecoration();
+    setTimeout(() => {
+        $(this).data('disabled', false);
+    }, 400);
+});
+
 $("#itemShopButtonHolder").on("pointerdown", function () {
     closeShopModal();
+    closeBottomMenu();
     $("#modalItemsShopContainer").show();
 });
 
@@ -2328,15 +2781,86 @@ $("#closeItemsShopModal").on("pointerdown", function () {
 });
 
 $("#buyFishFoodButtonHolder").on("pointerdown", function () {
-    buyFishFood($(this), 1);
+    buyItem($(this), "fish food", 1);
 });
 
 $("#buy10FishFoodButtonHolder").on("pointerdown", function () {
-    buyFishFood($(this), 10);
+    buyItem($(this), "fish food", 10);
+});
+
+$("#buySpeedCandyButtonHolder").on("pointerdown", function () {
+    buyItem($(this), "speed candy", 1);
+});
+
+$("#buy10SpeedCandyButtonHolder").on("pointerdown", function () {
+    buyItem($(this), "speed candy", 10);
 });
 
 $(".shopItemInfo").on("pointerdown", function () {
     handleInfo($(this));
+});
+
+$("#backgroundLightblueButtonHolder p").on("pointerdown", function () {
+    handleBoughtBackgroundColorInput($(this).parent(), '#ADD8E6', 0);
+});
+
+$("#backgroundBlackButtonHolder p").on("pointerdown", function () {
+    let cost = 5;
+    if (player.AquariumList[selectedAquariumIndex].OwnedBackgroundColors.includes("#000000")) { cost = 0; }
+    handleBoughtBackgroundColorInput($(this).parent(), '#000000', cost);
+});
+
+$("#backgroundWhiteButtonHolder p").on("pointerdown", function () {
+    let cost = 5;
+    if (player.AquariumList[selectedAquariumIndex].OwnedBackgroundColors.includes("#FFFFFF")) { cost = 0; }
+    handleBoughtBackgroundColorInput($(this).parent(), '#FFFFFF', cost);
+});
+
+$("#backgroundDarkblueButtonHolder p").on("pointerdown", function () {
+    let cost = 10;
+    if (player.AquariumList[selectedAquariumIndex].OwnedBackgroundColors.includes("#00008B")) { cost = 0; }
+    handleBoughtBackgroundColorInput($(this).parent(), '#00008B', cost);
+});
+
+$("#backgroundAquamarineButtonHolder p").on("pointerdown", function () {
+    let cost = 10;
+    if (player.AquariumList[selectedAquariumIndex].OwnedBackgroundColors.includes("#7FFFD4")) { cost = 0; }
+    handleBoughtBackgroundColorInput($(this).parent(), '#7FFFD4', cost);
+});
+
+$("#backgroundSeagreenButtonHolder p").on("pointerdown", function () {
+    let cost = 10;
+    if (player.AquariumList[selectedAquariumIndex].OwnedBackgroundColors.includes("#2E8B57")) { cost = 0; }
+    handleBoughtBackgroundColorInput($(this).parent(), '#2E8B57', cost);
+});
+
+$("#backgroundCoralButtonHolder p").on("pointerdown", function () {
+    let cost = 10;
+    if (player.AquariumList[selectedAquariumIndex].OwnedBackgroundColors.includes("#FF7F50")) { cost = 0; }
+    handleBoughtBackgroundColorInput($(this).parent(), '#FF7F50', cost);
+});
+
+$("#backgroundDarkredButtonHolder p").on("pointerdown", function () {
+    let cost = 10;
+    if (player.AquariumList[selectedAquariumIndex].OwnedBackgroundColors.includes("#8B0000")) { cost = 0; }
+    handleBoughtBackgroundColorInput($(this).parent(), '#8B0000', cost);
+});
+
+$("#backgroundGoldenrodButtonHolder p").on("pointerdown", function () {
+    let cost = 10;
+    if (player.AquariumList[selectedAquariumIndex].OwnedBackgroundColors.includes("#DAA520")) { cost = 0; }
+    handleBoughtBackgroundColorInput($(this).parent(), '#DAA520', cost);
+});
+
+$("#backgroundCustomColorButtonHolder p").on("pointerdown", function () {
+    const newColor = document.getElementById("customBackgroundColorInput").value;
+    if (newColor == getComputedStyle(document.documentElement).getPropertyValue("--background-color")) {
+        alert("No new color was selected, no money was charged!");
+    }
+    else {
+        customColorActive = true;
+        handleBoughtBackgroundColorInput($(this).parent(), newColor, 25);
+    }
 });
 
 $("#closeAlertModal").on("pointerdown", function () {
@@ -2347,10 +2871,20 @@ $("#closeAlertModal").on("pointerdown", function () {
 });
 
 $("#changeBackgroundButtonHolder").on("pointerdown", function () {
+    if (player.AquariumList[selectedAquariumIndex].SelectedBackgroundType === "color") {
+        const backgroundColor = player.AquariumList[selectedAquariumIndex].SelectedBackground;
+        document.documentElement.style.setProperty("--background-color", backgroundColor);
+    }
+
     $("#modalDecorationShopContainer").hide();
+    updateModalColorsOwnedVisually();
+    closeBottomMenu();
     $("#modalChangeBackgroundContainer").show();
-    $("#customBackgroundColorInput").val(backgroundColor);
-    if (isDarkColor(backgroundColor)) {
+
+    if (player.AquariumList[selectedAquariumIndex].SelectedBackgroundType === "color") {
+        $("#customBackgroundColorInput").attr("value", getComputedStyle(document.documentElement).getPropertyValue("--background-color"));
+    }
+    if (isDarkColor(player.AquariumList[selectedAquariumIndex].SelectedBackground)) {
         $("#previewCurrentBackground").css("color", "white");
     }
     else {
@@ -2435,21 +2969,10 @@ $(document).on("pointerdown", function (e) {
         clicksAfterMovingWaterFilter++;
         if (clicksAfterMovingWaterFilter > 1) {
             if (movingWaterFilter) {
-                const newXPx = parseInt($("#waterFilterContainer").css("left"), 10);
-                const newXVw = (newXPx / window.innerWidth) * 100;
-                movingWaterFilter = false;
-                spawnGameSavedText(false);
-                player.AquariumList[selectedAquariumIndex].WaterFilterX = newXVw; // save in vw
-                if ($("#waterFilter").hasClass("mirrored")) {
-                    player.AquariumList[selectedAquariumIndex].WaterFilterMirrored = true;
-                }
-                else {
-                    player.AquariumList[selectedAquariumIndex].WaterFilterMirrored = false;
-                }
-                saveToLocalStorage();
-                $("#waterFilter").attr("src", "images/waterFilter.png");
-                $("#waterFilter").attr("alt", "water filter");
-                $("#fishTank").css("cursor", "default");
+                stopMovingWaterFilter();
+            }
+            if (movingNavalMine) {
+                stopMovingNavalMine();
             }
             clicksAfterMovingWaterFilter = 0;
         }

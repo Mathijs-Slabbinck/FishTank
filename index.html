@@ -141,7 +141,7 @@
                             </div>
                             <div id="modalStatAge">
                                 <span>
-                                    <b>Age:</b>
+                                    <b>Moment Spawned:</b>
                                     <p></p>
                                 </span>
                             </div>
@@ -334,18 +334,27 @@
                                             <div class="modalButtonBlock greenButton" id="buyWaterFilterButtonHolder">
                                                 <p class="clickAble">buy</p>
                                             </div>
+                                            <div class="modalButtonBlock yellowButton hidden"
+                                                id="toggleWaterFilterButtonHolder">
+                                                <p class="clickAble">hide</p>
+                                            </div>
                                         </div>
 
                                         <div class="rowItem">
                                             <img src="images/GUI/modals/info.png" alt="info icon"
-                                                class="shopItemInfo clickAble">
+                                                class="shopItemInfo clickAble" id="navalMineInfo">
                                             <figure>
-                                                <figcaption>Empty</figcaption>
-                                                <img src="images/GUI/modals/empty.png" alt="empty">
+                                                <figcaption>Naval Mine</figcaption>
+                                                <img src="images/GUI/modals/decorationShopItems/navalMine.png"
+                                                    alt="naval mine">
                                             </figure>
-                                            <p>0 coins</p>
-                                            <div class="modalButtonBlock greenButton">
+                                            <p>100 coins</p>
+                                            <div class="modalButtonBlock greenButton" id="buyNavalMineButtonHolder">
                                                 <p class="clickAble">buy</p>
+                                            </div>
+                                            <div class="modalButtonBlock yellowButton hidden"
+                                                id="toggleNavalMineButtonHolder">
+                                                <p class="clickAble">hide</p>
                                             </div>
                                         </div>
 
@@ -450,14 +459,19 @@
 
                                     <div class="rowItem">
                                         <img src="images/GUI/modals/info.png" alt="info icon"
-                                            class="shopItemInfo clickAble">
+                                            class="shopItemInfo clickAble" id="speedCandyInfo">
                                         <figure>
-                                            <figcaption>Empty</figcaption>
-                                            <img src="images/GUI/modals/empty.png" alt="empty" />
+                                            <figcaption>Speed Candy</figcaption>
+                                            <img src="images/speedCandy.png" alt="speedCandy" />
                                         </figure>
-                                        <p>0 coins</p>
-                                        <div class="modalButtonBlock greenButton">
-                                            <p class="clickAble">buy</p>
+                                        <p>15 coins</p>
+                                        <div class="buttonGroupRow">
+                                            <div class="modalButtonBlock greenButton" id="buySpeedCandyButtonHolder">
+                                                <p class="clickAble">buy</p>
+                                            </div>
+                                            <div class="modalButtonBlock yellowButton" id="buy10SpeedCandyButtonHolder">
+                                                <p class="clickAble">buy 10</p>
+                                            </div>
                                         </div>
                                     </div>
 
@@ -640,67 +654,67 @@
                                 <b>Black (#000000)</b>
                                 <p class="rowItempriceInfo">5 coins</p>
                                 <div class="modalButtonBlock greenButton" id="backgroundBlackButtonHolder">
-                                    <p class="clickAble">choose</p>
+                                    <p class="clickAble">buy</p>
                                 </div>
                             </div>
                             <div id="previewBackgroundWhite">
                                 <b>White (#FFFFFF)</b>
                                 <p class="rowItempriceInfo">5 coins</p>
                                 <div class="modalButtonBlock greenButton" id="backgroundWhiteButtonHolder">
-                                    <p class="clickAble">choose</p>
+                                    <p class="clickAble">buy</p>
                                 </div>
                             </div>
                             <div id="previewBackgroundDarkblue">
                                 <b>Dark Blue (#00008B)</b>
                                 <p class="rowItempriceInfo">10 coins</p>
                                 <div class="modalButtonBlock greenButton" id="backgroundDarkblueButtonHolder">
-                                    <p class="clickAble">choose</p>
+                                    <p class="clickAble">buy</p>
                                 </div>
                             </div>
                             <div id="previewBackgroundAquamarine">
                                 <b>Aquamarine (#7FFFD4)</b>
                                 <p class="rowItempriceInfo">10 coins</p>
                                 <div class="modalButtonBlock greenButton" id="backgroundAquamarineButtonHolder">
-                                    <p class="clickAble">choose</p>
+                                    <p class="clickAble">buy</p>
                                 </div>
                             </div>
                             <div id="previewBackgroundSeagreen">
                                 <b>Sea Green (#2E8B57)</b>
                                 <p class="rowItempriceInfo">10 coins</p>
                                 <div class="modalButtonBlock greenButton" id="backgroundSeagreenButtonHolder">
-                                    <p class="clickAble">choose</p>
+                                    <p class="clickAble">buy</p>
                                 </div>
                             </div>
                             <div id="previewBackgroundCoral">
                                 <b>Coral (#FF7F50)</b>
                                 <p class="rowItempriceInfo">10 coins</p>
                                 <div class="modalButtonBlock greenButton" id="backgroundCoralButtonHolder">
-                                    <p class="clickAble">choose</p>
+                                    <p class="clickAble">buy</p>
                                 </div>
                             </div>
                             <div id="previewBackgroundDarkred">
                                 <b>Dark Red (#8B0000)</b>
                                 <p class="rowItempriceInfo">10 coins</p>
                                 <div class="modalButtonBlock greenButton" id="backgroundDarkredButtonHolder">
-                                    <p class="clickAble">choose</p>
+                                    <p class="clickAble">buy</p>
                                 </div>
                             </div>
                             <div id="previewBackgroundGoldenrod">
                                 <b>Goldenrod (#DAA520)</b>
                                 <p class="rowItempriceInfo">10 coins</p>
                                 <div class="modalButtonBlock greenButton" id="backgroundGoldenrodButtonHolder">
-                                    <p class="clickAble">choose</p>
+                                    <p class="clickAble">buy</p>
                                 </div>
                             </div>
                             <div id="previewCurrentBackground">
                                 <b>Custom Color:</b>
-                                <div class="colorInputBlock">
-                                    <input type="color" id="customBackgroundColorInput" value="#ffffff"
+                                <div>
+                                    <input type="color" id="customBackgroundColorInput" value="#ADD8E6"
                                         class="colorInput">
                                 </div>
                                 <p class="rowItempriceInfo">25 coins</p>
                                 <div class="modalButtonBlock greenButton" id="backgroundCustomColorButtonHolder">
-                                    <p class="clickAble">choose</p>
+                                    <p class="clickAble">buy</p>
                                 </div>
                             </div>
                         </div>
@@ -733,6 +747,13 @@
                 <div id="waterFilterContainer">
                     <img src="images/waterfilter.png" alt="water filter" id="waterFilter" class="clickAble">
                 </div>
+                <div id="landMineContainer">
+                    <img src="images/naval-mine.png" alt="naval mine" id="navalMine">
+                    <span id="navalMineChains">
+                    </span>
+                    <img src="images/chainBottom.png" alt="landmine chain bottom" id="landMineChainBottom"
+                        class="chain">
+                </diV>
                 <div id="bottomMenuButtonContainer">
                     <img src="images/GUI/openBottomMenu.png" alt="open menu button" id="openBottomMenuImg"
                         class="clickAble">
@@ -752,8 +773,8 @@
                     <p>1 (max)</p>
                 </div>
                 <div id="bottomMenuSlot3" class="bottomMenuSlot">
-                    <img src="images/emptySlot.png" alt="empty slot">
-                    <p>empty</p>
+                    <img src="images/speedCandy.png" alt="speed candy" id="speedCandyImg" class="clickAble">
+                    <p id="speedCandyAmount"></p>
                 </div>
                 <div id="bottomMenuSlot4" class="bottomMenuSlot">
                     <img src="images/emptySlot.png" alt="empty slot">

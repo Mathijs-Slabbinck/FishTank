@@ -1,5 +1,6 @@
 :root {
     --background-color: #ADD8E6;
+    --background-image: "url('../../images/backgrounds/static/seaweed.png')";
 }
 
 body {
@@ -111,6 +112,10 @@ b {
     cursor: url('../media/dustpanGreenCursor.png') 10 10, auto;
 }
 
+.speedCandyCursor {
+    cursor: url('../media/speedCandyCursor.png') 10 10, auto;
+}
+
 .noClickCursor {
     cursor: url('../media//noClickCursor.png') 10 10, auto;
 }
@@ -176,7 +181,7 @@ b {
     height: auto;
     text-align: center;
     top: 0;
-    right: 0;
+    right: 2vw;
 }
 
 #coinDisplayBlock img {
@@ -217,12 +222,85 @@ b {
     height: auto;
 }
 
+#landMineContainer {
+    position: absolute;
+    left: 70vw;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: wobble 10s ease-in-out infinite;
+    transform-origin: center;
+    display: none;
+}
+
+#landMineChainBottom {
+    width: 1.3vw;
+}
+
+.landMineChain {
+    width: 1.3vw;
+    height: auto;
+    z-index: 0;
+    margin-top: -0.5vh;
+    margin-bottom: -0.5vh;
+}
+
+#navalMineChains {
+    display: flex;
+    flex-direction: column;
+}
+
+#navalMine {
+    width: 10vw;
+    height: auto;
+    z-index: 0;
+    margin-bottom: -0.5vh;
+    cursor: pointer;
+}
+
+#landMineContainerBlock {
+    position: absolute;
+    bottom: 0;
+}
+
+.rotateSettings {
+    animation: rotateSettings 1s ease-out forwards;
+}
+
+.rotateSettingsBack {
+    animation: rotateSettingsBack 1s ease-out forwards;
+}
+
 .mirrored {
     transform: scaleX(-1);
 }
 
 .hidden {
     display: none;
+}
+
+@keyframes wobble {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    25% {
+        transform: rotate(2deg);
+    }
+
+    50% {
+        transform: rotate(0deg);
+    }
+
+    75% {
+        transform: rotate(-2deg);
+    }
+
+    100% {
+        transform: rotate(0deg);
+    }
+
 }
 
 @keyframes bubbleRise {
@@ -269,9 +347,35 @@ b {
     }
 }
 
+@keyframes rotateSettings {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(45deg);
+    }
+}
+
+@keyframes rotateSettingsBack {
+    0% {
+        transform: rotate(45deg);
+    }
+
+    100% {
+        transform: rotate(0);
+    }
+}
+
 @media only screen and (max-width: 1000px) {
     #bottomMenu {
         height: 17vh;
+    }
+}
+
+@media only screen and (min-width: 1000px) {
+    body {
+        overflow: hidden;
     }
 }
 
