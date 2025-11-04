@@ -1,5 +1,5 @@
 <!-- Tigerstripes -->
-<svg width="200" height="100" viewBox="0 0 160 100" xmlns="http://www.w3.org/2000/svg" class="fish tigerstripes">
+<svg width="220" height="120" viewBox="0 0 160 100" xmlns="http://www.w3.org/2000/svg" class="fish tigerstripes">
     <!-- Body -->
     <path d="M20,50 Q60,10 140,30 Q180,50 140,70 Q60,90 20,50 Z" fill="var(--body-color, #ffdd00)" />
 

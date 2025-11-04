@@ -35,16 +35,16 @@ const FishParts = {
 };
 
 const FishSvgPaths = {
-    bubbleback: 'assets/media/fish/bubbleBack.svg',
-    bubblemark: 'assets/media/fish/bubbleMark.svg',
-    clownfish: 'assets/media/fish/clownfish.svg',
-    longpaddlefin: 'assets/media/fish/longpaddlefin.svg',
-    normalBroadback: 'assets/media/fish/normalBroadback.svg',
-    normalOvalfin: 'assets/media/fish/normalOvalfin.svg',
-    normalPaddlefin: 'assets/media/fish/normalPaddlefin.svg',
-    normalRoundback: 'assets/media/fish/normalRoundback.svg',
-    normalSlimtail: 'assets/media/fish/normalSlimtail.svg',
-    piranha: 'assets/media/fish/piranha.svg',
-    tigerstripes: 'assets/media/fish/tigerstripes.svg',
-    wavyfin: 'assets/media/fish/wavyfin.svg'
+    bubbleback: 'assets/media/svgs/fish/bubbleBack.svg',
+    bubblemark: 'assets/media/svgs/fish/bubbleMark.svg',
+    clownfish: 'assets/media/svgs/fish/clownfish.svg',
+    longpaddlefin: 'assets/media/svgs/fish/longpaddlefin.svg',
+    normalBroadback: 'assets/media/svgs/fish/normalBroadback.svg',
+    normalOvalfin: 'assets/media/svgs/fish/normalOvalfin.svg',
+    normalPaddlefin: 'assets/media/svgs/fish/normalPaddlefin.svg',
+    normalRoundback: 'assets/media/svgs/fish/normalRoundback.svg',
+    normalSlimtail: 'assets/media/svgs/fish/normalSlimtail.svg',
+    piranha: 'assets/media/svgs/fish/piranha.svg',
+    tigerstripes: 'assets/media/svgs/fish/tigerstripes.svg',
+    wavyfin: 'assets/media/svgs/fish/wavyfin.svg'
 }

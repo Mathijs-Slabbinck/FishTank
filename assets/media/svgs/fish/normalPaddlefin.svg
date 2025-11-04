@@ -1,5 +1,5 @@
 <!-- Normal Paddlefin -->
-<svg width="200" height="100" viewBox="0 0 150 100" xmlns="http://www.w3.org/2000/svg" class="fish normalPaddlefin">
+<svg width="220" height="120" viewBox="0 0 150 100" xmlns="http://www.w3.org/2000/svg" class="fish normalPaddlefin">
     <!-- Body -->
     <path d="M10,50 Q60,0 130,30 Q170,50 130,70 Q60,100 10,50 Z" fill="var(--body-color, #55dd55)" />
     <!-- Tail -->

@@ -1,5 +1,5 @@
 <!-- Normal Slimtail -->
-<svg width="200" height="100" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg" class="fish normalSlimtail">
+<svg width="220" height="120" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg" class="fish normalSlimtail">
     <!-- Body -->
     <path d="M10,50 Q60,20 160,40 Q180,50 160,60 Q60,80 10,50 Z" fill="var(--body-color, #ff7777)" />
     <!-- Tail -->

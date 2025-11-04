@@ -783,7 +783,7 @@ function createNewFish(fishType, useRandomColors, isStarterFish = false) {
             if (newFish.HasPattern) newFish.PatternColor = getStandardColor(fishType, FishParts.Pattern);
         }
 
-        $.get(`assets/media/fish/${fishType}.svg`, function (data) {
+        $.get(`assets/media/svgs/fish/${fishType}.svg`, function (data) {
             const svg = $(data).find('svg');
             svg.css({
                 '--body-color': newFish.BodyColor,
@@ -3024,7 +3024,7 @@ function spawnNewRandomFish(fishType) {
 
     player.AquariumList[selectedAquariumIndex].FishList.push(newFish);
 
-    $.get(`assets/media/fish/${fishType}.svg`, function (data) {
+    $.get(`assets/media/svgs/fish/${fishType}.svg`, function (data) {
         const svg = $(data).find('svg');
 
         svg.addClass('spawned-fish').css({

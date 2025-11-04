@@ -1,5 +1,5 @@
 <!-- Normal Roundback -->
-<svg width="200" height="100" viewBox="0 0 140 100" xmlns="http://www.w3.org/2000/svg" class="fish normalRoundback">
+<svg width="220" height="120" viewBox="0 0 140 100" xmlns="http://www.w3.org/2000/svg" class="fish normalRoundback">
     <!-- Body -->
     <path d="M10,50 Q40,15 110,35 Q160,50 110,65 Q40,85 10,50 Z" fill="var(--body-color, #5599ff)" />
 

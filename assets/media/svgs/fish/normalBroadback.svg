@@ -1,5 +1,5 @@
 <!-- Normal Broadback -->
-<svg width="200" height="100" viewBox="0 0 170 100" xmlns="http://www.w3.org/2000/svg" class="fish normalBroadback">
+<svg width="220" height="120" viewBox="0 0 170 100" xmlns="http://www.w3.org/2000/svg" class="fish normalBroadback">
     <!-- Body -->
     <path d="M20,50 Q80,5 150,30 Q170,50 150,70 Q80,95 20,50 Z" fill="var(--body-color, #ffcc00)" />
     <!-- Tail -->

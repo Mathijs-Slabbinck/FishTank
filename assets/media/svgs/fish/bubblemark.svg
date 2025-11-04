@@ -1,5 +1,5 @@
 <!-- Bubblemark -->
-<svg width="200" height="100" viewBox="0 0 160 100" xmlns="http://www.w3.org/2000/svg" class="fish bubblemark">
+<svg width="220" height="120" viewBox="0 0 160 100" xmlns="http://www.w3.org/2000/svg" class="fish bubblemark">
 
     <!-- Body -->
     <path d="M20,50 Q60,15 140,30 Q180,50 140,70 Q60,85 20,50 Z" fill="var(--body-color, #00dddd)" />
