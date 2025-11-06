@@ -314,7 +314,28 @@ class Fish {
     get Age() { return this._age; }
     set Age(value) { this._age = value; }
 
-    get CurrentValue() { return this._currentValue; }
+    get CurrentValue() {
+        let value = Math.floor(this.CostPrice + (this.Speed * 5) + (this.FoodEaten * 0.5) + (this.Size * 2 * 2));
+        if (StandardFishColors[this.FishTypeName].body !== this.BodyColor) {
+            value += 1;
+        }
+        if (StandardFishColors[this.FishTypeName].tailFin !== this.TailFinColor) {
+            value += 1;
+        }
+        if (StandardFishColors[this.FishTypeName].topFin !== this.TopFinColor) {
+            value += 1;
+        }
+        if (StandardFishColors[this.FishTypeName].bottomFin !== this.BottomFinColor) {
+            value += 1;
+        }
+        if (StandardFishColors[this.FishTypeName].sideFin !== this.SideFinColor) {
+            value += 1;
+        }
+        if (StandardFishColors[this.FishTypeName].pattern !== this.PatternColor) {
+            value += 1;
+        }
+        return value;
+    }
     set CurrentValue(value) { this._currentValue = value; }
 
     get IsStarterFish() { return this._isStarterFish; }
